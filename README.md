@@ -1,4 +1,4 @@
-# WebCheckers
+# WebChecker
 
 An online Checkers game system built in Java 8 and Spark,
 a web micro-framework.
@@ -7,7 +7,7 @@ a web micro-framework.
 ## Team
 
 Ryan Cervantes (rxc3202@rit.edu)
-- MEMBER2
+Abhimanyu Gupta (axg4004@rit.edu)
 - MEMBER3
 - MEMBER4
 
