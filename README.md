@@ -6,7 +6,7 @@ a web micro-framework.
 
 ## Team
 
-- MEMBER1
+Ryan Cervantes (rxc3202@rit.edu)
 - MEMBER2
 - MEMBER3
 - MEMBER4
