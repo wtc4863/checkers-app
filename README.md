@@ -8,7 +8,7 @@ a web micro-framework.
 
 Ryan Cervantes (rxc3202@rit.edu)
 Abhimanyu Gupta (axg4004@rit.edu)
-- MEMBER3
+Sean Newman (sxn6296@rit.edu)
 - MEMBER4
 
 
