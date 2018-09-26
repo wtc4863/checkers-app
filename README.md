@@ -6,9 +6,9 @@ a web micro-framework.
 
 ## Team
 
-Ryan Cervantes (rxc3202@rit.edu)
-Abhimanyu Gupta (axg4004@rit.edu)
-Sean Newman (sxn6296@rit.edu)
+- Ryan Cervantes (rxc3202@rit.edu)
+- Abhimanyu Gupta (axg4004@rit.edu)
+- Sean Newman (sxn6296@rit.edu)
 - MEMBER4
 
 
