@@ -13,5 +13,14 @@ public class Player {
         this.sessionID = sid;
     }
 
+    public String getName() {
+        return this.name;
+    }
+
+    public void updateSessionID(String newID) {
+        this.sessionID = newID;
+    }
+
+
 
 }
