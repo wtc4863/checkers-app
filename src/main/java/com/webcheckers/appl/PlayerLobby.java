@@ -59,12 +59,8 @@ public class PlayerLobby {
             return false;
         } else {
             Player p = getPlayer(playerName);
-            p.updateSessionID(sessionID);
+            p.signIn(sessionID);
             return true;
         }
     }
-
-
-
-
 }
