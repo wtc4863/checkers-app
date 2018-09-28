@@ -1,5 +1,6 @@
 package com.webcheckers.appl;
 import com.webcheckers.model.Player;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
 
@@ -40,7 +41,7 @@ public class PlayerLobby {
      * @return true if the user was successfully created
      */
     //TODO: Must implement sessionID
-    public synchronized boolean newPlayer(String possibleName) {
+    public synchronized boolean registerNewPlayer(String possibleName) {
         if(!doesPlayerExist(possibleName)) return false;
         Player p = new Player(possibleName);
         players.put(possibleName, p);
@@ -53,14 +54,23 @@ public class PlayerLobby {
      * @param sessionID the unique current sessionID of the player
      * @return true if the sessionID is updated
      */
-    public synchronized boolean signIn(String playerName, String sessionID) {
-        if(doesPlayerExist(playerName)) {
-            //TODO: display error message to the user
-            return false;
-        } else {
-            Player p = getPlayer(playerName);
-            p.signIn(sessionID);
-            return true;
+    public synchronized boolean signInExistingPlayer(String playerName, String sessionID) {
+          Player existingPlayer = getPlayer(playerName);
+          existingPlayer.signIn(sessionID);
+          return true;
+    }
+
+    /**
+     * This function returns a list of names of the players that are currently
+     * signed in to the webapp
+     * @return an ArrayList of Strings that are unique values for each signed in player
+     */
+    public synchronized ArrayList<String> getSignedInPlayers() {
+        ArrayList<String> signedInPlayers = new ArrayList<>();
+        for(Player player : players.values()) {
+            if(player.isSignedIn())
+                signedInPlayers.add(player.getName());
         }
+        return signedInPlayers;
     }
 }
