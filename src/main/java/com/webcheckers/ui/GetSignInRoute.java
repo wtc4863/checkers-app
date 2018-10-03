@@ -24,13 +24,9 @@ public class GetSignInRoute implements Route {
     /**
      * Render the WebCheckers sign-in page.
      *
-     * @param request
-     *      the HTTP request
-     * @param response
-     *      the HTTP response
-     *
-     * @return
-     *      the rendered HTML for the sign-in page
+     * @param request  the HTTP request
+     * @param response the HTTP response
+     * @return the rendered HTML for the sign-in page
      */
     @Override
     public Object handle(Request request, Response response) {

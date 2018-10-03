@@ -18,7 +18,9 @@
     <div class="body">
       <h2>Sign in here!</h2>
       <form action="/signin" method="post">
-
+        <label for="username">Username</label>
+        <input type="text" id="username" name="username" placeholder="Username" /><br>
+        <input type="submit" value="Sign In" />
       </form>
     </div>
 

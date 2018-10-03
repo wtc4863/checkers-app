@@ -1,5 +1,7 @@
 package com.webcheckers.appl;
+
 import com.webcheckers.model.Player;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
@@ -26,6 +28,7 @@ public class PlayerLobby {
      * This method will check if the given name exists. If the name exists
      * there is a player that already has that name since all names must be
      * unique
+     *
      * @param name the name to check
      * @return true if player in current instance of the web server
      */
@@ -37,12 +40,13 @@ public class PlayerLobby {
      * This method will allow the model to create a new player instance
      * and reserve it's name so that it cannot be used. The new player will
      * also be added to the current list of available players
+     *
      * @param possibleName the name that the user wants to use
      * @return true if the user was successfully created
      */
     //TODO: Must implement sessionID
     public synchronized boolean registerNewPlayer(String possibleName) {
-        if(!doesPlayerExist(possibleName)) return false;
+        if (!doesPlayerExist(possibleName)) return false;
         Player p = new Player(possibleName);
         players.put(possibleName, p);
         return true;
@@ -50,25 +54,27 @@ public class PlayerLobby {
 
     /**
      * This method will sign in an existing player with a given session ID
+     *
      * @param playerName the name of the player
-     * @param sessionID the unique current sessionID of the player
+     * @param sessionID  the unique current sessionID of the player
      * @return true if the sessionID is updated
      */
     public synchronized boolean signInExistingPlayer(String playerName, String sessionID) {
-          Player existingPlayer = getPlayer(playerName);
-          existingPlayer.signIn(sessionID);
-          return true;
+        Player existingPlayer = getPlayer(playerName);
+        existingPlayer.signIn(sessionID);
+        return true;
     }
 
     /**
      * This function returns a list of names of the players that are currently
      * signed in to the webapp
+     *
      * @return an ArrayList of Strings that are unique values for each signed in player
      */
     public synchronized ArrayList<String> getSignedInPlayers() {
         ArrayList<String> signedInPlayers = new ArrayList<>();
-        for(Player player : players.values()) {
-            if(player.isSignedIn())
+        for (Player player : players.values()) {
+            if (player.isSignedIn())
                 signedInPlayers.add(player.getName());
         }
         return signedInPlayers;

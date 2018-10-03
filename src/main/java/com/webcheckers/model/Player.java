@@ -10,8 +10,7 @@ public class Player {
     /**
      * Create a new signed-out player
      *
-     * @param name
-     *      The name of the new player
+     * @param name The name of the new player
      */
     public Player(String name) {
         this.name = name;
@@ -21,10 +20,8 @@ public class Player {
     /**
      * Create a new signed-in player
      *
-     * @param name
-     *      The name of the new player
-     * @param sessionID
-     *      The session ID to associate with the player
+     * @param name      The name of the new player
+     * @param sessionID The session ID to associate with the player
      */
     public Player(String name, String sessionID) {
         this.name = name;
@@ -34,8 +31,7 @@ public class Player {
     /**
      * Get the player's name
      *
-     * @return
-     *      The player's name
+     * @return The player's name
      */
     public String getName() {
         return this.name;
@@ -44,9 +40,8 @@ public class Player {
     /**
      * Check if the player is currently signed in
      *
-     * @return
-     *      {@code true} if the player is signed in, {@code false} if the
-     *      player is not signed in
+     * @return {@code true} if the player is signed in, {@code false} if the
+     * player is not signed in
      */
     public boolean isSignedIn() {
         return this.sessionID != null;
@@ -55,8 +50,7 @@ public class Player {
     /**
      * Sign in the player and associate a given session ID with the player
      *
-     * @param sessionID
-     *      The session ID to associate with the player
+     * @param sessionID The session ID to associate with the player
      */
     public void signIn(String sessionID) {
         this.sessionID = sessionID;
