@@ -24,14 +24,17 @@ import spark.TemplateEngine;
 public class GetHomeRoute implements Route {
     private static final Logger LOG = Logger.getLogger(GetHomeRoute.class.getName());
 
-    // Model-View constants
+    //
+    // Constants
+    //
     static final String TITLE_ATTR = "title";
     static final String SIGNED_IN_PLAYERS = "signedInPlayers";
 
-    // keys for the session-related items
-    static final String PLAYER_SESSION_KEY = "playerSession";
+    static final String TEMPLATE_NAME = "home.ftl";
 
+    //
     // Attributes
+    //
     private final PlayerLobby playerLobby;
     private final TemplateEngine templateEngine;
 
@@ -76,7 +79,7 @@ public class GetHomeRoute implements Route {
         //TODO: remove yourself from displayed users
         vm.put(SIGNED_IN_PLAYERS, playerLobby.getSignedInPlayers());
 
-        return templateEngine.render(new ModelAndView(vm, "home.ftl"));
+        return templateEngine.render(new ModelAndView(vm, TEMPLATE_NAME));
     }
 
 }
