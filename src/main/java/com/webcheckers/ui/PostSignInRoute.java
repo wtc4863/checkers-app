@@ -1,13 +1,14 @@
 package com.webcheckers.ui;
 
 import com.webcheckers.appl.PlayerLobby;
-import spark.Request;
-import spark.Response;
-import spark.Route;
-import spark.TemplateEngine;
+import spark.*;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 import java.util.logging.Logger;
+
+import static spark.Spark.halt;
 
 /**
  * The UI controller to handle POST sign in requests.
@@ -17,7 +18,14 @@ import java.util.logging.Logger;
 public class PostSignInRoute implements Route {
     private static final Logger LOG = Logger.getLogger(PostSignInRoute.class.getName());
 
+    //
+    // Constants
+    //
+    public static final String ERROR_MESSAGE = "The username you entered is either already in use, or invalid.  Please try again.";
+
+    //
     // Attributes
+    //
     private final PlayerLobby playerLobby;
     private final TemplateEngine templateEngine;
 
@@ -51,6 +59,18 @@ public class PostSignInRoute implements Route {
     @Override
     public Object handle(Request request, Response response) {
         LOG.finer("PostSignInRoute is invoked.");
-        return null;
+
+        if (playerLobby.signIn(request.queryParams("username"), request.session().id())) {
+            // The user is signed in, send them back to the home page
+            response.redirect("/");
+            halt();
+            return null;
+        } else {
+            // Something failed, make them retry sign in
+            Map<String, Object> vm = new HashMap<>();
+            vm.put(GetSignInRoute.TITLE_ATTR, "Retry Sign-in");
+            vm.put(GetSignInRoute.MESSAGE_ATTR, ERROR_MESSAGE);
+            return templateEngine.render(new ModelAndView(vm, GetSignInRoute.TEMPLATE_NAME));
+        }
     }
 }
