@@ -76,35 +76,6 @@ public class PlayerLobby {
     }
 
     /**
-     * This method will allow the model to create a new player instance
-     * and reserve it's name so that it cannot be used. The new player will
-     * also be added to the current list of available players
-     *
-     * @param possibleName the name that the user wants to use
-     * @return true if the user was successfully created
-     */
-    //TODO: Must implement sessionID
-    public synchronized boolean registerNewPlayer(String possibleName) {
-        if (!doesPlayerExist(possibleName)) return false;
-        Player p = new Player(possibleName);
-        players.put(possibleName, p);
-        return true;
-    }
-
-    /**
-     * This method will sign in an existing player with a given session ID
-     *
-     * @param playerName the name of the player
-     * @param sessionID  the unique current sessionID of the player
-     * @return true if the sessionID is updated
-     */
-    public synchronized boolean signInExistingPlayer(String playerName, String sessionID) {
-        Player existingPlayer = getPlayer(playerName);
-        existingPlayer.signIn(sessionID);
-        return true;
-    }
-
-    /**
      * This function returns a list of names of the players that are currently
      * signed in to the webapp
      *
@@ -117,5 +88,35 @@ public class PlayerLobby {
                 signedInPlayers.add(player.getName());
         }
         return signedInPlayers;
+    }
+
+    /**
+     * Helper method that checks if a player's name is valid
+     *
+     * @param playerName the player name to check
+     * @return true if the name is valid, false if invalid
+     */
+    private boolean validName(String playerName) {
+        return playerName.matches(ALPHANUMERIC_REGEX) && playerName.matches(VALID_NAME_REGEX);
+    }
+
+    /**
+     * Sign in a player.
+     *
+     * @param playerName the username of the player to sign in as
+     * @param sessionID the session ID to associate with the player
+     * @return
+     *      true if the player was signed in successfully, false if the player
+     *      could not be signed in.
+     */
+    public synchronized boolean signIn(String playerName, String sessionID) {
+        if (!validName(playerName)) {
+            return false;
+        } else if (getSignedInPlayers().contains(playerName)) {
+            return false;
+        } else {
+            players.put(playerName, new Player(playerName, sessionID));
+            return true;
+        }
     }
 }
