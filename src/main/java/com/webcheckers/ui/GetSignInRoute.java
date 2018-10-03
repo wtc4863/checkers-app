@@ -10,6 +10,16 @@ import spark.*;
 public class GetSignInRoute implements Route {
     private static final Logger LOG = Logger.getLogger(GetHomeRoute.class.getName());
 
+    //
+    // Constants
+    //
+    static final String TITLE_ATTR = "title";
+    static final String MESSAGE_ATTR = "message";
+    static final String TEMPLATE_NAME = "signin.ftl";
+
+    //
+    // Attributes
+    //
     private final TemplateEngine templateEngine;
 
     public GetSignInRoute(final TemplateEngine templateEngine) {
@@ -34,8 +44,8 @@ public class GetSignInRoute implements Route {
 
         // Render the template
         Map<String, Object> vm = new HashMap<>();
-        vm.put("title", "Sign-in");
-        vm.put("message", "Please enter your username to sign in.");
-        return templateEngine.render(new ModelAndView(vm, "signin.ftl"));
+        vm.put(TITLE_ATTR, "Sign-in");
+        vm.put(MESSAGE_ATTR, "Please enter your username to sign in.");
+        return templateEngine.render(new ModelAndView(vm, TEMPLATE_NAME));
     }
 }
