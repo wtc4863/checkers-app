@@ -18,8 +18,8 @@
     
     <div class="body">
       <p>Welcome to the world of online Checkers.</p>
-      <#list ${signedInPlayers} as player>
-        <li> player <\li>
+      <#list signedInPlayers as player>
+        <li>${player}</li>
       </#list>
     </div>
     
