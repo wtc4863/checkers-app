@@ -6,20 +6,59 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
 
+/**
+ * The Application-tier controller that is responsible for all Player-based
+ * operations, such as signing in and out from the game.
+ *
+ * @author <a href="mailto:rxc3202@rit.edu>Ryan Cervantes</a>
+ */
 public class PlayerLobby {
 
+    //
+    // Constants
+    //
+    public static final String ALPHANUMERIC_REGEX = "^[A-Za-z0-9]+$";
+    public static final String VALID_NAME_REGEX = "^[A-Za-z0-9 ]*$";
+
+    //
+    // Attributes
+    //
+
+    /**
+     * Record of all players that have ever signed into the game
+     */
     private HashMap<String, Player> players;
+
+    /**
+     * The GameCenter instance used to handle game information
+     */
     private GameCenter gameCenter;
 
+    //
+    // Constructors
+    //
+
+    /**
+     * Create a new PlayerLobby instance
+     */
     public PlayerLobby() {
         this.players = new HashMap<>();
         this.gameCenter = new GameCenter();
     }
 
+    //
+    // Methods
+    //
+
     private Player getPlayer(String name) {
         return players.get(name);
     }
 
+    /**
+     * Get the names of all players that have ever signed into the game
+     *
+     * @return a set of all player names
+     */
     private Set<String> getPlayerNames() {
         return players.keySet();
     }
