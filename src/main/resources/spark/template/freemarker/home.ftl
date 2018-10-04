@@ -12,15 +12,20 @@
     <h1>Web Checkers</h1>
     
     <div class="navigation">
+      <a href="/signin">sign in</a>
       <a href="/">my home</a>
-      <a href="/signin"> sign in </a>
     </div>
     
     <div class="body">
       <p>Welcome to the world of online Checkers.</p>
-      <#list signedInPlayers as player>
-        <li>${player}</li>
-      </#list>
+      <#if isUserSignedIn == true>
+        <#list signedInPlayers as player>
+          ${player}
+        </#list>
+      <#else>
+        <p> Number of Players online: ${numPlayersOnline}</p>
+      </#if>
+
     </div>
     
   </div>
