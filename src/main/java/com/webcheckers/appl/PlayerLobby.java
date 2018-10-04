@@ -17,7 +17,7 @@ public class PlayerLobby {
     //
     // Constants
     //
-    public static final String ALPHANUMERIC_REGEX = "^[A-Za-z0-9]+$";
+    public static final String ALPHANUMERIC_REGEX = "^.*[A-Za-z0-9]+.*$";
     public static final String VALID_NAME_REGEX = "^[A-Za-z0-9 ]*$";
 
     //
