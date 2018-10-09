@@ -38,6 +38,15 @@ public class Player {
     }
 
     /**
+     * Checks if a player is signed in with a given session id
+     * @param sessionID the sessionID to check against
+     * @return true if the sessinonID matches this players sessionID
+     */
+    public boolean isSignedIn(String sessionID) {
+        return this.sessionID.equals(sessionID);
+    }
+
+    /**
      * Check if the player is currently signed in
      *
      * @return {@code true} if the player is signed in, {@code false} if the

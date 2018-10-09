@@ -76,6 +76,16 @@ public class PlayerLobby {
     }
 
     /**
+     * Helper method that checks if a player's name is valid
+     *
+     * @param playerName the player name to check
+     * @return true if the name is valid, false if invalid
+     */
+    private boolean validName(String playerName) {
+        return playerName.matches(ALPHANUMERIC_REGEX) && playerName.matches(VALID_NAME_REGEX);
+    }
+
+    /**
      * This function returns a list of names of the players that are currently
      * signed in to the webapp
      *
@@ -88,16 +98,6 @@ public class PlayerLobby {
                 signedInPlayers.add(player.getName());
         }
         return signedInPlayers;
-    }
-
-    /**
-     * Helper method that checks if a player's name is valid
-     *
-     * @param playerName the player name to check
-     * @return true if the name is valid, false if invalid
-     */
-    private boolean validName(String playerName) {
-        return playerName.matches(ALPHANUMERIC_REGEX) && playerName.matches(VALID_NAME_REGEX);
     }
 
     /**
@@ -118,5 +118,26 @@ public class PlayerLobby {
             players.put(playerName, new Player(playerName, sessionID));
             return true;
         }
+    }
+
+    /**
+     * Checks if the given sessionID is already registered to a player.
+     * @param sessionID the session id to check
+     * @return player name if a player is using the given ID
+     */
+    public String isAlreadySignedIn(String sessionID) {
+        for(Player player: players.values()) {
+            if(player.isSignedIn(sessionID))
+                return player.getName();
+        }
+        return null;
+    }
+
+    /**
+     * Return the number of online players
+     * @return an int representing the number of online players
+     */
+    public int getNumberOnlinePlayers() {
+        return getSignedInPlayers().size();
     }
 }

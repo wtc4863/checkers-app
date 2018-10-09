@@ -1,5 +1,8 @@
 package com.webcheckers.ui;
 
+import static spark.Spark.halt;
+
+import com.webcheckers.appl.PlayerLobby;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -21,12 +24,16 @@ public class GetSignInRoute implements Route {
     // Attributes
     //
     private final TemplateEngine templateEngine;
+    private final PlayerLobby playerLobby;
 
-    public GetSignInRoute(final TemplateEngine templateEngine) {
+    public GetSignInRoute(final PlayerLobby playerLobby, final TemplateEngine templateEngine) {
         // Validate the template engine
         Objects.requireNonNull(templateEngine, "templateEngine must not be null");
+        Objects.requireNonNull(playerLobby, "playerLobby must not be null");
 
         this.templateEngine = templateEngine;
+        this.playerLobby = playerLobby;
+
 
         LOG.config("Get SignInRoute is initialized.");
     }
@@ -42,10 +49,22 @@ public class GetSignInRoute implements Route {
     public Object handle(Request request, Response response) {
         LOG.finer("GetSignInRoute is invoked.");
 
-        // Render the template
+        // retrieve the http session
+        final Session httpSession = request.session();
+        final String sessionID = httpSession.id();
+
+        // set up the template for rendering
         Map<String, Object> vm = new HashMap<>();
-        vm.put(TITLE_ATTR, "Sign-in");
-        vm.put(MESSAGE_ATTR, "Please enter your username to sign in.");
-        return templateEngine.render(new ModelAndView(vm, TEMPLATE_NAME));
+
+        String usersPlayer = playerLobby.isAlreadySignedIn(sessionID);
+        if(usersPlayer != null) {
+            response.redirect("/");
+            halt();
+            return null;
+        } else {
+            vm.put(TITLE_ATTR, "Sign-in");
+            vm.put(MESSAGE_ATTR, "Please enter your username to sign in.");
+            return templateEngine.render(new ModelAndView(vm, TEMPLATE_NAME));
+        }
     }
 }

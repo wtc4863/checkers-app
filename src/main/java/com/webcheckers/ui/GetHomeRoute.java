@@ -4,6 +4,7 @@ import com.webcheckers.appl.GameCenter;
 import com.webcheckers.appl.PlayerLobby;
 import com.webcheckers.model.Player;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -29,7 +30,8 @@ public class GetHomeRoute implements Route {
     //
     static final String TITLE_ATTR = "title";
     static final String SIGNED_IN_PLAYERS = "signedInPlayers";
-
+    static final String IS_SIGNED_IN = "isUserSignedIn";
+    static final String NUM_SIGNED_IN = "numPlayersOnline" ;
     static final String TEMPLATE_NAME = "home.ftl";
 
     //
@@ -69,15 +71,27 @@ public class GetHomeRoute implements Route {
 
         // retrieve the http session
         final Session httpSession = request.session();
+        final String sessionID = httpSession.id();
 
         // start building the view-model
         Map<String, Object> vm = new HashMap<>();
 
         vm.put(TITLE_ATTR, "Welcome!");
 
-        // list of signed in players to render to the user
-        //TODO: remove yourself from displayed users
-        vm.put(SIGNED_IN_PLAYERS, playerLobby.getSignedInPlayers());
+        // if the player is signed in return the name of the player
+        String usersPlayer = playerLobby.isAlreadySignedIn(sessionID);
+        if(usersPlayer != null) {
+            LOG.finer("Player is returning: " + usersPlayer);
+            // list of signed in players to render to the user (excluding user)
+            ArrayList<String> onlinePlayers = playerLobby.getSignedInPlayers();
+            onlinePlayers.remove(usersPlayer);
+            vm.put(SIGNED_IN_PLAYERS, onlinePlayers);
+            vm.put(IS_SIGNED_IN, true);
+        } else {
+            LOG.finer("New, non-registered player joined");
+            vm.put(IS_SIGNED_IN, false);
+            vm.put(NUM_SIGNED_IN, playerLobby.getNumberOnlinePlayers());
+        }
 
         return templateEngine.render(new ModelAndView(vm, TEMPLATE_NAME));
     }

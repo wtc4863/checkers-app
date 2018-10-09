@@ -145,7 +145,7 @@ public class WebServer {
         get(HOME_URL, new GetHomeRoute(playerLobby, templateEngine));
 
         // Shows the Checkers game Sign-in page.
-        get(SIGN_IN_URL, new GetSignInRoute(templateEngine));
+        get(SIGN_IN_URL, new GetSignInRoute(playerLobby, templateEngine));
 
         // Handles sign-in form submissions
         post(SIGN_IN_URL, new PostSignInRoute(playerLobby, templateEngine));

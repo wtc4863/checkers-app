@@ -59,9 +59,9 @@ public class PostSignInRoute implements Route {
     @Override
     public Object handle(Request request, Response response) {
         LOG.finer("PostSignInRoute is invoked.");
-
-        if (playerLobby.signIn(request.queryParams("username"), request.session().id())) {
-            // The user is signed in, send them back to the home page
+        boolean signInResult = playerLobby.signIn(request.queryParams("username"), request.session().id());
+        if (signInResult) {
+            // The user has been signed in, send them back to the home page
             response.redirect("/");
             halt();
             return null;
