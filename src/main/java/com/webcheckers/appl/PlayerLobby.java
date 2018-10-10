@@ -140,4 +140,23 @@ public class PlayerLobby {
     public int getNumberOnlinePlayers() {
         return getSignedInPlayers().size();
     }
+
+    /**
+     * Retrieves a player based on the session ID associated with the player.
+     * @param sessionID the session ID associated with the player
+     * @return the Player object associated with the session ID, or Null if
+     * there is no player for the given session ID.
+     */
+    public Player getBySessionID(String sessionID) {
+        for(Player player : players.values()) {
+            if(player.isSignedIn(sessionID)) {
+                // If we've found a match, we can return now.  There should be
+                // no session ID duplicates.  If there is, either something
+                // else is broken in our code, or we just found a CVE in Spark.
+                return player;
+            }
+        }
+        // If we get here, then there are no players that match that session ID
+        return null;
+    }
 }
