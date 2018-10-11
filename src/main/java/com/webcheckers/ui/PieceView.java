@@ -1,6 +1,6 @@
 package com.webcheckers.ui;
 
-public class Piece {
+public class PieceView {
     enum color {
         RED, WHITE;
     }

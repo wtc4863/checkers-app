@@ -51,13 +51,13 @@
             <div>
               <table data-color='RED'>
                 <tr>
-                  <td><img src="../img/single-piece-red.svg" /></td>
+                  <td><img src="../img/single-pieceView-red.svg" /></td>
                   <td class="name">Red</td>
                 </tr>
               </table>
               <table data-color='WHITE'>
                 <tr>
-                  <td><img src="../img/single-piece-white.svg" /></td>
+                  <td><img src="../img/single-pieceView-white.svg" /></td>
                   <td class="name">White</td>
                 </tr>
               </table>
@@ -82,11 +82,11 @@
                     class="Space"
                     </#if>
                     >
-                <#if space.piece??>
+                <#if space.pieceView??>
                   <div class="Piece"
-                       id="piece-${row.index}-${space.cellIdx}"
-                       data-type="${space.piece.type}"
-                       data-color="${space.piece.color}">
+                       id="pieceView-${row.index}-${space.cellIdx}"
+                       data-type="${space.pieceView.type}"
+                       data-color="${space.pieceView.color}">
                   </div>
                 </#if>
                 </td>

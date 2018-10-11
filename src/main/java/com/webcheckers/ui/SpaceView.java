@@ -1,13 +1,13 @@
 package com.webcheckers.ui;
 
-public class Space {
+public class SpaceView {
 
-    private Piece piece;
+    private PieceView pieceView;
     private int cellIdx;
 
-    public Space(int cellIdx, Piece piece) {
+    public SpaceView(int cellIdx, PieceView pieceView) {
         this.cellIdx = cellIdx;
-        this.piece = piece;
+        this.pieceView = pieceView;
     }
 
     public int getCellIdx() {
@@ -15,14 +15,14 @@ public class Space {
     }
 
     public boolean isValid() {
-        if (this.piece == null) {
+        if (this.pieceView == null) {
             return true;
         }
         return false;
     }
 
-    public Piece getPiece() {
-        return piece;
+    public PieceView getPieceView() {
+        return pieceView;
     }
 
 }

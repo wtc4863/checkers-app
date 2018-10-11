@@ -3,15 +3,17 @@ package com.webcheckers.ui;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-public class BoardView implements Iterable<Row> {
+public class BoardView implements Iterable<RowView> {
 
-    private ArrayList<Row> listRows;
+    private ArrayList<RowView> listRowViews;
 
-    public BoardView(ArrayList<Row> listRows) {
-        this.listRows = listRows;
+    public BoardView(ArrayList<RowView> listRowViews) {
+        this.listRowViews = listRowViews;
     }
 
-    public Iterator<Row> iterator() {
-        return listRows.iterator();
+    public Iterator<RowView> iterator() {
+        return listRowViews.iterator();
     }
+
+
 }
