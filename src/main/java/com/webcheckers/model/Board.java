@@ -9,6 +9,6 @@ public class Board {
     }
 
     public BoardView getBoardViewVersion() {
-
+        return null;
     }
 }

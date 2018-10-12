@@ -27,7 +27,7 @@ public class PlayerLobby {
     /**
      * Record of all players that have ever signed into the game
      */
-    private HashMap<String, Player> players;
+    private static HashMap<String, Player> players;
 
     /**
      * The GameCenter instance used to handle game information
@@ -50,7 +50,7 @@ public class PlayerLobby {
     // Methods
     //
 
-    private Player getPlayer(String name) {
+    public static Player getPlayer(String name) {
         return players.get(name);
     }
 

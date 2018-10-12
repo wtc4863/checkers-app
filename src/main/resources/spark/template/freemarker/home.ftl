@@ -22,7 +22,7 @@
         <ul style="list-style-type:none">
         <#list signedInPlayers as player>
             <li>
-            <form method = "post" action = "/game">
+            <form method = "get" action = "/game">
             <input type="hidden" name="username" value="${player}">
             <input type="submit" value="${player}">
             </form>
