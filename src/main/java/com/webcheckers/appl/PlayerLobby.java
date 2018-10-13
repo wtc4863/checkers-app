@@ -1,5 +1,6 @@
 package com.webcheckers.appl;
 
+import com.webcheckers.model.Game;
 import com.webcheckers.model.Player;
 
 import java.util.ArrayList;
@@ -158,5 +159,17 @@ public class PlayerLobby {
         }
         // If we get here, then there are no players that match that session ID
         return null;
+    }
+
+    public Player getOpponent(Player player) {
+       return this.gameCenter.getOpponent(player);
+    }
+
+    public Game getGame (Player player) {
+        return this.gameCenter.getGame(player);
+    }
+
+    public Game startGame (Player redPlayer, Player whitePlayer) {
+        return gameCenter.startGame(redPlayer, whitePlayer);
     }
 }

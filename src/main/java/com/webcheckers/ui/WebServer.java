@@ -8,6 +8,7 @@ import java.util.logging.Logger;
 import com.google.gson.Gson;
 
 import com.webcheckers.appl.PlayerLobby;
+import com.webcheckers.model.Player;
 import spark.TemplateEngine;
 
 
@@ -60,6 +61,10 @@ public class WebServer {
      */
     public static final String SIGN_IN_URL = "/signin";
 
+    /**
+     * The URL pattern to request the Game page.
+     */
+    public static final String GAME_URL = "/game";
     //
     // Attributes
     //
@@ -149,6 +154,9 @@ public class WebServer {
 
         // Handles sign-in form submissions
         post(SIGN_IN_URL, new PostSignInRoute(playerLobby, templateEngine));
+
+        //Shows the Checkers game page
+        get(GAME_URL, new GetGameRoute(playerLobby, templateEngine));
 
         //
         LOG.config("WebServer is initialized.");
