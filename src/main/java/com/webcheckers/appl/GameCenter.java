@@ -1,6 +1,7 @@
 package com.webcheckers.appl;
 
 import com.webcheckers.model.*;
+import com.webcheckers.ui.BoardView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,6 +27,11 @@ public class GameCenter {
             }
         }
         return null;
+    }
+
+    public BoardView getBoardView(Player player) {
+        Game game = getGame(player);
+        return game.getBoardView();
     }
 
     /**

@@ -1,5 +1,7 @@
 package com.webcheckers.model;
 
+import com.webcheckers.ui.BoardView;
+
 public class Game {
     private Player redPlayer;
     private Player whitePlayer;
@@ -26,6 +28,10 @@ public class Game {
 
     public Board getBoard() {
         return this.board;
+    }
+
+    public BoardView getBoardView() {
+        return this.board.getBoardViewVersion();
     }
 
     public Turn getTurn() {

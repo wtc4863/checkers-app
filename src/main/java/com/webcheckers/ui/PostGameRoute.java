@@ -31,6 +31,9 @@ public class PostGameRoute implements Route{
     public Object handle(Request request, Response response) {
         final Session httpSession = request.session();
         final Map<String, Object> vm = new HashMap<>();
+        vm.put(CURRENT_PLAYER_ATTR, playerLobby.getBySessionID(httpSession.id()));
+        vm.put(RED_PLAYER_ATTR, playerLobby.getBySessionID(httpSession.id()));
+        vm.put(WHITE_PLAYER_ATTR, playerLobby.getPlayer(request.queryParams("username")));
 
         return null;
     }

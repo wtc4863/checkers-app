@@ -2,6 +2,7 @@ package com.webcheckers.appl;
 
 import com.webcheckers.model.Game;
 import com.webcheckers.model.Player;
+import com.webcheckers.ui.BoardView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -171,5 +172,9 @@ public class PlayerLobby {
 
     public Game startGame (Player redPlayer, Player whitePlayer) {
         return gameCenter.startGame(redPlayer, whitePlayer);
+    }
+
+    public BoardView getBoardView(Player player) {
+        return gameCenter.getBoardView(player);
     }
 }
