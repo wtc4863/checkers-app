@@ -3,10 +3,10 @@ package com.webcheckers.model;
 public class Space {
 
     /** Colors for space */
-    public enum Color { black, white }
+    public enum SpColor { black, white }
 
     /** Color of this space */
-    private Color spacecolor;
+    private SpColor spacecolor;
 
     /** Space is taken or not  */
     private boolean valid;
@@ -15,13 +15,14 @@ public class Space {
     private Piece PieceOnSpace;
 
     /**
-     * Check if the space is valid
+     * Create a new Space
      *
      * @param color The color of the space
      */
-    public Space(Color color) {
+    public Space(SpColor color, Piece onSpace) {
         spacecolor = color;
         valid = true;
+        PieceOnSpace = onSpace;
 
     }
 
@@ -46,5 +47,32 @@ public class Space {
 
         else
             return null;
+    }
+    /**
+     * Remove a piece from a Space
+     *
+     * @param pieceAdd Piece to be added to the space
+     */
+    public void addPiece(Piece pieceAdd){
+        if(isValid()) {
+            this.valid = false;
+            this.PieceOnSpace = pieceAdd;
+        }
+        else {
+
+        }
+    }
+    /**
+     * Remove a piece from a Space
+     *
+     */
+    public void removePiece(){
+        if(isValid()) {
+            this.valid = true;
+            this.PieceOnSpace = null;
+        }
+        else {
+
+        }
     }
 }
