@@ -8,12 +8,14 @@ public class Board {
     private static int rows = 8;
     private static int columns = 8;
 
+    /** used for alternating colors(space) on the board*/
+    private boolean darkSpace = true;
+
     /** 2D Array of spaces*/
     private Space[][] boardArray;
 
     /**
-     * TODO (Alternating colors for spaces)
-     * Create a new Board
+     * Create a new Board with spaces and pieces
      *
      */
     public Board() {
@@ -22,14 +24,37 @@ public class Board {
 
         for(int i = 0; i < rows; i++){
             for(int j = 0; j < columns; j++){
-                boardArray[i][j] = new Space(Space.SpColor.black, null);
+
+                //black and bottom 2
+                if (darkSpace == true && i<3){
+                    boardArray[i][j] = new Space(Space.SpColor.black, new Piece(Piece.PColor.red));
+                    darkSpace = false;
+                }
+
+                // black space and top 2 rows
+                else if (darkSpace == true && i>5){
+                    boardArray[i][j] = new Space(Space.SpColor.black, new Piece(Piece.PColor.white));
+                    darkSpace = false;
+                }
+
+                //black space and no pieces
+                else if (darkSpace == true && i<6 && i>2){
+                    boardArray[i][j] = new Space(Space.SpColor.black, null);
+                    darkSpace = false;
+                }
+
+                // white space
+                else {
+                    boardArray[i][j] = new Space(Space.SpColor.white, null);
+                    darkSpace =true;
+                }
             }
         }
 
     }
 
     /**
-     * Move piece from one location to the other 
+     * Move piece from one location to the other
      *
      */
     public void move(Space location1, Space location2) {
