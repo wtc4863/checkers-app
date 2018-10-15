@@ -24,7 +24,7 @@ public class GetGameRoute implements Route{
     final static String TITLE_ATTR = "title";
 
     private enum View {
-        PLAYER, SPECTATOR, REPLAY;
+        PLAY, SPECTATOR, REPLAY;
     }
 
     private final TemplateEngine templateEngine;
@@ -88,7 +88,7 @@ public class GetGameRoute implements Route{
         vm.put(CURRENT_PLAYER_ATTR, thisPlayer);
         vm.put(ACTIVE_COLOR_ATTR, game.getTurn());
         vm.put(BOARD_VIEW_ATTR, playerLobby.getBoardView(thisPlayer));
-        vm.put(VIEW_MODE_ATTR, View.PLAYER);
+        vm.put(VIEW_MODE_ATTR, View.PLAY);
 
 
 

@@ -17,6 +17,8 @@ import spark.Route;
 import spark.Session;
 import spark.TemplateEngine;
 
+import static spark.Spark.halt;
+
 /**
  * The UI Controller to GET the Home page.
  *
@@ -72,6 +74,12 @@ public class GetHomeRoute implements Route {
         // retrieve the http session
         final Session httpSession = request.session();
         final String sessionID = httpSession.id();
+
+        if(playerLobby.getGame(playerLobby.getBySessionID(sessionID)) != null) {
+            response.redirect("/game");
+            halt();
+            return null;
+        }
 
         // start building the view-model
         Map<String, Object> vm = new HashMap<>();

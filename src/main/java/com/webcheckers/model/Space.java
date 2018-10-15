@@ -31,6 +31,10 @@ public class Space {
         valid = true;
     }
 
+    public boolean isBlack() {
+        return spacecolor == SpColor.black;
+    }
+
     /**
      * Check if the space is valid
      *

@@ -17,9 +17,9 @@ public class Piece {
      *
      * @param pCol The color of the piece
      */
-    public Piece(PColor pCol){
+    public Piece(PColor pCol, PType pType){
         pieceColor = pCol;
-        pieceType = PType.single;
+        pieceType = pType;
     }
 
     public boolean isRed() {

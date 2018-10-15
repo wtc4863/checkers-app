@@ -27,36 +27,42 @@ public class Board {
 
         boardArray = new Space[rows][columns];
 
-        for(int i = 0; i < rows; i++){
-            for(int j = 0; j < columns; j++){
-
-                //black and bottom 2
-                if (darkSpace == true && i<3){
-                    boardArray[i][j] = new Space(Space.SpColor.black, new Piece(Piece.PColor.red));
-                    darkSpace = false;
-                }
-
-                // black space and top 2 rows
-                else if (darkSpace == true && i>5){
-                    boardArray[i][j] = new Space(Space.SpColor.black, new Piece(Piece.PColor.white));
-                    darkSpace = false;
-                }
-
-                //black space and no pieces
-                else if (darkSpace == true && i<6 && i>2){
-                    boardArray[i][j] = new Space(Space.SpColor.black);
-                    darkSpace = false;
-                }
-
-                // white space
-                else {
-                    boardArray[i][j] = new Space(Space.SpColor.white);
-                    darkSpace =true;
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < columns; j++) {
+                //Even rows start with black space
+                if (i % 2 == 0) {
+                    if (j % 2 != 0) {
+                        boardArray[i][j] = new Space(Space.SpColor.black);
+                    } else {
+                        boardArray[i][j] = new Space(Space.SpColor.white);
+                    }
+                } else {
+                    if (j % 2 != 0) {
+                        boardArray[i][j] = new Space(Space.SpColor.white);
+                    } else {
+                        boardArray[i][j] = new Space(Space.SpColor.black);
+                    }
                 }
             }
         }
 
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < columns; j++) {
+                if (i <= 2) {
+                    if (boardArray[i][j].isBlack()) {
+                        boardArray[i][j].addPiece(new Piece(Piece.PColor.white, Piece.PType.single));
+                    }
+                } else if(i >= 5) {
+                    if (boardArray[i][j].isBlack()) {
+                        boardArray[i][j].addPiece(new Piece(Piece.PColor.red, Piece.PType.single));
+                    }
+                }
+            }
+        }
+
+
     }
+
 
     /**
      * Move piece from one location to the other
