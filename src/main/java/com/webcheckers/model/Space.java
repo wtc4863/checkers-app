@@ -8,8 +8,7 @@ public class Space {
     /** Color of this space */
     private SpColor spacecolor;
 
-    /** Space is taken or not  */
-    private boolean valid;
+    private boolean hasPiece;
 
     /** Piece that is occupying the space*/
     private Piece PieceOnSpace;
@@ -21,18 +20,22 @@ public class Space {
      */
     public Space(SpColor color, Piece onSpace) {
         spacecolor = color;
-        valid = false;
+        hasPiece = true;
         PieceOnSpace = onSpace;
 
     }
 
     public Space(SpColor color) {
         spacecolor = color;
-        valid = true;
+        hasPiece = false;
     }
 
     public boolean isBlack() {
         return spacecolor == SpColor.black;
+    }
+
+    public boolean doesHasPiece() {
+        return this.hasPiece;
     }
 
     /**
@@ -41,7 +44,7 @@ public class Space {
      * @return boolean
      */
     public boolean isValid(){
-        return this.valid;
+        return (this.spacecolor == SpColor.black && !this.hasPiece);
     }
 
     /**
@@ -64,8 +67,8 @@ public class Space {
      */
     public void addPiece(Piece pieceAdd){
         if(isValid()) {
-            this.valid = false;
             this.PieceOnSpace = pieceAdd;
+            this.hasPiece = true;
         }
         else {
 
@@ -76,8 +79,8 @@ public class Space {
      *
      */
     public void removePiece(){
-        if(isValid()) {
-            this.valid = true;
+        if(doesHasPiece()) {
+            this.hasPiece = false;
             this.PieceOnSpace = null;
         }
         else {

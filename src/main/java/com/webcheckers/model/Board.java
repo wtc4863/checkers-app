@@ -5,6 +5,7 @@ import com.webcheckers.ui.PieceView;
 import com.webcheckers.ui.RowView;
 import com.webcheckers.ui.SpaceView;
 
+import com.webcheckers.ui.SpaceView.ViewColor;
 import java.util.ArrayList;
 
 public class Board {
@@ -20,13 +21,13 @@ public class Board {
     private Space[][] boardArray;
 
     /**
-     * Create a new Board with spaces and pieces
+     * Create a new Board with spaces and pieces in starting formation
      *
      */
     public Board() {
 
         boardArray = new Space[rows][columns];
-
+        //start by creating all of the spaces on the board as empty spaces
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < columns; j++) {
                 //Even rows start with black space
@@ -45,7 +46,7 @@ public class Board {
                 }
             }
         }
-
+        //go back through all of the spaces and put pieces where they belong
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < columns; j++) {
                 if (i <= 2) {
@@ -71,28 +72,46 @@ public class Board {
     public void move(Space location1, Space location2) {
 
         Piece beingMoved = location1.pieceInfo();
-        location1.removePiece();
-        location2.addPiece(beingMoved);
+        if(location2.isValid()) {
+            location1.removePiece();
+            location2.addPiece(beingMoved);
+        }
+
 
     }
 
+    /**
+     * Gets the board view for the current state of the board
+     * @param opposite if the player rendering the page is white color, flip the board view
+     * @return board view object
+     */
     public BoardView getBoardViewVersion(boolean opposite) {
+        //populate an ArrayList of RowViews to create the BoardView
         ArrayList<RowView> rowViews = new ArrayList<>();
+
+        //for each row of the board
         for (int rowIDX = 0; rowIDX <= 7; rowIDX++) {
+
+            ///populate an ArrayList of SpaceViews to create the RowView
             ArrayList<SpaceView> row = new ArrayList<>();
             for (int colIDX = 0; colIDX <= 7; colIDX++) {
                 int i = rowIDX;
                 int j = colIDX;
                 if(opposite) {
-                    j = rowIDX;
-                    i = colIDX;
+                    j = (7 - j);
+                    i = (7 - i);
                 }
                 Space space = boardArray[i][j];
                 SpaceView spaceView;
-                if (space.isValid()) {
-                    spaceView = new SpaceView(j, null);
-                }
-                else {
+                //if a space is empty, no need to make a PieceView
+                if (!space.doesHasPiece()) {
+                    if (space.isBlack()) {
+                        spaceView = new SpaceView(j, null, true);
+                    } else {
+                        spaceView = new SpaceView(j, null, false);
+                    }
+                }else {
+                    //this space has a piece on it, so create a PieceView and store it in this SpaceView
                     Piece piece = space.pieceInfo();
                     PieceView pieceView;
                     if (piece.isRed()) {
@@ -111,7 +130,12 @@ public class Board {
                             pieceView = new PieceView(PieceView.Color.WHITE, PieceView.Type.KING);
                         }
                     }
-                    spaceView = new SpaceView(j, pieceView);
+                    if (space.isBlack()) {
+                        spaceView = new SpaceView(j, pieceView, true);
+                    } else {
+                        spaceView = new SpaceView(j, pieceView, false);
+
+                    }
                 }
                 row.add(spaceView);
             }
