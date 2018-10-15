@@ -19,6 +19,7 @@
     <div class="body">
       <p>Welcome to the world of online Checkers.</p>
       <#if isUserSignedIn == true>
+        <p>${message}</p>
         <ul style="list-style-type:none">
         <#list signedInPlayers as player>
             <li>

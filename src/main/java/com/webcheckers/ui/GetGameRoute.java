@@ -4,6 +4,7 @@ import com.webcheckers.appl.GameCenter;
 import com.webcheckers.appl.PlayerLobby;
 import com.webcheckers.model.Game;
 import com.webcheckers.model.Player;
+import java.util.ArrayList;
 import spark.*;
 
 import java.util.HashMap;
@@ -22,6 +23,10 @@ public class GetGameRoute implements Route{
     final static String MESSAGE_ATTR = "message";
     final static String TEMPLATE_NAME = "game.ftl";
     final static String TITLE_ATTR = "title";
+
+    final static String SIGNED_IN_PLAYERS = "signedInPlayers";
+    final static String IS_SIGNED_IN = "isUserSignedIn";
+    final static String TEMPLATE_NAME_REDIRECT = "home.ftl";
 
     private enum View {
         PLAY, SPECTATOR, REPLAY;
@@ -64,9 +69,17 @@ public class GetGameRoute implements Route{
         //if the current player is not in a game but the opponent is, reject the request
         //TODO will change when implementing multiple games
         if (playerLobby.getGame(thisPlayer) == null && playerLobby.getGame(opponentPlayer) != null) {
-            response.redirect("");
-            halt();
-            return null;
+            Map<String, Object> vmRedirect = new HashMap<>();
+            String usersPlayer = thisPlayer.getName();
+            ArrayList<String> onlinePlayers = playerLobby.getSignedInPlayers();
+            onlinePlayers.remove(usersPlayer);
+            vmRedirect.put(SIGNED_IN_PLAYERS, onlinePlayers);
+            vmRedirect.put(IS_SIGNED_IN, true);
+            vmRedirect.put(TITLE_ATTR, "Welcome!");
+            vmRedirect.put(MESSAGE_ATTR, "Requested player is already in a game. Choose another player.");
+//            response.redirect("");
+//            halt();
+            return templateEngine.render(new ModelAndView(vmRedirect, TEMPLATE_NAME_REDIRECT));
         }
 
         //if the current player is red, make the other player white and start the game
@@ -82,7 +95,7 @@ public class GetGameRoute implements Route{
             game = playerLobby.getGame(thisPlayer);
         }
 
-        vm.put(TITLE_ATTR, "Test");
+        vm.put(TITLE_ATTR, "Game");
         vm.put(WHITE_PLAYER_ATTR, whitePlayer);
         vm.put(RED_PLAYER_ATTR, redPlayer);
         vm.put(CURRENT_PLAYER_ATTR, thisPlayer);

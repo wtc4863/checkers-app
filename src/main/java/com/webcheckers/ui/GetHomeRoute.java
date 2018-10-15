@@ -35,6 +35,7 @@ public class GetHomeRoute implements Route {
     static final String IS_SIGNED_IN = "isUserSignedIn";
     static final String NUM_SIGNED_IN = "numPlayersOnline" ;
     static final String TEMPLATE_NAME = "home.ftl";
+    static final String MESSAGE_ATTR = "message";
 
     //
     // Attributes
@@ -85,6 +86,7 @@ public class GetHomeRoute implements Route {
         Map<String, Object> vm = new HashMap<>();
 
         vm.put(TITLE_ATTR, "Welcome!");
+        vm.put(MESSAGE_ATTR, "");
 
         // if the player is signed in return the name of the player
         String usersPlayer = playerLobby.isAlreadySignedIn(sessionID);
