@@ -21,9 +21,14 @@ public class Space {
      */
     public Space(SpColor color, Piece onSpace) {
         spacecolor = color;
-        valid = true;
+        valid = false;
         PieceOnSpace = onSpace;
 
+    }
+
+    public Space(SpColor color) {
+        spacecolor = color;
+        valid = true;
     }
 
     /**
@@ -42,7 +47,7 @@ public class Space {
      */
     public Piece pieceInfo(){
 
-        if(isValid())
+        if(!isValid())
             return PieceOnSpace;
 
         else

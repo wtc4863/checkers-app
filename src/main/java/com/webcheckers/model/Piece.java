@@ -5,9 +5,11 @@ public class Piece {
     /** Colors for Piece */
     public enum PColor { red, white }
 
+    public enum PType { single, king }
+
     public PColor pieceColor;
 
-    public boolean King;
+    public PType pieceType;
 
 
     /**
@@ -17,7 +19,15 @@ public class Piece {
      */
     public Piece(PColor pCol){
         pieceColor = pCol;
-        King = false;
+        pieceType = PType.single;
+    }
+
+    public boolean isRed() {
+        return pieceColor == PColor.red;
+    }
+
+    public boolean isKing() {
+        return pieceType == PType.king;
     }
 
     /**
@@ -25,7 +35,7 @@ public class Piece {
      *
      * @return boolean
      */
-    public boolean isKing() {
-        return King;
+    public PType getPieceType() {
+        return pieceType;
     }
 }

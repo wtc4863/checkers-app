@@ -1,6 +1,11 @@
 package com.webcheckers.model;
 
 import com.webcheckers.ui.BoardView;
+import com.webcheckers.ui.PieceView;
+import com.webcheckers.ui.RowView;
+import com.webcheckers.ui.SpaceView;
+
+import java.util.ArrayList;
 
 public class Board {
 
@@ -39,13 +44,13 @@ public class Board {
 
                 //black space and no pieces
                 else if (darkSpace == true && i<6 && i>2){
-                    boardArray[i][j] = new Space(Space.SpColor.black, null);
+                    boardArray[i][j] = new Space(Space.SpColor.black);
                     darkSpace = false;
                 }
 
                 // white space
                 else {
-                    boardArray[i][j] = new Space(Space.SpColor.white, null);
+                    boardArray[i][j] = new Space(Space.SpColor.white);
                     darkSpace =true;
                 }
             }
@@ -66,6 +71,41 @@ public class Board {
     }
 
     public BoardView getBoardViewVersion() {
-        return null;
+        ArrayList<RowView> rowViews = new ArrayList<>();
+        for (int i = 0; i <= 7; i++) {
+            ArrayList<SpaceView> row = new ArrayList<>();
+            for (int j = 0; j <= 7; j++) {
+                Space space = boardArray[i][j];
+                SpaceView spaceView;
+                if (space.isValid()) {
+                    spaceView = new SpaceView(j, null);
+                }
+                else {
+                    Piece piece = space.pieceInfo();
+                    PieceView pieceView;
+                    if (piece.isRed()) {
+                        if (!piece.isKing()) {
+                            pieceView = new PieceView(PieceView.Color.RED, PieceView.Type.SINGLE);
+                        }
+                        else {
+                            pieceView = new PieceView(PieceView.Color.RED, PieceView.Type.KING);
+                        }
+                    }
+                    else {
+                        if (!piece.isKing()) {
+                            pieceView = new PieceView(PieceView.Color.WHITE, PieceView.Type.SINGLE);
+                        }
+                        else {
+                            pieceView = new PieceView(PieceView.Color.WHITE, PieceView.Type.KING);
+                        }
+                    }
+                    spaceView = new SpaceView(j, pieceView);
+                }
+                row.add(spaceView);
+            }
+            RowView rowView = new RowView(i, row);
+            rowViews.add(rowView);
+        }
+        return new BoardView(rowViews);
     }
 }

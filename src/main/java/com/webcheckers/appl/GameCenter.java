@@ -44,6 +44,7 @@ public class GameCenter {
         this.opponents.put(redPlayer.getName(), whitePlayer);
         this.opponents.put(whitePlayer.getName(), redPlayer);
         Game game = new Game(redPlayer, whitePlayer);
+        activeGames.add(game);
         return game;
         //TODO
     }

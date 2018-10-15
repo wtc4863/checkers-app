@@ -21,6 +21,7 @@ public class GetGameRoute implements Route{
     final static String VIEW_MODE_ATTR = "viewMode";
     final static String MESSAGE_ATTR = "message";
     final static String TEMPLATE_NAME = "game.ftl";
+    final static String TITLE_ATTR = "title";
 
     private enum View {
         PLAYER, SPECTATOR, REPLAY;
@@ -81,7 +82,7 @@ public class GetGameRoute implements Route{
             game = playerLobby.getGame(thisPlayer);
         }
 
-
+        vm.put(TITLE_ATTR, "Test");
         vm.put(WHITE_PLAYER_ATTR, whitePlayer);
         vm.put(RED_PLAYER_ATTR, redPlayer);
         vm.put(CURRENT_PLAYER_ATTR, thisPlayer);

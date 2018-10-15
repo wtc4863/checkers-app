@@ -1,22 +1,29 @@
 package com.webcheckers.ui;
 
 public class PieceView {
-    enum color {
+    public enum Color {
         RED, WHITE;
     }
 
-    enum type {
+    public enum Type {
         SINGLE, KING;
     }
 
-    private color color;
-    private type type;
+    private Color color;
+    private Type type;
 
-    public type getType() {
+    public PieceView(Color color, Type type) {
+        this.color = color;
+        this.type = type;
+    }
+
+    public Type getType() {
         return type;
     }
 
-    public color getColor() {
+    public Color getColor() {
         return this.color;
     }
+
+
 }

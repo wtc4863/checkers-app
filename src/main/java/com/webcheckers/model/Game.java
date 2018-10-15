@@ -16,6 +16,7 @@ public class Game {
         this.redPlayer = redPlayer;
         this.whitePlayer = whitePlayer;
         this.turn = Turn.RED;
+        this.board = new Board();
     }
 
     public Player getRedPlayer() {
