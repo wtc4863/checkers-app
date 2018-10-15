@@ -31,8 +31,8 @@ public class Game {
         return this.board;
     }
 
-    public BoardView getBoardView() {
-        return this.board.getBoardViewVersion();
+    public BoardView getBoardView(boolean opposite) {
+        return this.board.getBoardViewVersion(opposite);
     }
 
     public Turn getTurn() {

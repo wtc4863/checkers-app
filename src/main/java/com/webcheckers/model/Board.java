@@ -76,11 +76,17 @@ public class Board {
 
     }
 
-    public BoardView getBoardViewVersion() {
+    public BoardView getBoardViewVersion(boolean opposite) {
         ArrayList<RowView> rowViews = new ArrayList<>();
-        for (int i = 0; i <= 7; i++) {
+        for (int rowIDX = 0; rowIDX <= 7; rowIDX++) {
             ArrayList<SpaceView> row = new ArrayList<>();
-            for (int j = 0; j <= 7; j++) {
+            for (int colIDX = 0; colIDX <= 7; colIDX++) {
+                int i = rowIDX;
+                int j = colIDX;
+                if(opposite) {
+                    j = rowIDX;
+                    i = colIDX;
+                }
                 Space space = boardArray[i][j];
                 SpaceView spaceView;
                 if (space.isValid()) {
@@ -109,7 +115,7 @@ public class Board {
                 }
                 row.add(spaceView);
             }
-            RowView rowView = new RowView(i, row);
+            RowView rowView = new RowView(rowIDX, row);
             rowViews.add(rowView);
         }
         return new BoardView(rowViews);

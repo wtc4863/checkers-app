@@ -31,7 +31,10 @@ public class GameCenter {
 
     public BoardView getBoardView(Player player) {
         Game game = getGame(player);
-        return game.getBoardView();
+        if(game.getWhitePlayer() == player) {
+            return game.getBoardView(true);
+        }
+        return game.getBoardView(false);
     }
 
     /**
