@@ -2,27 +2,21 @@ package com.webcheckers.model;
 
 public class Space {
 
-    /** Colors for space */
+    //
+    // Attributes
+    //
     public enum SpColor { black, white }
-
-    /** Color of this space */
     private SpColor spacecolor;
-
     private boolean hasPiece;
-
-    /** Piece that is occupying the space*/
     private Piece PieceOnSpace;
 
-    /**
-     * Create a new Space
-     *
-     * @param color The color of the space
-     */
+    //
+    // Constructors
+    //
     public Space(SpColor color, Piece onSpace) {
         spacecolor = color;
         hasPiece = true;
         PieceOnSpace = onSpace;
-
     }
 
     public Space(SpColor color) {
@@ -30,10 +24,22 @@ public class Space {
         hasPiece = false;
     }
 
+    //
+    // Methods
+    //
+
+    /**
+     * Tells if this Space is black or not
+     * @return true if black
+     */
     public boolean isBlack() {
         return spacecolor == SpColor.black;
     }
 
+    /**
+     * Tells if a piece is on this space
+     * @return true if space has a piece
+     */
     public boolean doesHasPiece() {
         return this.hasPiece;
     }
@@ -61,7 +67,7 @@ public class Space {
             return null;
     }
     /**
-     * Remove a piece from a Space
+     * Remove a piece from a Space, if possible
      *
      * @param pieceAdd Piece to be added to the space
      */

@@ -14,6 +14,9 @@ import java.util.Objects;
 import static spark.Spark.halt;
 
 public class GetGameRoute implements Route{
+    //
+    // Constants
+    //
     final static String CURRENT_PLAYER_ATTR = "currentPlayer";
     final static String WHITE_PLAYER_ATTR = "whitePlayer";
     final static String RED_PLAYER_ATTR = "redPlayer";
@@ -32,9 +35,15 @@ public class GetGameRoute implements Route{
         PLAY, SPECTATOR, REPLAY;
     }
 
+    //
+    // Attributes
+    //
     private final TemplateEngine templateEngine;
     private final PlayerLobby playerLobby;
 
+    //
+    // Constructor
+    //
     GetGameRoute(final PlayerLobby playerLobby, final TemplateEngine templateEngine) {
         //validate
         Objects.requireNonNull(templateEngine, "templateEngine must not be null");
@@ -44,6 +53,16 @@ public class GetGameRoute implements Route{
         this.playerLobby = playerLobby;
     }
 
+    //
+    // Methods
+    //
+
+  /**
+   * Starts a new game and brings the red and white player to the game page
+   * @param request the HTTP request
+   * @param response the HTTP response
+   * @return a rendering of the home or game page
+   */
     @Override
     public Object handle(Request request, Response response) {
         final Session httpSession = request.session();
@@ -77,8 +96,7 @@ public class GetGameRoute implements Route{
             vmRedirect.put(IS_SIGNED_IN, true);
             vmRedirect.put(TITLE_ATTR, "Welcome!");
             vmRedirect.put(MESSAGE_ATTR, "Requested player is already in a game. Choose another player.");
-//            response.redirect("");
-//            halt();
+
             return templateEngine.render(new ModelAndView(vmRedirect, TEMPLATE_NAME_REDIRECT));
         }
 

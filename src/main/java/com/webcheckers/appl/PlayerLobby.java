@@ -162,10 +162,20 @@ public class PlayerLobby {
         return null;
     }
 
+    /**
+     * Passes up the opponent of a specific player from GameCenter
+     * @param player player whose opponent is being found
+     * @return player object of opponent
+     */
     public Player getOpponent(Player player) {
        return this.gameCenter.getOpponent(player);
     }
 
+    /**
+     * Passes up the game object a specific player is playing in
+     * @param player player whose game is being found
+     * @return game object of player, null if player is not in game
+     */
     public Game getGame (Player player) {
         if (player == null) {
             return null;
@@ -174,10 +184,21 @@ public class PlayerLobby {
         }
     }
 
+    /**
+     * Tells the GameCenter to create a new game with two players
+     * @param redPlayer player on the red team
+     * @param whitePlayer player on the white team
+     * @return Game object of these two players
+     */
     public Game startGame (Player redPlayer, Player whitePlayer) {
         return gameCenter.startGame(redPlayer, whitePlayer);
     }
 
+    /**
+     * Tells the GameCenter to get the BoardView for a specific player
+     * @param player player that the BoardView is for
+     * @return BoardView of this player
+     */
     public BoardView getBoardView(Player player) {
         return gameCenter.getBoardView(player);
     }

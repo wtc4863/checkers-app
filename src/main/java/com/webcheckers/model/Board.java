@@ -8,8 +8,14 @@ import com.webcheckers.ui.SpaceView;
 import com.webcheckers.ui.SpaceView.ViewColor;
 import java.util.ArrayList;
 
-public class Board {
+/**
+ * Object that holds all of the game data for the state of the board
+ */
 
+public class Board {
+    //
+    // Attributes
+    //
     /** Number of rows and columns*/
     private static int rows = 8;
     private static int columns = 8;
@@ -20,10 +26,9 @@ public class Board {
     /** 2D Array of spaces*/
     private Space[][] boardArray;
 
-    /**
-     * Create a new Board with spaces and pieces in starting formation
-     *
-     */
+    //
+    // Constructor
+    //
     public Board() {
 
         boardArray = new Space[rows][columns];
@@ -64,10 +69,13 @@ public class Board {
 
     }
 
-
+    //
+    // Methods
+    //
     /**
-     * Move piece from one location to the other
-     *
+     * Move piece from one location to another, if possible
+     * @param location1 location the piece starts in
+     * @param location2 the desired location of the piece
      */
     public void move(Space location1, Space location2) {
 
