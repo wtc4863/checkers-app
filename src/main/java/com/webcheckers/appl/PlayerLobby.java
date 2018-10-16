@@ -167,7 +167,11 @@ public class PlayerLobby {
     }
 
     public Game getGame (Player player) {
-        return this.gameCenter.getGame(player);
+        if (player == null) {
+            return null;
+        } else {
+            return this.gameCenter.getGame(player);
+        }
     }
 
     public Game startGame (Player redPlayer, Player whitePlayer) {
