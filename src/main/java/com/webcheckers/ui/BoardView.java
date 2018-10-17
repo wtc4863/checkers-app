@@ -1,7 +1,6 @@
 package com.webcheckers.ui;
 
 import com.webcheckers.model.Board;
-import com.webcheckers.model.Piece;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -12,13 +11,6 @@ public class BoardView implements Iterable<RowView> {
     // Attributes
     //
     private ArrayList<RowView> listRowViews;
-
-    //
-    // Constructor
-    //
-    public BoardView(ArrayList<RowView> listRowViews) { // TODO remove old constructor
-        this.listRowViews = listRowViews;
-    }
 
     /**
      * Create a new BoardView object using a Board model-tier class so the

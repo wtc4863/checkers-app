@@ -1,6 +1,5 @@
 package com.webcheckers.ui;
 
-import com.webcheckers.model.Piece;
 import com.webcheckers.model.Space;
 
 import java.util.ArrayList;
@@ -13,14 +12,6 @@ public class RowView implements Iterable<SpaceView>{
     //
     private ArrayList<SpaceView> listSpaceViews;
     private int index;
-
-    //
-    // Constructor
-    //
-    public RowView(int index, ArrayList<SpaceView> listSpaceViews) {  // TODO remove old constructor
-        this.index = index;
-        this.listSpaceViews = listSpaceViews;
-    }
 
     /**
      * Create a new RowView object using a model-tier representation of the row

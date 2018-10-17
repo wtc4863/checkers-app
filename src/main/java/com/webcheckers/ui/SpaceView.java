@@ -2,8 +2,6 @@ package com.webcheckers.ui;
 
 import com.webcheckers.model.Space;
 
-import javax.swing.text.View;
-
 /**
  * The class that represents the UI tier of a space
  */
@@ -21,19 +19,6 @@ public class SpaceView {
      */
     public enum ViewColor {
         WHITE, BLACK;
-    }
-
-    //
-    // Constructor
-    //
-    public SpaceView(int cellIdx, PieceView pieceView, boolean isBlack) {  // TODO remove old constructor
-        this.cellIdx = cellIdx;
-        this.pieceView = pieceView;
-        if(isBlack) {
-            this.viewColor = ViewColor.BLACK;
-        } else {
-            this.viewColor = ViewColor.WHITE;
-        }
     }
 
     /**
