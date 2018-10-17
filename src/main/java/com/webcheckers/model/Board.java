@@ -5,7 +5,6 @@ import com.webcheckers.ui.PieceView;
 import com.webcheckers.ui.RowView;
 import com.webcheckers.ui.SpaceView;
 
-import com.webcheckers.ui.SpaceView.ViewColor;
 import java.util.ArrayList;
 
 /**
@@ -16,9 +15,9 @@ public class Board {
     //
     // Attributes
     //
-    /** Number of rows and columns*/
-    private static int rows = 8;
-    private static int columns = 8;
+    /** Number of ROWS and COLUMNS*/
+    public static final int ROWS = 8;
+    public static final int COLUMNS = 8;
 
     /** used for alternating colors(space) on the board*/
     private boolean darkSpace = true;
@@ -31,11 +30,11 @@ public class Board {
     //
     public Board() {
 
-        boardArray = new Space[rows][columns];
+        boardArray = new Space[ROWS][COLUMNS];
         //start by creating all of the spaces on the board as empty spaces
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < columns; j++) {
-                //Even rows start with black space
+        for (int i = 0; i < ROWS; i++) {
+            for (int j = 0; j < COLUMNS; j++) {
+                //Even ROWS start with black space
                 if (i % 2 == 0) {
                     if (j % 2 != 0) {
                         boardArray[i][j] = new Space(Space.SpColor.black);
@@ -52,8 +51,8 @@ public class Board {
             }
         }
         //go back through all of the spaces and put pieces where they belong
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < columns; j++) {
+        for (int i = 0; i < ROWS; i++) {
+            for (int j = 0; j < COLUMNS; j++) {
                 if (i <= 2) {
                     if (boardArray[i][j].isBlack()) {
                         boardArray[i][j].addPiece(new Piece(Piece.PColor.white, Piece.PType.single));
@@ -89,67 +88,11 @@ public class Board {
     }
 
     /**
-     * Gets the board view for the current state of the board
-     * @param opposite if the player rendering the page is white color, flip the board view
-     * @return board view object
+     * Return a row of spaces at the specified index
+     * @param rowIndex the index of the row to return
+     * @return a row of spaces
      */
-    public BoardView getBoardViewVersion(boolean opposite) {
-        //populate an ArrayList of RowViews to create the BoardView
-        ArrayList<RowView> rowViews = new ArrayList<>();
-
-        //for each row of the board
-        for (int rowIDX = 0; rowIDX <= 7; rowIDX++) {
-
-            ///populate an ArrayList of SpaceViews to create the RowView
-            ArrayList<SpaceView> row = new ArrayList<>();
-            for (int colIDX = 0; colIDX <= 7; colIDX++) {
-                int i = rowIDX;
-                int j = colIDX;
-                if(opposite) {
-                    j = (7 - j);
-                    i = (7 - i);
-                }
-                Space space = boardArray[i][j];
-                SpaceView spaceView;
-                //if a space is empty, no need to make a PieceView
-                if (!space.doesHasPiece()) {
-                    if (space.isBlack()) {
-                        spaceView = new SpaceView(j, null, true);
-                    } else {
-                        spaceView = new SpaceView(j, null, false);
-                    }
-                }else {
-                    //this space has a piece on it, so create a PieceView and store it in this SpaceView
-                    Piece piece = space.pieceInfo();
-                    PieceView pieceView;
-                    if (piece.isRed()) {
-                        if (!piece.isKing()) {
-                            pieceView = new PieceView(PieceView.Color.RED, PieceView.Type.SINGLE);
-                        }
-                        else {
-                            pieceView = new PieceView(PieceView.Color.RED, PieceView.Type.KING);
-                        }
-                    }
-                    else {
-                        if (!piece.isKing()) {
-                            pieceView = new PieceView(PieceView.Color.WHITE, PieceView.Type.SINGLE);
-                        }
-                        else {
-                            pieceView = new PieceView(PieceView.Color.WHITE, PieceView.Type.KING);
-                        }
-                    }
-                    if (space.isBlack()) {
-                        spaceView = new SpaceView(j, pieceView, true);
-                    } else {
-                        spaceView = new SpaceView(j, pieceView, false);
-
-                    }
-                }
-                row.add(spaceView);
-            }
-            RowView rowView = new RowView(rowIDX, row);
-            rowViews.add(rowView);
-        }
-        return new BoardView(rowViews);
+    public Space[] getRow(int rowIndex) {
+        return this.boardArray[rowIndex];
     }
 }

@@ -63,7 +63,7 @@ public class Game {
      * @return BoardView object
      */
     public BoardView getBoardView(boolean opposite) {
-        return this.board.getBoardViewVersion(opposite);
+        return new BoardView(this.board, opposite);
     }
 
     /**

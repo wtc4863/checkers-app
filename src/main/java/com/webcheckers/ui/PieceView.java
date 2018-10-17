@@ -1,5 +1,7 @@
 package com.webcheckers.ui;
 
+import com.webcheckers.model.Piece;
+
 public class PieceView {
     private Color color;
     private Type type;
@@ -26,6 +28,26 @@ public class PieceView {
     public PieceView(Color color, Type type) {
         this.color = color;
         this.type = type;
+    }
+
+    /**
+     * Create a new PieceView object using a model-tier representation of the
+     * piece
+     *
+     * @param piece the model-tier representation of the piece
+     */
+    public PieceView(Piece piece){
+        if (piece.pieceColor == Piece.PColor.red) {
+            this.color = Color.RED;
+        } else {
+            this.color = Color.WHITE;
+        }
+
+        if (piece.pieceType == Piece.PType.king) {
+            this.type = Type.KING;
+        } else {
+            this.type = Type.SINGLE;
+        }
     }
 
     /**

@@ -1,5 +1,7 @@
 package com.webcheckers.ui;
 
+import com.webcheckers.model.Space;
+
 /**
  * The class that represents the UI tier of a space
  */
@@ -19,16 +21,25 @@ public class SpaceView {
         WHITE, BLACK;
     }
 
-    //
-    // Constructor
-    //
-    public SpaceView(int cellIdx, PieceView pieceView, boolean isBlack) {
-        this.cellIdx = cellIdx;
-        this.pieceView = pieceView;
-        if(isBlack) {
+    /**
+     * Create a new SpaceView object using a model-tier representation of the
+     * space.
+     *
+     * @param space the model-tier representation of a space
+     * @param cellIndex the index of the space in the row
+     */
+    public SpaceView(Space space, int cellIndex) {
+        this.cellIdx = cellIndex;
+        this.pieceView = null;
+
+        if (space.isBlack()) {
             this.viewColor = ViewColor.BLACK;
         } else {
             this.viewColor = ViewColor.WHITE;
+        }
+
+        if (space.doesHasPiece()) {
+            this.pieceView = new PieceView(space.pieceInfo());
         }
     }
 
