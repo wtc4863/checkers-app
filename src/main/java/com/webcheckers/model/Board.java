@@ -87,6 +87,11 @@ public class Board {
 
     }
 
+    /**
+     * Return a row of spaces at the specified index
+     * @param rowIndex the index of the row to return
+     * @return a row of spaces
+     */
     public Space[] getRow(int rowIndex) {
         return this.boardArray[rowIndex];
     }
