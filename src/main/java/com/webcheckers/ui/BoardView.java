@@ -36,7 +36,7 @@ public class BoardView implements Iterable<RowView> {
 
         // Create the rows
         for (int row = 0; row < Board.ROWS; row++) {
-            this.listRowViews.add(new RowView(board.getRow(row), row, true));
+            this.listRowViews.add(new RowView(board.getRow(row), row, isWhite));
         }
 
         // Reverse the rows when rendering for White so the board appears
