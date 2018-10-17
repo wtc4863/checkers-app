@@ -1,6 +1,10 @@
 package com.webcheckers.ui;
 
+import com.webcheckers.model.Piece;
+import com.webcheckers.model.Space;
+
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 
 public class RowView implements Iterable<SpaceView>{
@@ -13,9 +17,37 @@ public class RowView implements Iterable<SpaceView>{
     //
     // Constructor
     //
-    public RowView(int index, ArrayList<SpaceView> listSpaceViews) {
+    public RowView(int index, ArrayList<SpaceView> listSpaceViews) {  // TODO remove old constructor
         this.index = index;
         this.listSpaceViews = listSpaceViews;
+    }
+
+    /**
+     * Create a new RowView object using a model-tier representation of the row
+     *
+     * @param row
+     *      the model-tier representation of a row
+     * @param index
+     *      the index of the row in the board
+     * @param reverse
+     *      if the row should be reversed, as in when the board is being
+     *      rendered for the White player
+     */
+    public RowView(Space[] row, int index, boolean reverse) {
+        // Initialize attributes
+        this.index = index;
+        this.listSpaceViews = new ArrayList<SpaceView>();
+
+        // Create the spaces
+        for (int spaceIndex = 0; spaceIndex < row.length; spaceIndex++) {
+            this.listSpaceViews.add(new SpaceView(row[spaceIndex], spaceIndex));
+        }
+
+        // Reverse the spaces when rendering for White so the board appears
+        // correctly.
+        if (reverse) {
+            Collections.reverse(this.listSpaceViews);
+        }
     }
 
     //
