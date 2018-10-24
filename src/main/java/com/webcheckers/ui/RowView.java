@@ -60,4 +60,12 @@ public class RowView implements Iterable<SpaceView>{
     public Iterator<SpaceView> iterator() {
         return listSpaceViews.iterator();
     }
+
+    @Override
+    public boolean equals(Object other) {
+        if(!(other instanceof RowView))
+            return false;
+        else
+            return ((RowView) other).index == this.index;
+    }
 }
