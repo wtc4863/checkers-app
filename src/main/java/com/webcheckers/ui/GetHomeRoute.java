@@ -17,6 +17,8 @@ import spark.Route;
 import spark.Session;
 import spark.TemplateEngine;
 
+import static spark.Spark.halt;
+
 /**
  * The UI Controller to GET the Home page.
  *
@@ -33,6 +35,7 @@ public class GetHomeRoute implements Route {
     static final String IS_SIGNED_IN = "isUserSignedIn";
     static final String NUM_SIGNED_IN = "numPlayersOnline" ;
     static final String TEMPLATE_NAME = "home.ftl";
+    static final String MESSAGE_ATTR = "message";
 
     //
     // Attributes
@@ -73,10 +76,17 @@ public class GetHomeRoute implements Route {
         final Session httpSession = request.session();
         final String sessionID = httpSession.id();
 
+        if(playerLobby.getGame(playerLobby.getBySessionID(sessionID)) != null) {
+            response.redirect("/game");
+            halt();
+            return null;
+        }
+
         // start building the view-model
         Map<String, Object> vm = new HashMap<>();
 
         vm.put(TITLE_ATTR, "Welcome!");
+        vm.put(MESSAGE_ATTR, "");
 
         // if the player is signed in return the name of the player
         String usersPlayer = playerLobby.isAlreadySignedIn(sessionID);

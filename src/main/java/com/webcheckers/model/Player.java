@@ -1,5 +1,7 @@
 package com.webcheckers.model;
 
+import com.webcheckers.ui.PlayerView;
+
 /**
  * TODO
  */
@@ -70,6 +72,15 @@ public class Player {
      */
     public void signOut() {
         this.sessionID = null;
+    }
+
+    /**
+     * Construct a PlayerView representation of this player for use by
+     * templates
+     * @return a PlayerView object that represents this player
+     */
+    public PlayerView getPlayerView() {
+        return new PlayerView(this.name);
     }
 
     @Override

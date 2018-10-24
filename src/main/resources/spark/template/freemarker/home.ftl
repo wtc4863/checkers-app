@@ -19,9 +19,17 @@
     <div class="body">
       <p>Welcome to the world of online Checkers.</p>
       <#if isUserSignedIn == true>
+        <p>${message}</p>
+        <ul style="list-style-type:none">
         <#list signedInPlayers as player>
-          ${player}
+            <li>
+            <form method = "get" action = "/game">
+            <input type="hidden" name="username" value="${player}">
+            <input type="submit" value="${player}">
+            </form>
+            </li>
         </#list>
+        </ul>
       <#else>
         <p> Number of Players online: ${numPlayersOnline}</p>
       </#if>

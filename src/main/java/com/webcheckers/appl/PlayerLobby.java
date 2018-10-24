@@ -1,6 +1,8 @@
 package com.webcheckers.appl;
 
+import com.webcheckers.model.Game;
 import com.webcheckers.model.Player;
+import com.webcheckers.ui.BoardView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,7 +19,7 @@ public class PlayerLobby {
     //
     // Constants
     //
-    public static final String ALPHANUMERIC_REGEX = "^[A-Za-z0-9]+$";
+    public static final String ALPHANUMERIC_REGEX = "^.*[A-Za-z0-9]+.*$";
     public static final String VALID_NAME_REGEX = "^[A-Za-z0-9 ]*$";
 
     //
@@ -27,7 +29,7 @@ public class PlayerLobby {
     /**
      * Record of all players that have ever signed into the game
      */
-    private HashMap<String, Player> players;
+    private static HashMap<String, Player> players;
 
     /**
      * The GameCenter instance used to handle game information
@@ -50,7 +52,7 @@ public class PlayerLobby {
     // Methods
     //
 
-    private Player getPlayer(String name) {
+    public static Player getPlayer(String name) {
         return players.get(name);
     }
 
@@ -139,5 +141,65 @@ public class PlayerLobby {
      */
     public int getNumberOnlinePlayers() {
         return getSignedInPlayers().size();
+    }
+
+    /**
+     * Retrieves a player based on the session ID associated with the player.
+     * @param sessionID the session ID associated with the player
+     * @return the Player object associated with the session ID, or Null if
+     * there is no player for the given session ID.
+     */
+    public Player getBySessionID(String sessionID) {
+        for(Player player : players.values()) {
+            if(player.isSignedIn(sessionID)) {
+                // If we've found a match, we can return now.  There should be
+                // no session ID duplicates.  If there is, either something
+                // else is broken in our code, or we just found a CVE in Spark.
+                return player;
+            }
+        }
+        // If we get here, then there are no players that match that session ID
+        return null;
+    }
+
+    /**
+     * Passes up the opponent of a specific player from GameCenter
+     * @param player player whose opponent is being found
+     * @return player object of opponent
+     */
+    public Player getOpponent(Player player) {
+       return this.gameCenter.getOpponent(player);
+    }
+
+    /**
+     * Passes up the game object a specific player is playing in
+     * @param player player whose game is being found
+     * @return game object of player, null if player is not in game
+     */
+    public Game getGame (Player player) {
+        if (player == null) {
+            return null;
+        } else {
+            return this.gameCenter.getGame(player);
+        }
+    }
+
+    /**
+     * Tells the GameCenter to create a new game with two players
+     * @param redPlayer player on the red team
+     * @param whitePlayer player on the white team
+     * @return Game object of these two players
+     */
+    public Game startGame (Player redPlayer, Player whitePlayer) {
+        return gameCenter.startGame(redPlayer, whitePlayer);
+    }
+
+    /**
+     * Tells the GameCenter to get the BoardView for a specific player
+     * @param player player that the BoardView is for
+     * @return BoardView of this player
+     */
+    public BoardView getBoardView(Player player) {
+        return gameCenter.getBoardView(player);
     }
 }
