@@ -10,7 +10,7 @@ public class BoardView implements Iterable<RowView> {
     //
     // Attributes
     //
-    private ArrayList<RowView> listRowViews;
+    ArrayList<RowView> listRowViews;
 
     /**
      * Create a new BoardView object using a Board model-tier class so the
