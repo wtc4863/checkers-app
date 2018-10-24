@@ -23,7 +23,7 @@ public class Board {
     private boolean darkSpace = true;
 
     /** 2D Array of spaces*/
-    private Space[][] boardArray;
+    Space[][] boardArray;
 
     //
     // Constructor
@@ -77,14 +77,13 @@ public class Board {
      * @param location2 the desired location of the piece
      */
     public void move(Space location1, Space location2) {
-
-        Piece beingMoved = location1.pieceInfo();
-        if(location2.isValid()) {
-            location1.removePiece();
-            location2.addPiece(beingMoved);
+        if (location1.doesHasPiece()) {
+            Piece beingMoved = location1.pieceInfo();
+            if(location2.isValid()) {
+                location1.removePiece();
+                location2.addPiece(beingMoved);
+            }
         }
-
-
     }
 
     /**
@@ -94,5 +93,9 @@ public class Board {
      */
     public Space[] getRow(int rowIndex) {
         return this.boardArray[rowIndex];
+    }
+
+    public Space getSpace(int rowIndex, int colIndex) {
+        return boardArray[rowIndex][colIndex];
     }
 }

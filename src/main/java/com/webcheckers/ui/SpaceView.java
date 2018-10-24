@@ -68,4 +68,12 @@ public class SpaceView {
     public PieceView getPieceView() {
         return pieceView;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == this) return true;
+        if (!(o instanceof SpaceView)) return false;
+        final SpaceView that = (SpaceView) o;
+        return (this.pieceView == that.pieceView && this.cellIdx == that.cellIdx && this.viewColor == that.viewColor);
+    }
 }
