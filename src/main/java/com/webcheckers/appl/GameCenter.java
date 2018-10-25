@@ -15,8 +15,8 @@ public class GameCenter {
     //
     // Attributes
     //
-    private static ArrayList<Game> activeGames;
-    private static HashMap<String, Player> opponents;
+    ArrayList<Game> activeGames;
+    HashMap<String, Player> opponents;
 
     //
     // Constructor
