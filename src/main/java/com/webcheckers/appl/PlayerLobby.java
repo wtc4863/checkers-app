@@ -19,8 +19,8 @@ public class PlayerLobby {
     //
     // Constants
     //
-    public static final String ALPHANUMERIC_REGEX = "^.*[A-Za-z0-9]+.*$";
-    public static final String VALID_NAME_REGEX = "^[A-Za-z0-9 ]*$";
+    private static final String ALPHANUMERIC_REGEX = "^.*[A-Za-z0-9]+.*$";
+    private static final String VALID_NAME_REGEX = "^[A-Za-z0-9 ]*$";
 
     //
     // Attributes
@@ -29,7 +29,7 @@ public class PlayerLobby {
     /**
      * Record of all players that have ever signed into the game
      */
-    private static HashMap<String, Player> players;
+    private HashMap<String, Player> players;
 
     /**
      * The GameCenter instance used to handle game information
@@ -44,37 +44,28 @@ public class PlayerLobby {
      * Create a new PlayerLobby instance
      */
     public PlayerLobby() {
+        this(new GameCenter());
+    }
+
+    /**
+     * Create a new PlayerLobby instance with a given GameCenter object.
+     * Currently used only for testing purposes.
+     *
+     * @param gameCenter
+     *      the GameCenter object to use when creating the new
+     *      PlayerLobby instance.
+     */
+    PlayerLobby(GameCenter gameCenter) {
         this.players = new HashMap<>();
-        this.gameCenter = new GameCenter();
+        this.gameCenter = gameCenter;
     }
 
     //
     // Methods
     //
 
-    public static Player getPlayer(String name) {
+    public Player getPlayer(String name) {
         return players.get(name);
-    }
-
-    /**
-     * Get the names of all players that have ever signed into the game
-     *
-     * @return a set of all player names
-     */
-    private Set<String> getPlayerNames() {
-        return players.keySet();
-    }
-
-    /**
-     * This method will check if the given name exists. If the name exists
-     * there is a player that already has that name since all names must be
-     * unique
-     *
-     * @param name the name to check
-     * @return true if player in current instance of the web server
-     */
-    private boolean doesPlayerExist(String name) {
-        return !getPlayerNames().contains(name);
     }
 
     /**
@@ -112,12 +103,24 @@ public class PlayerLobby {
      *      could not be signed in.
      */
     public synchronized boolean signIn(String playerName, String sessionID) {
-        if (!validName(playerName)) {
+        return signIn(new Player(playerName, sessionID));
+    }
+
+    /**
+     * Sign in a player.
+     *
+     * @param player the Player object to use to sign in the player
+     * @return
+     *      true if the player was signed in successfully, false if the player
+     *      could not be signed in.
+     */
+    synchronized boolean signIn(Player player) {
+        if(!validName(player.getName())) {
             return false;
-        } else if (getSignedInPlayers().contains(playerName)) {
+        } else if (getSignedInPlayers().contains(player.getName())) {
             return false;
         } else {
-            players.put(playerName, new Player(playerName, sessionID));
+            players.put(player.getName(), player);
             return true;
         }
     }
@@ -127,7 +130,7 @@ public class PlayerLobby {
      * @param sessionID the session id to check
      * @return player name if a player is using the given ID
      */
-    public String isAlreadySignedIn(String sessionID) {
+    public String getPlayerNameBySessionID(String sessionID) {
         for(Player player: players.values()) {
             if(player.isSignedIn(sessionID))
                 return player.getName();
@@ -136,20 +139,12 @@ public class PlayerLobby {
     }
 
     /**
-     * Return the number of online players
-     * @return an int representing the number of online players
-     */
-    public int getNumberOnlinePlayers() {
-        return getSignedInPlayers().size();
-    }
-
-    /**
      * Retrieves a player based on the session ID associated with the player.
      * @param sessionID the session ID associated with the player
      * @return the Player object associated with the session ID, or Null if
      * there is no player for the given session ID.
      */
-    public Player getBySessionID(String sessionID) {
+    public Player getPlayerBySessionID(String sessionID) {
         for(Player player : players.values()) {
             if(player.isSignedIn(sessionID)) {
                 // If we've found a match, we can return now.  There should be
@@ -176,7 +171,7 @@ public class PlayerLobby {
      * @param player player whose game is being found
      * @return game object of player, null if player is not in game
      */
-    public Game getGame (Player player) {
+    public Game getGame(Player player) {
         if (player == null) {
             return null;
         } else {
@@ -190,7 +185,7 @@ public class PlayerLobby {
      * @param whitePlayer player on the white team
      * @return Game object of these two players
      */
-    public Game startGame (Player redPlayer, Player whitePlayer) {
+    public Game startGame(Player redPlayer, Player whitePlayer) {
         return gameCenter.startGame(redPlayer, whitePlayer);
     }
 

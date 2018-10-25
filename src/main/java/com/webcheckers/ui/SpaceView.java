@@ -18,7 +18,7 @@ public class SpaceView {
      * A SpaceView either represents a white or black space
      */
     public enum ViewColor {
-        WHITE, BLACK;
+        WHITE, BLACK
     }
 
     /**
@@ -34,12 +34,11 @@ public class SpaceView {
 
         if (space.isBlack()) {
             this.viewColor = ViewColor.BLACK;
+            if (space.doesHasPiece()) {
+                this.pieceView = space.pieceInfo().getPieceView();
+            }
         } else {
             this.viewColor = ViewColor.WHITE;
-        }
-
-        if (space.doesHasPiece()) {
-            this.pieceView = new PieceView(space.pieceInfo());
         }
     }
 
@@ -69,5 +68,4 @@ public class SpaceView {
     public PieceView getPieceView() {
         return pieceView;
     }
-
 }
