@@ -1,4 +1,4 @@
-package com.webcheckers.ui.UI;
+package com.webcheckers.ui;
 import static org.junit.jupiter.api.Assertions.*;
 
 import com.webcheckers.model.Piece;
