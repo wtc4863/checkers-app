@@ -66,5 +66,13 @@ public class PieceView {
         return this.color;
     }
 
+    @Override
+    public boolean equals(Object o){
+        if (o == this) return true;
+        if (!(o instanceof PieceView)) return false;
+        final PieceView that = (PieceView) o;
+        return (this.color == that.color && this.type == that.type);
 
+
+    }
 }
