@@ -1,5 +1,7 @@
 package com.webcheckers.model;
 
+import com.webcheckers.ui.PieceView;
+
 public class Space {
 
     //
