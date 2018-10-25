@@ -1,6 +1,5 @@
 package com.webcheckers.ui;
 
-import com.webcheckers.appl.GameCenter;
 import com.webcheckers.appl.PlayerLobby;
 import com.webcheckers.model.Game;
 import com.webcheckers.model.Player;
@@ -67,7 +66,7 @@ public class GetGameRoute implements Route{
     public Object handle(Request request, Response response) {
         final Session httpSession = request.session();
         final Map<String, Object> vm = new HashMap<>();
-        Player thisPlayer = playerLobby.getBySessionID(httpSession.id());
+        Player thisPlayer = playerLobby.getPlayerBySessionID(httpSession.id());
         Player opponentPlayer = null;
         Player redPlayer = null;
         Player whitePlayer = null;

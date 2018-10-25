@@ -1,8 +1,6 @@
 package com.webcheckers.ui;
 
-import com.webcheckers.appl.GameCenter;
 import com.webcheckers.appl.PlayerLobby;
-import com.webcheckers.model.Player;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -76,7 +74,7 @@ public class GetHomeRoute implements Route {
         final Session httpSession = request.session();
         final String sessionID = httpSession.id();
 
-        if(playerLobby.getGame(playerLobby.getBySessionID(sessionID)) != null) {
+        if(playerLobby.getGame(playerLobby.getPlayerBySessionID(sessionID)) != null) {
             response.redirect("/game");
             halt();
             return null;
@@ -89,7 +87,7 @@ public class GetHomeRoute implements Route {
         vm.put(MESSAGE_ATTR, "");
 
         // if the player is signed in return the name of the player
-        String usersPlayer = playerLobby.isAlreadySignedIn(sessionID);
+        String usersPlayer = playerLobby.getPlayerNameBySessionID(sessionID);
         if(usersPlayer != null) {
             LOG.finer("Player is returning: " + usersPlayer);
             // list of signed in players to render to the user (excluding user)
@@ -100,7 +98,7 @@ public class GetHomeRoute implements Route {
         } else {
             LOG.finer("New, non-registered player joined");
             vm.put(IS_SIGNED_IN, false);
-            vm.put(NUM_SIGNED_IN, playerLobby.getNumberOnlinePlayers());
+            vm.put(NUM_SIGNED_IN, playerLobby.getSignedInPlayers().size());
         }
 
         return templateEngine.render(new ModelAndView(vm, TEMPLATE_NAME));

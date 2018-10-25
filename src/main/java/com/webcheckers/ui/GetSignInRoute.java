@@ -56,7 +56,7 @@ public class GetSignInRoute implements Route {
         // set up the template for rendering
         Map<String, Object> vm = new HashMap<>();
 
-        String usersPlayer = playerLobby.isAlreadySignedIn(sessionID);
+        String usersPlayer = playerLobby.getPlayerNameBySessionID(sessionID);
         if(usersPlayer != null) {
             response.redirect("/");
             halt();
