@@ -44,8 +44,20 @@ public class PlayerLobby {
      * Create a new PlayerLobby instance
      */
     public PlayerLobby() {
+        this(new GameCenter());
+    }
+
+    /**
+     * Create a new PlayerLobby instance with a given GameCenter object.
+     * Currently used only for testing purposes.
+     *
+     * @param gameCenter
+     *      the GameCenter object to use when creating the new
+     *      PlayerLobby instance.
+     */
+    PlayerLobby(GameCenter gameCenter) {
         this.players = new HashMap<>();
-        this.gameCenter = new GameCenter();
+        this.gameCenter = gameCenter;
     }
 
     //
@@ -91,12 +103,24 @@ public class PlayerLobby {
      *      could not be signed in.
      */
     public synchronized boolean signIn(String playerName, String sessionID) {
-        if (!validName(playerName)) {
+        return signIn(new Player(playerName, sessionID));
+    }
+
+    /**
+     * Sign in a player.
+     *
+     * @param player the Player object to use to sign in the player
+     * @return
+     *      true if the player was signed in successfully, false if the player
+     *      could not be signed in.
+     */
+    synchronized boolean signIn(Player player) {
+        if(!validName(player.getName())) {
             return false;
-        } else if (getSignedInPlayers().contains(playerName)) {
+        } else if (getSignedInPlayers().contains(player.getName())) {
             return false;
         } else {
-            players.put(playerName, new Player(playerName, sessionID));
+            players.put(player.getName(), player);
             return true;
         }
     }
