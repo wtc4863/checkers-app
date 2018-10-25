@@ -10,7 +10,7 @@ public class RowView implements Iterable<SpaceView>{
     //
     // Attributes
     //
-    private ArrayList<SpaceView> listSpaceViews;
+    ArrayList<SpaceView> listSpaceViews;
     private int index;
 
     /**
