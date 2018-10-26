@@ -1,6 +1,7 @@
 package com.webcheckers.model;
 
 import com.webcheckers.ui.BoardView;
+import java.util.Queue;
 
 /**
  * Object that holds all of the data for a specific game
@@ -14,6 +15,7 @@ public class Game {
     private Player whitePlayer;
     private Board board;
     private Turn turn;
+    private Queue<Move> queuedTurnMoves;
 
     enum Turn {
         WHITE, RED;
@@ -72,5 +74,12 @@ public class Game {
      */
     public Turn getTurn() {
         return this.turn;
+    }
+
+    /**
+     * Applies the current players moves to the board.
+     */
+    public void applyTurnMoves() {
+        //TODO: implement doing all these moves to the board
     }
 }
