@@ -1,5 +1,6 @@
 package com.webcheckers.model;
 
+import java.lang.UnsupportedOperationException;
 public class Move {
 
     Position start;
@@ -16,6 +17,29 @@ public class Move {
 
     public Position getStart() {
         return start;
+    }
+
+    /**
+     * This method will not be used because a move must be a specific subclass of Move itsef.
+     * If a plain Move is used then we throw the UnsupportedOperationException because
+     * a generic move doesn't exist
+     * @param board the board of the game we're validating
+     * @return
+     * @throws UnsupportedOperationException
+     */
+    public boolean validateMove(Board board) throws UnsupportedOperationException{
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * This method will not be used because a move must be a specific subclass of Move itsef.
+     * If a plain Move is used then we throw the UnsupportedOperationException because
+     * a generic move doesn't exist
+     * @param board the board of the game we're validating
+     * @throws UnsupportedOperationException
+     */
+    public void executeMove(Board board) throws UnsupportedOperationException{
+        throw new UnsupportedOperationException();
     }
 
     @Override
