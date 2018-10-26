@@ -1,16 +1,24 @@
 package com.webcheckers.ui;
 
+import com.webcheckers.model.Game;
 import com.webcheckers.model.Move;
-import com.webcheckers.model.Position;
 import com.google.gson.GsonBuilder;
 import com.google.gson.Gson;
 
-public class TurnTranslator {
+public class TurnController {
 
     private GsonBuilder builder;
+    private Game modelRepresentation;
+    private BoardView viewRepresentation;
 
-    public TurnTranslator() {
+    /**
+     * @param currentGame the game being played
+     * @param viewBoard the board of the game after a move has been sent
+     */
+    public TurnController(Game currentGame, BoardView viewBoard) {
         builder = new GsonBuilder();
+        modelRepresentation = currentGame;
+        viewRepresentation = viewBoard;
     }
 
     /**
