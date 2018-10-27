@@ -23,11 +23,10 @@ public class Move {
      * This method will not be used because a move must be a specific subclass of Move itsef.
      * If a plain Move is used then we throw the UnsupportedOperationException because
      * a generic move doesn't exist
-     * @param board the board of the game we're validating
-     * @return
+     * @param game the game in which we're moving the piece
      * @throws UnsupportedOperationException
      */
-    public boolean validateMove(Board board) throws UnsupportedOperationException{
+    public boolean validateMove(Game game) throws UnsupportedOperationException{
         throw new UnsupportedOperationException();
     }
 
@@ -35,10 +34,11 @@ public class Move {
      * This method will not be used because a move must be a specific subclass of Move itsef.
      * If a plain Move is used then we throw the UnsupportedOperationException because
      * a generic move doesn't exist
-     * @param board the board of the game we're validating
+     * @param game the game in which we're moving the piece
+     * @return true if move was made
      * @throws UnsupportedOperationException
      */
-    public void executeMove(Board board) throws UnsupportedOperationException{
+    public boolean executeMove(Game game) throws UnsupportedOperationException{
         throw new UnsupportedOperationException();
     }
 
