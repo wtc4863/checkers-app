@@ -3,6 +3,10 @@ package com.webcheckers.model;
 import java.lang.UnsupportedOperationException;
 public class Move {
 
+    static final String GENERIC_VALIDATION_ERROR_MESSAGE = "Generic move validation not supported.";
+    static final String GENERIC_EXECUTION_ERROR_MESSAGE = "Generic move execution not supported.";
+
+
     Position start;
     Position end;
 
@@ -27,7 +31,7 @@ public class Move {
      * @throws UnsupportedOperationException
      */
     public boolean validateMove(Game game) throws UnsupportedOperationException{
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException(GENERIC_VALIDATION_ERROR_MESSAGE);
     }
 
     /**
@@ -39,7 +43,7 @@ public class Move {
      * @throws UnsupportedOperationException
      */
     public boolean executeMove(Game game) throws UnsupportedOperationException{
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException(GENERIC_EXECUTION_ERROR_MESSAGE);
     }
 
     @Override
