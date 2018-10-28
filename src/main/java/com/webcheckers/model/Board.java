@@ -93,8 +93,4 @@ public class Board {
     public Space[] getRow(int rowIndex) {
         return this.boardArray[rowIndex];
     }
-
-    public Space getSpace(int rowIndex, int colIndex) {
-        return boardArray[rowIndex][colIndex];
-    }
 }
