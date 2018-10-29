@@ -23,7 +23,7 @@ public class Position {
             return false;
         } else {
             Position pos = (Position)obj;
-            return this.row == pos.getRow() && this.col == pos.getRow();
+            return this.row == pos.getRow() && this.col == pos.getCol();
         }
     }
 }

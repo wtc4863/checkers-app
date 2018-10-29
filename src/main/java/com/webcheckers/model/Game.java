@@ -31,6 +31,14 @@ public class Game {
         this.board = new Board();
     }
 
+    // used for custom configuration
+    public Game(Player redPlayer, Player whitePlayer, Turn turn, Board board) {
+        this.redPlayer = redPlayer;
+        this.whitePlayer = whitePlayer;
+        this.turn = turn;
+        this.board = board;
+    }
+
     //
     // Methods
     //
