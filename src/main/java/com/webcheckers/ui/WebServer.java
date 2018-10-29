@@ -65,6 +65,10 @@ public class WebServer {
      * The URL pattern to request the Game page.
      */
     public static final String GAME_URL = "/game";
+    /**
+     * The URL pattern to request the Game page.
+     */
+    public static final String VALIDATE_MOVE_URL = "/validateMove";
     //
     // Attributes
     //
@@ -157,6 +161,9 @@ public class WebServer {
 
         //Shows the Checkers game page
         get(GAME_URL, new GetGameRoute(playerLobby, templateEngine));
+
+        // Handles Move Validation
+        post(VALIDATE_MOVE_URL, new PostValidateMoveRoute(playerLobby, templateEngine));
 
         //
         LOG.config("WebServer is initialized.");
