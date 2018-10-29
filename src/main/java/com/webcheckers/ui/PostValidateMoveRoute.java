@@ -46,14 +46,9 @@ public class PostValidateMoveRoute implements Route {
         final String moveToBeValidated = request.body();
 
         TurnController turnController = new TurnController(playerLobby);
-        boolean result = turnController.handleValidation(moveToBeValidated, httpSession.id());
-        if(result) {
-            Message success = new Message(VALID_MOVE_MESSAGE, MessageType.info);
-            return turnController.MessageFromModeltoUI(success);
-        } else {
-            Message error = new Message(INVALID_MOVE_MESSAGE, MessageType.error);
-            return turnController.MessageFromModeltoUI(error);
-        }
+        Message res = turnController.handleValidation(moveToBeValidated, httpSession.id());
+        return turnController.MessageFromModeltoUI(res);
+
     }
 
 

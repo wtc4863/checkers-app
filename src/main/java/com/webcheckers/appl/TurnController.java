@@ -7,10 +7,13 @@ import com.google.gson.Gson;
 import com.webcheckers.model.Player;
 import com.webcheckers.model.SimpleMove;
 import com.webcheckers.ui.Message;
+import com.webcheckers.ui.Message.MessageType;
 import java.util.logging.Logger;
 
 public class TurnController {
     private static final Logger LOG = Logger.getLogger(TurnController.class.getName());
+
+    private static final String SIMPLE_MOVE_ERROR_MSG = "Piece not moved to adjacent space or Space is filled.";
 
     GsonBuilder builder;
     PlayerLobby playerLobby;
@@ -52,11 +55,21 @@ public class TurnController {
      * @param sessionID the session ID that will help find the game
      * @return
      */
-    public boolean handleValidation(String moveToBeValidated, String sessionID) {
+    public Message handleValidation(String moveToBeValidated, String sessionID) {
         Player playerMakingMove = playerLobby.getPlayerBySessionID(sessionID);
         Game currentGame = playerLobby.getGame(playerMakingMove);
         Move currentMove = MovefromUItoModel(moveToBeValidated);
-        return currentMove.validateMove(currentGame);
+        boolean result = currentMove.validateMove(currentGame);
+        if(result) {
+            return new Message("Valid Move", MessageType.info);
+        } else {
+            // differentiate between different move types
+            if(currentMove instanceof SimpleMove) {
+                return new Message(SIMPLE_MOVE_ERROR_MSG, MessageType.error);
+            } else {
+                return new Message("Invalid Generic Move", MessageType.error);
+            }
+        }
 
     }
 }
