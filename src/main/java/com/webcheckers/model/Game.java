@@ -76,6 +76,13 @@ public class Game {
         return this.turn;
     }
 
+    public void switchTurn() {
+        if(this.turn == Turn.RED)
+            this.turn = Turn.WHITE;
+        else
+            this.turn = Turn.RED;
+    }
+
     /**
      * Applies the current players moves to the board.
      */

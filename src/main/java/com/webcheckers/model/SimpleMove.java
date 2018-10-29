@@ -18,6 +18,7 @@ public class SimpleMove extends Move{
         Board board = game.getBoard();
         if(validateMove(game)) {
             board.move(start, end);
+            game.switchTurn();
             return true;
         } else {
             return false;
@@ -41,7 +42,7 @@ public class SimpleMove extends Move{
         if(board.spaceIsValid(end)) {
             // red is at the top of the board in the model and moving "forward" is going down
             //TODO: does the way we flip the board change this because the client will switch it?
-            if(game.getTurn() == Turn.RED) {
+            if(game.getTurn() == Turn.WHITE) {
                 // get the possible starting points given this ending space
                 int left = end.getCol() - 1;
                 int right = end.getCol() + 1;

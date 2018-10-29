@@ -1,12 +1,10 @@
 package com.webcheckers.model;
 
-import java.lang.reflect.Executable;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Tag;
-import org.mockito.Mockito;
 
 @Tag("Model-Tier")
 public class MoveTest {
