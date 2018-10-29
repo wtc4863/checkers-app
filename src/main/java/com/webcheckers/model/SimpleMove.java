@@ -1,9 +1,10 @@
 package com.webcheckers.model;
 
 import com.webcheckers.model.Game.Turn;
+import java.util.logging.Logger;
 
 public class SimpleMove extends Move{
-
+    private static final Logger LOG = Logger.getLogger(SimpleMove.class.getName());
     public SimpleMove(Position start, Position end) {
         super(start, end);
     }
@@ -44,21 +45,24 @@ public class SimpleMove extends Move{
             //TODO: does the way we flip the board change this because the client will switch it?
             if(game.getTurn() == Turn.WHITE) {
                 // get the possible starting points given this ending space
-                int left = end.getCol() - 1;
-                int right = end.getCol() + 1;
-                int top = end.getRow() + 1;
+                int left = end.getCell() - 1;
+                int right = end.getCell() + 1;
+                int top = end.getRow() - 1;
                 // create new positions for easy comparison
                 Position upperLeft = new Position(top, left);
                 Position upperRight = new Position(top, right);
                 return upperLeft.equals(start) || upperRight.equals(start);
             } else {
                 // get the possible starting points given this ending space
-                int left = end.getCol() - 1;
-                int right = end.getCol() + 1;
-                int bot = end.getRow() - 1;
+                int left = end.getCell() - 1;
+                int right = end.getCell() + 1;
+                int bot = end.getRow() + 1;
                 // create new positions for easy comparison
                 Position bottomLeft = new Position(bot, left);
+                LOG.fine("BottomLeft: " + bottomLeft.toString());
                 Position bottomRight = new Position(bot, right);
+                LOG.fine("BottomRight: " + bottomRight.toString());
+                LOG.fine("Start: " + start.toString());
                 return bottomLeft.equals(start) || bottomRight.equals(start);
             }
         } else {
@@ -77,8 +81,8 @@ public class SimpleMove extends Move{
          Position start = move.getStart();
          Position end = move.getEnd();
          // get the possible starting points given this ending space
-         int left = end.getCol() - 1;
-         int right = end.getCol() + 1;
+         int left = end.getCell() - 1;
+         int right = end.getCell() + 1;
          int top = end.getRow() + 1;
          int bot = end.getRow() - 1;
          // create new positions for easy comparison
@@ -88,5 +92,10 @@ public class SimpleMove extends Move{
          Position bottomRight = new Position(bot, right);
          return upperLeft.equals(start) || upperRight.equals(start) || bottomLeft.equals(start) || bottomRight.equals(start);
      }
+    @Override
+    public String toString() {
+        return String.format("SimpleMove{(%d, %d) -> (%d, %d)}",
+            start.getRow(), start.getCell(), end.getRow(), end.getCell());
+    }
 
 }

@@ -56,4 +56,10 @@ public class Move {
         }
 
     }
+
+    @Override
+    public String toString() {
+        return String.format("Move{(%d, %d) -> (%d, %d)}",
+            start.getRow(), start.getCell(), end.getRow(), end.getCell());
+    }
 }

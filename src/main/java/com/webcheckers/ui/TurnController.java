@@ -7,8 +7,10 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.Gson;
 import com.webcheckers.model.Player;
 import com.webcheckers.model.SimpleMove;
+import java.util.logging.Logger;
 
 public class TurnController {
+    private static final Logger LOG = Logger.getLogger(TurnController.class.getName());
 
     private GsonBuilder builder;
     private PlayerLobby playerLobby;
@@ -41,12 +43,7 @@ public class TurnController {
         Move translatedMove = gson.fromJson(json, Move.class);
 
         // Do checking for move type in order to return correct type
-        if(SimpleMove.isSimpleMove(translatedMove)) {
-            return new SimpleMove(translatedMove.getStart(), translatedMove.getEnd());
-        } else {
-            // if we get here then something went wrong
-            return null;
-        }
+        return new SimpleMove(translatedMove.getStart(), translatedMove.getEnd());
     }
 
     /**
@@ -71,11 +68,7 @@ public class TurnController {
         Player playerMakingMove = playerLobby.getPlayerBySessionID(sessionID);
         Game currentGame = playerLobby.getGame(playerMakingMove);
         Move currentMove = MovefromUItoModel(moveToBeValidated);
+        return currentMove.validateMove(currentGame);
 
-        if(currentMove != null) {
-            return currentMove.validateMove(currentGame);
-        } else {
-            return false;
-        }
     }
 }

@@ -15,10 +15,10 @@ public class SimpleMoveTest {
 
     private static final int START_ROW = 1;
     private static final int START_COL = 2;
-    private static final int END_ROW_RED = 2;
-    private static final int END_COL_RED = 3;
-    private static final int END_ROW_WHITE = 0;
-    private static final int END_COL_WHITE = 3;
+    private static final int END_ROW_WHITE= 2;
+    private static final int END_COL_WHITE= 3;
+    private static final int END_ROW_RED= 0;
+    private static final int END_COL_RED= 3;
     private static final String TEST_NAME_RED = "red";
     private static final String TEST_NAME_WHITE= "white";
 
@@ -143,5 +143,18 @@ public class SimpleMoveTest {
 
         CuT = new SimpleMove(testStart, testEnd);
         Assertions.assertFalse(CuT.validateMove(testGame));
+    }
+
+    @Test
+    public void shouldFailWhenJumpMove() {
+        testStart = new Position(5, 0);
+        testEnd = new Position(3, 2);
+        when(testBoard.spaceIsValid(testEnd)).thenReturn(true);
+        when(testGame.getBoard()).thenReturn(testBoard);
+        when(testGame.getTurn()).thenReturn(Turn.RED);
+
+        CuT = new SimpleMove(testStart, testEnd);
+        Assertions.assertFalse(CuT.validateMove(testGame));
+
     }
 }

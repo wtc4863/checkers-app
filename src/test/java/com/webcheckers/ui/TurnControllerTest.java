@@ -31,7 +31,6 @@ public class TurnControllerTest {
         whitePlayer = new Player("whitePlayerName", "1");
         redPlayer = new Player("redPlayerName", "2");
         Game game = new Game(redPlayer, whitePlayer);
-        CuT = new TurnController(game, testViewBoard);
     }
 
     @AfterEach
