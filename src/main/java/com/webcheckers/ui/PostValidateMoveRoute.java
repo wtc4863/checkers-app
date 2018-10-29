@@ -1,6 +1,9 @@
 package com.webcheckers.ui;
 
 import com.webcheckers.appl.PlayerLobby;
+import com.webcheckers.model.Game;
+import com.webcheckers.model.Player;
+import com.webcheckers.ui.Message.MessageType;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -9,6 +12,7 @@ import spark.ModelAndView;
 import spark.Request;
 import spark.Response;
 import spark.Route;
+import spark.Session;
 import spark.TemplateEngine;
 
 public class PostValidateMoveRoute implements Route {
@@ -17,7 +21,8 @@ public class PostValidateMoveRoute implements Route {
     //
     // Constants
     //
-    public static final String ERROR_MESSAGE = "The username you entered is either already in use, or invalid.  Please try again.";
+    public static final String INVALID_MOVE_MESSAGE = "Invalid Move";
+    public static final String VALID_MOVE_MESSAGE = "Valid Move";
 
     //
     // Attributes
@@ -40,14 +45,24 @@ public class PostValidateMoveRoute implements Route {
         this.playerLobby = playerLobby;
         this.templateEngine = templateEngine;
 
-        LOG.config("PostSignInRoute is initialized.");
+        LOG.config("PostValidateMoveRoute is initialized.");
     }
 
 
     @Override
     public Object handle(Request request, Response response) {
-        Map<String, Object> vm = new HashMap<>();
-        return templateEngine.render(new ModelAndView(vm, GetSignInRoute.TEMPLATE_NAME));
+        final Session httpSession = request.session();
+        final String moveToBeValidated = request.body();
+
+        TurnController turnController = new TurnController(playerLobby);
+        boolean result = turnController.handleValidation(moveToBeValidated, httpSession.id());
+        if(result) {
+            Message success = new Message(VALID_MOVE_MESSAGE, MessageType.INFO);
+            return turnController.MessageFromModeltoUI(success);
+        } else {
+            Message error = new Message(INVALID_MOVE_MESSAGE, MessageType.ERROR);
+            return turnController.MessageFromModeltoUI(error);
+        }
 
     }
 
