@@ -2,15 +2,15 @@ package com.webcheckers.model;
 
 public class Position {
     private int row;
-    private int col;
+    private int cell;
 
-    public Position(int row, int col) {
+    public Position(int row, int cell) {
         this.row = row;
-        this.col = col;
+        this.cell = cell;
     }
 
-    public int getCol() {
-        return col;
+    public int getCell() {
+        return cell;
     }
 
     public int getRow() {
@@ -23,7 +23,11 @@ public class Position {
             return false;
         } else {
             Position pos = (Position)obj;
-            return this.row == pos.getRow() && this.col == pos.getCol();
+            return this.row == pos.getRow() && this.cell == pos.getCell();
         }
+    }
+    @Override
+    public String toString() {
+        return String.format("(%d, %d)", row, cell);
     }
 }

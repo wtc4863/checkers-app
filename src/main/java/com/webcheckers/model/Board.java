@@ -73,15 +73,15 @@ public class Board {
      * @param location2 the desired location of the piece
      */
     public void move(Position location1, Position location2) {
-        Space startSpace = boardArray[location1.getRow()][location1.getCol()];
-        Space endSpace = boardArray[location2.getRow()][location2.getCol()];
+        Space startSpace = boardArray[location1.getRow()][location1.getCell()];
+        Space endSpace = boardArray[location2.getRow()][location2.getCell()];
         Piece beingMoved = startSpace.pieceInfo();
             startSpace.removePiece();
             endSpace.addPiece(beingMoved);
     }
 
     public boolean spaceIsValid(Position position) {
-        Space space = boardArray[position.getRow()][position.getCol()];
+        Space space = boardArray[position.getRow()][position.getCell()];
         return space.isValid();
     }
 
