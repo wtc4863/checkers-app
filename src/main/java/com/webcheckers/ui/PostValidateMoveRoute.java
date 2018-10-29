@@ -15,8 +15,6 @@ public class PostValidateMoveRoute implements Route {
     //
     // Constants
     //
-    public static final String INVALID_MOVE_MESSAGE = "Invalid Move";
-    public static final String VALID_MOVE_MESSAGE = "Valid Move";
 
     //
     // Attributes
