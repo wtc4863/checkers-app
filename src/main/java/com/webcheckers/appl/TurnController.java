@@ -1,19 +1,19 @@
-package com.webcheckers.ui;
+package com.webcheckers.appl;
 
-import com.webcheckers.appl.PlayerLobby;
 import com.webcheckers.model.Game;
 import com.webcheckers.model.Move;
 import com.google.gson.GsonBuilder;
 import com.google.gson.Gson;
 import com.webcheckers.model.Player;
 import com.webcheckers.model.SimpleMove;
+import com.webcheckers.ui.Message;
 import java.util.logging.Logger;
 
 public class TurnController {
     private static final Logger LOG = Logger.getLogger(TurnController.class.getName());
 
-    private GsonBuilder builder;
-    private PlayerLobby playerLobby;
+    GsonBuilder builder;
+    PlayerLobby playerLobby;
     //private Game modelRepresentation;
     //private BoardView viewRepresentation;
 
@@ -27,7 +27,7 @@ public class TurnController {
      * @param message the message to be translated
      * @return a string continaing a message
      */
-     String MessageFromModeltoUI(Message message) {
+     public String MessageFromModeltoUI(Message message) {
         Gson gson = this.builder.create();
         return gson.toJson(message, Message.class);
     }
@@ -38,24 +38,12 @@ public class TurnController {
      * @param json the json-formatted move
      * @return a Move instance
      */
-    private Move MovefromUItoModel(String json) {
+    Move MovefromUItoModel(String json) {
         Gson gson = this.builder.create();
         Move translatedMove = gson.fromJson(json, Move.class);
 
         // Do checking for move type in order to return correct type
         return new SimpleMove(translatedMove.getStart(), translatedMove.getEnd());
-    }
-
-    /**
-     * Takes a move instance and uses its data to create a json representation
-     * to pass to be understood by the ui tier
-     * @param move the instance of move to translate
-     * @return a JSON-formatted string
-     */
-    private String MovefromModeltoUI(Move move) {
-        Gson gson = builder.create();
-        String translatedMove = gson.toJson(move);
-        return translatedMove;
     }
 
     /**

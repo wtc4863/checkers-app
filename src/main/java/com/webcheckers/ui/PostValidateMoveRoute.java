@@ -1,5 +1,6 @@
 package com.webcheckers.ui;
 
+import com.webcheckers.appl.TurnController;
 import com.webcheckers.appl.PlayerLobby;
 import com.webcheckers.ui.Message.MessageType;
 import java.util.logging.Logger;
@@ -8,7 +9,6 @@ import spark.Request;
 import spark.Response;
 import spark.Route;
 import spark.Session;
-import spark.TemplateEngine;
 
 public class PostValidateMoveRoute implements Route {
     private static final Logger LOG = Logger.getLogger(PostSignInRoute.class.getName());
