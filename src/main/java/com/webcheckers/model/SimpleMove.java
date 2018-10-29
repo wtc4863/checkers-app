@@ -59,10 +59,7 @@ public class SimpleMove extends Move{
                 int bot = end.getRow() + 1;
                 // create new positions for easy comparison
                 Position bottomLeft = new Position(bot, left);
-                LOG.fine("BottomLeft: " + bottomLeft.toString());
                 Position bottomRight = new Position(bot, right);
-                LOG.fine("BottomRight: " + bottomRight.toString());
-                LOG.fine("Start: " + start.toString());
                 return bottomLeft.equals(start) || bottomRight.equals(start);
             }
         } else {

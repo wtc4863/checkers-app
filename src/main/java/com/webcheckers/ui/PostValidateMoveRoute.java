@@ -2,7 +2,6 @@ package com.webcheckers.ui;
 
 import com.webcheckers.appl.TurnController;
 import com.webcheckers.appl.PlayerLobby;
-import com.webcheckers.ui.Message.MessageType;
 import java.util.logging.Logger;
 import java.util.Objects;
 import spark.Request;

@@ -14,11 +14,14 @@ public class TurnController {
     private static final Logger LOG = Logger.getLogger(TurnController.class.getName());
 
     private static final String SIMPLE_MOVE_ERROR_MSG = "Piece not moved to adjacent space or Space is filled.";
+    private static final String TOO_MANY_MOVES_ERROR_MSG = "Too many moves made";
 
+    // Keep track of the moves made during this turn
+    static int movesMade = 0;
+
+    // Private attributes
     GsonBuilder builder;
     PlayerLobby playerLobby;
-    //private Game modelRepresentation;
-    //private BoardView viewRepresentation;
 
     public TurnController(PlayerLobby playerLobby) {
         builder = new GsonBuilder();
@@ -60,16 +63,26 @@ public class TurnController {
         Game currentGame = playerLobby.getGame(playerMakingMove);
         Move currentMove = MovefromUItoModel(moveToBeValidated);
         boolean result = currentMove.validateMove(currentGame);
+        // test if move is valid
         if(result) {
+            // only one move per turn
+            if(movesMade >= 1) {
+                return returnMessageAndResetMoves(TOO_MANY_MOVES_ERROR_MSG, movesMade);
+            }
+            movesMade++;
             return new Message("Valid Move", MessageType.info);
         } else {
             // differentiate between different move types
             if(currentMove instanceof SimpleMove) {
-                return new Message(SIMPLE_MOVE_ERROR_MSG, MessageType.error);
+                return returnMessageAndResetMoves(SIMPLE_MOVE_ERROR_MSG, movesMade);
             } else {
-                return new Message("Invalid Generic Move", MessageType.error);
+                return returnMessageAndResetMoves("GENERIC MOVE ERROR", movesMade);
             }
         }
+    }
 
+    private Message returnMessageAndResetMoves(String message, int currMoveCount) {
+        movesMade = currMoveCount;
+        return new Message(message, MessageType.error);
     }
 }
