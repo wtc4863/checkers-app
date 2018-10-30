@@ -19,7 +19,7 @@ public class PostValidateMoveRoute implements Route {
     //
     // Attributes
     //
-    private final PlayerLobby playerLobby;
+    final PlayerLobby playerLobby;
 
     /**
      * Create the Spark Route (UI controller) for the {@code POST /signin} HTTP
@@ -48,5 +48,11 @@ public class PostValidateMoveRoute implements Route {
 
     }
 
-
+    /**
+     * Get player lobby should only be used for test purposes
+     * @return the playerLobby attribute
+     */
+    PlayerLobby getPlayerLobby() {
+        return playerLobby;
+    }
 }
