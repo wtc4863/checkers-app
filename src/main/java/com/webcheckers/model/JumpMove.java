@@ -90,7 +90,7 @@ public class JumpMove extends Move {
 
         // TODO: skip this block if the piece is a king
         // Make sure the piece is going in the right direction
-        if(jumpedPiece.pieceColor == Piece.PColor.red) {
+        if(movedPiece.pieceColor == Piece.PColor.red) {
             // Red pieces should travel in the "negative" direction
             return start.getRow() > end.getRow();
         } else {
