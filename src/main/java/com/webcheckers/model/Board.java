@@ -93,4 +93,13 @@ public class Board {
     public Space[] getRow(int rowIndex) {
         return this.boardArray[rowIndex];
     }
+
+    /**
+     * Helper method to return a space at a specific location
+     * @param position
+     * @return
+     */
+    public Space getSpace(Position position) {
+        return this.boardArray[position.getRow()][position.getCell()];
+    }
 }
