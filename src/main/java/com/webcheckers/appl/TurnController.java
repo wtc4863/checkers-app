@@ -13,8 +13,10 @@ import java.util.logging.Logger;
 public class TurnController {
     private static final Logger LOG = Logger.getLogger(TurnController.class.getName());
 
-    private static final String SIMPLE_MOVE_ERROR_MSG = "Piece not moved to adjacent space or Space is filled.";
-    private static final String TOO_MANY_MOVES_ERROR_MSG = "Too many moves made";
+    static final String SIMPLE_MOVE_ERROR_MSG = "Piece not moved to adjacent space or Space is filled.";
+    static final String TOO_MANY_MOVES_ERROR_MSG = "Too many moves made";
+    static final String VALID_MOVE = "Valid move!";
+    static final String GENERIC_MOVE_ERR = "GENERIC MOVE ERROR";
 
     // Keep track of the moves made during this turn
     static int movesMade = 0;
@@ -45,6 +47,7 @@ public class TurnController {
      * @return a Move instance
      */
     Move MovefromUItoModel(String json) {
+        LOG.fine(json);
         Gson gson = this.builder.create();
         Move translatedMove = gson.fromJson(json, Move.class);
 
@@ -70,13 +73,14 @@ public class TurnController {
                 return returnMessageAndResetMoves(TOO_MANY_MOVES_ERROR_MSG, movesMade);
             }
             movesMade++;
-            return new Message("Valid Move", MessageType.info);
+            return new Message(VALID_MOVE, MessageType.info);
         } else {
-            // differentiate between different move types
+            // differentiate between different errors move types
             if(currentMove instanceof SimpleMove) {
                 return returnMessageAndResetMoves(SIMPLE_MOVE_ERROR_MSG, movesMade);
             } else {
-                return returnMessageAndResetMoves("GENERIC MOVE ERROR", movesMade);
+                // we should never get here
+                return returnMessageAndResetMoves(GENERIC_MOVE_ERR, movesMade);
             }
         }
     }

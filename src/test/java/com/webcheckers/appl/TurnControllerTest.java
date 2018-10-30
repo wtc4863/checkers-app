@@ -16,6 +16,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Tag;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.mockingDetails;
 import static org.mockito.Mockito.when;
 
 @Tag("Application-Tier")
@@ -23,13 +24,13 @@ public class TurnControllerTest {
 
     private static final String MESSAGE_BODY_STR = "testMessage";
     private static final String MESSAGE_TYPE_STR = "info";
-    private static final String TEST_JSON = "{\"start\":{\"row\":4,\"cell\":1},\"end\":{\"row\":5,\"cell\":0}";
-    private static final String TEST_ID = "1";
-    private static final String TEST_NAME = "meh";
-    private static final int ROW_START = 4;
-    private static final int ROW_END = 5;
-    private static final int COL_START = 4;
-    private static final int COL_END = 0;
+    private static final String JSON_MOVE_PASS = "{\"start\":{\"row\":5,\"cell\":0},\"end\":{\"row\":4,\"cell\":1}}";
+    private static final String JSON_MOVE_ERR = "{\"start\":{\"row\":5,\"cell\":0},\"end\":{\"row\":3,\"cell\":2}}";
+
+    private static final String TEST_RED_NAME = "red";
+    private static final String TEST_WHITE_NAME = "white";
+    private static final String TEST_RED_ID = "1";
+    private static final String TEST_WHITE_ID= "2";
 
     // Component Under Test
     private TurnController CuT;
@@ -65,5 +66,33 @@ public class TurnControllerTest {
         Assertions.assertEquals(expectedJson, json);
     }
 
+    @Test
+    public void handleValidationShouldPassSimpleMove() {
+        Player redPlayer = new Player(TEST_RED_NAME, TEST_RED_ID);
+        Player whitePlayer = new Player(TEST_WHITE_NAME, TEST_WHITE_ID);
+        playerLobby = new PlayerLobby();
+        playerLobby.signIn(redPlayer);
+        playerLobby.signIn(whitePlayer);
+        playerLobby.startGame(redPlayer, whitePlayer);
 
+        CuT = new TurnController(playerLobby);
+
+        Message message = CuT.handleValidation(JSON_MOVE_PASS, TEST_RED_ID);
+        Assertions.assertEquals(message.getText(), TurnController.VALID_MOVE);
+    }
+
+    @Test
+    public void handleValidationShouldFailSimpleMove() {
+        Player redPlayer = new Player(TEST_RED_NAME, TEST_RED_ID);
+        Player whitePlayer = new Player(TEST_WHITE_NAME, TEST_WHITE_ID);
+        playerLobby = new PlayerLobby();
+        playerLobby.signIn(redPlayer);
+        playerLobby.signIn(whitePlayer);
+        playerLobby.startGame(redPlayer, whitePlayer);
+
+        CuT = new TurnController(playerLobby);
+
+        Message message = CuT.handleValidation(JSON_MOVE_ERR, TEST_RED_ID);
+        Assertions.assertEquals(message.getText(), TurnController.SIMPLE_MOVE_ERROR_MSG);
+    }
 }
