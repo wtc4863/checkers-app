@@ -1,5 +1,7 @@
 package com.webcheckers.model;
 
+import java.util.ArrayList;
+
 public class JumpMove extends Move {
 
     Position middle;
@@ -40,7 +42,13 @@ public class JumpMove extends Move {
         }
 
         // Make sure the ending position doesn't have a piece
-        if(!board.spaceIsValid(end)) {
+        try {
+            if(!board.spaceIsValid(end)) {
+                return false;
+            }
+        } catch(IndexOutOfBoundsException except) {
+            // This is a really lazy way of checking that the ending position
+            // is out of the board's bounds, but whatever.
             return false;
         }
 
@@ -82,8 +90,64 @@ public class JumpMove extends Move {
 
             // Remove the jumped piece
             board.getSpace(middle).removePiece();
+            return true;
         } else {
             return false;
         }
+    }
+
+    /**
+     * Checks if a move is theoretically a jump move. Only checks the spacing
+     * between the start and end of the move, and doesn't actually do any real
+     * validation.
+     *
+     * @param move the move whose spacing will be checked
+     * @return true if the move is a jump move, false otherwise
+     */
+    public static boolean isJumpMove(Move move) {
+        return (Math.abs(move.start.getRow() - move.end.getCell()) == 2 &&
+                Math.abs(move.start.getCell() - move.end.getCell()) == 2);
+    }
+
+    /**
+     * Checks a game to see if the current player has a jump move available.
+     *
+     * @param game the game state to check for possible jump moves
+     * @return true if a jump move is available, false otherwise
+     */
+    public static boolean jumpMoveAvailable(Game game) {
+        // Convert the turn to a PColor
+        Piece.PColor currentColor = Piece.PColor.red;
+        if(game.getTurn() == Game.Turn.WHITE) {
+            currentColor = Piece.PColor.white;
+        }
+
+        // Loop through all piece positions for that player
+        /* REFERENCE FOR THIS CODE BLOCK:
+        "lower" refers to lower-numbered rows
+        "higher" refers to higher-numbered rows
+         */
+        for(Position pos : game.getBoard().getPieceLocations(currentColor)) {
+            ArrayList<JumpMove> possibilities = new ArrayList<>();
+            if(currentColor == Piece.PColor.red) {
+                // Lower-left
+                possibilities.add(new JumpMove(pos, new Position(pos.getRow() - 2, pos.getCell() - 2)));
+                // Lower-right
+                possibilities.add(new JumpMove(pos, new Position(pos.getRow() - 2, pos.getCell() + 2)));
+            } else {
+                // Upper-left
+                possibilities.add(new JumpMove(pos, new Position(pos.getRow() + 2, pos.getCell() - 2)));
+                // Upper-right
+                possibilities.add(new JumpMove(pos, new Position(pos.getRow() + 2, pos.getCell() + 2)));
+            }   // TODO: when the piece is a king, check all four of those
+
+            // Check each possible space
+            for(JumpMove move : possibilities) {
+                if(move.validateMove(game)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }
