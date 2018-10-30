@@ -7,12 +7,37 @@ public class JumpMove extends Move {
     Position middle;
 
     public JumpMove(Position start, Position end) {
-        super(start, end);
+        this(start, calculateMiddle(start, end), end);
+    }
 
-        // Calculate the middle position
+    /**
+     * Helper constructor that is useful for testing, because sometimes we want
+     * to inject a mock object for the middle position.
+     *
+     * @param start the start position of the move
+     * @param middle the position that is jumped by the move
+     * @param end the end position of the move
+     */
+    JumpMove(Position start, Position middle, Position end) {
+        super(start, end);
+        this.middle = middle;
+    }
+
+    private static Position calculateMiddle(Position start, Position end) {
         int middleRow = (start.getRow() + end.getRow()) / 2;
         int middleCell = (start.getCell() + end.getCell()) / 2;
-        this.middle = new Position(middleRow, middleCell);
+        return new Position(middleRow, middleCell);
+    }
+
+    /**
+     * Helper method to verify the spacing of the move
+     * @param start the starting position of the move
+     * @param end the ending position of the move
+     * @return true if the spacing is valid for a jump move, false otherwise
+     */
+    private static boolean validSpacing(Position start, Position end) {
+        return (Math.abs(start.getRow() - end.getRow()) == 2 &&
+                Math.abs(start.getCell() - end.getCell()) == 2);
     }
 
     /**
@@ -28,7 +53,7 @@ public class JumpMove extends Move {
         Piece jumpedPiece;
 
         // Make sure the spacing is right
-        if(Math.abs(start.getRow() - end.getRow()) != 2 || Math.abs(start.getCell() - end.getCell()) != 2) {
+        if(!validSpacing(this.start, this.end)) {
             return false;
         }
 
@@ -94,19 +119,6 @@ public class JumpMove extends Move {
         } else {
             return false;
         }
-    }
-
-    /**
-     * Checks if a move is theoretically a jump move. Only checks the spacing
-     * between the start and end of the move, and doesn't actually do any real
-     * validation.
-     *
-     * @param move the move whose spacing will be checked
-     * @return true if the move is a jump move, false otherwise
-     */
-    public static boolean isJumpMove(Move move) {
-        return (Math.abs(move.start.getRow() - move.end.getCell()) == 2 &&
-                Math.abs(move.start.getCell() - move.end.getCell()) == 2);
     }
 
     /**
