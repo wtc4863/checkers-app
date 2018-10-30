@@ -122,6 +122,44 @@ public class JumpMove extends Move {
     }
 
     /**
+     * Checks a position in a given game to see if it has any jump moves
+     * available.
+     *
+     * @param position the position to check for moves
+     * @param game the game that is currently running
+     * @return true if the position has jump moves available, false otherwise
+     */
+    public static boolean positionHasJumpMoveAvailable(Position pos, Game game) {
+        ArrayList<JumpMove> possibleMoves = new ArrayList<>();
+        /* REFERENCE FOR THIS CODE BLOCK:
+        "lower" refers to lower-numbered rows
+        "higher" refers to higher-numbered rows
+         */
+
+        // This is a big-time law of Demeter violation right here
+        Piece.PColor currentColor = game.getBoard().getSpace(pos).pieceInfo().pieceColor;
+        if(currentColor == Piece.PColor.red) {
+            // Lower-left
+            possibleMoves.add(new JumpMove(pos, new Position(pos.getRow() - 2, pos.getCell() - 2)));
+            // Lower-right
+            possibleMoves.add(new JumpMove(pos, new Position(pos.getRow() - 2, pos.getCell() + 2)));
+        } else {
+            // Upper-left
+            possibleMoves.add(new JumpMove(pos, new Position(pos.getRow() + 2, pos.getCell() - 2)));
+            // Upper-right
+            possibleMoves.add(new JumpMove(pos, new Position(pos.getRow() + 2, pos.getCell() + 2)));
+        }   // TODO: when the piece is a king, check all four of those
+
+        // Check all the possible spaces to see if any one of them is valid
+        for(JumpMove move : possibleMoves) {
+            if(move.validateMove(game)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
      * Checks a game to see if the current player has a jump move available.
      *
      * @param game the game state to check for possible jump moves
@@ -135,29 +173,9 @@ public class JumpMove extends Move {
         }
 
         // Loop through all piece positions for that player
-        /* REFERENCE FOR THIS CODE BLOCK:
-        "lower" refers to lower-numbered rows
-        "higher" refers to higher-numbered rows
-         */
         for(Position pos : game.getBoard().getPieceLocations(currentColor)) {
-            ArrayList<JumpMove> possibilities = new ArrayList<>();
-            if(currentColor == Piece.PColor.red) {
-                // Lower-left
-                possibilities.add(new JumpMove(pos, new Position(pos.getRow() - 2, pos.getCell() - 2)));
-                // Lower-right
-                possibilities.add(new JumpMove(pos, new Position(pos.getRow() - 2, pos.getCell() + 2)));
-            } else {
-                // Upper-left
-                possibilities.add(new JumpMove(pos, new Position(pos.getRow() + 2, pos.getCell() - 2)));
-                // Upper-right
-                possibilities.add(new JumpMove(pos, new Position(pos.getRow() + 2, pos.getCell() + 2)));
-            }   // TODO: when the piece is a king, check all four of those
-
-            // Check each possible space
-            for(JumpMove move : possibilities) {
-                if(move.validateMove(game)) {
-                    return true;
-                }
+            if(positionHasJumpMoveAvailable(pos, game)) {
+                return true;
             }
         }
         return false;
