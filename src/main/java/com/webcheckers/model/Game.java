@@ -11,11 +11,11 @@ public class Game {
     //
     // Attributes
     //
-    private Player redPlayer;
-    private Player whitePlayer;
-    private Board board;
-    private Turn turn;
-    private Queue<Move> queuedTurnMoves;
+    Player redPlayer;
+    Player whitePlayer;
+    Board board;
+    Turn turn;
+    Queue<Move> queuedTurnMoves;
 
     enum Turn {
         WHITE, RED;
