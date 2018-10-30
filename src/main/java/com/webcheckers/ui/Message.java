@@ -6,7 +6,7 @@ package com.webcheckers.ui;
  */
 public class Message {
     public enum MessageType {
-        INFO, ERROR
+        info, error
     }
 
     //
@@ -34,7 +34,7 @@ public class Message {
      * @param text the text of the informational message
      */
     public Message(String text) {
-        this(text, MessageType.INFO);
+        this(text, MessageType.info);
     }
 
     //

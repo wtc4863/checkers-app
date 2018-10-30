@@ -68,7 +68,7 @@ public class WebServer {
     /**
      * The URL pattern to request the Game page.
      */
-    public static final String CHECK_TURN_URL = "/game";
+    public static final String CHECK_TURN_URL = "/checkTurn";
 
     //
     // Attributes
