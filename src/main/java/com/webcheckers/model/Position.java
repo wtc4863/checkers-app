@@ -1,8 +1,8 @@
 package com.webcheckers.model;
 
 public class Position {
-    private int row;
-    private int cell;
+    int row;
+    int cell;
 
     public Position(int row, int cell) {
         this.row = row;
