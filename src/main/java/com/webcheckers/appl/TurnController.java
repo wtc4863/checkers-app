@@ -1,11 +1,8 @@
 package com.webcheckers.appl;
 
-import com.webcheckers.model.Game;
-import com.webcheckers.model.Move;
+import com.webcheckers.model.*;
 import com.google.gson.GsonBuilder;
 import com.google.gson.Gson;
-import com.webcheckers.model.Player;
-import com.webcheckers.model.SimpleMove;
 import com.webcheckers.ui.Message;
 import com.webcheckers.ui.Message.MessageType;
 import java.util.logging.Logger;
@@ -69,15 +66,18 @@ public class TurnController {
         // test if move is valid
         if(result) {
             // only one move per turn
-            if(movesMade >= 1) {
+            if (movesMade >= 1) {
                 return returnMessageAndResetMoves(TOO_MANY_MOVES_ERROR_MSG, movesMade);
+            } else {
+                movesMade++;
+                return new Message(VALID_MOVE, MessageType.info);
             }
-            movesMade++;
-            return new Message(VALID_MOVE, MessageType.info);
         } else {
             // differentiate between different errors move types
             if(currentMove instanceof SimpleMove) {
                 return returnMessageAndResetMoves(SIMPLE_MOVE_ERROR_MSG, movesMade);
+            } else if(currentMove instanceof JumpMove) {
+                return returnMessageAndResetMoves(JUMP_MOVE_ERROR_MSG, movesMade);
             } else {
                 // we should never get here
                 return returnMessageAndResetMoves(GENERIC_MOVE_ERR, movesMade);

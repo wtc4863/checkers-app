@@ -40,6 +40,10 @@ public class SimpleMove extends Move {
      */
     @Override
     public boolean validateMove(Game game) {
+        // First, make sure there aren't any JumpMoves available
+        if(JumpMove.jumpMoveAvailable(game)) {
+            return false;
+        }
         //check if there is a piece on it
         Board board = game.getBoard();
         if (board.spaceIsValid(end)) {
