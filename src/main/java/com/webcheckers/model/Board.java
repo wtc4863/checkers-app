@@ -87,6 +87,7 @@ public class Board {
         return space.isValid();
     }
 
+
     /**
      * Return a row of spaces at the specified index
      * @param rowIndex the index of the row to return

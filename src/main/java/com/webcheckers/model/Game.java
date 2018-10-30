@@ -1,6 +1,8 @@
 package com.webcheckers.model;
 
 import com.webcheckers.ui.BoardView;
+
+import java.util.ArrayList;
 import java.util.Queue;
 
 /**
@@ -15,7 +17,7 @@ public class Game {
     Player whitePlayer;
     Board board;
     Turn turn;
-    Queue<Move> queuedTurnMoves;
+    ArrayList<Move> queuedTurnMoves;
 
     enum Turn {
         WHITE, RED;
@@ -106,9 +108,42 @@ public class Game {
     }
 
     /**
-     * Applies the current players moves to the board.
+     * Applies the current players moves to the board, changes the turn to the other player
      */
     public void applyTurnMoves() {
-        //TODO: implement doing all these moves to the board
+        for (Move move : queuedTurnMoves) {
+            move.executeMove(this);
+        }
+        if(this.turn == Turn.RED) {
+            this.turn = Turn.WHITE;
+        } else {
+            this.turn = Turn.RED;
+        }
+    }
+
+    /**
+     * Checks if there are moves left to be made in this turn
+     * @return true if there are moves left to be made in this turn
+     */
+    public boolean movesLeft() {
+        //if there is a move left, the most recent move's end position is the next move's start position
+        Move lastMove = queuedTurnMoves.get(queuedTurnMoves.size() -1 );
+        Position newStart = lastMove.getEnd();
+        //we must check two spaces the piece could potentially move to
+        int newColLeft = newStart.getCol() + 2;
+        int newColRight = newStart.getCol() - 2;
+        SingleJumpMove jump1;
+        SingleJumpMove jump2;
+        if (turn == Turn.RED) {
+            jump1 = new SingleJumpMove(newStart, new Position(newStart.getRow() - 2, newColRight));
+            jump2 = new SingleJumpMove(newStart, new Position(newStart.getRow() - 2, newColLeft));
+        } else {
+            jump1 = new SingleJumpMove(newStart, new Position(newStart.getRow() + 2, newColRight));
+            jump2 = new SingleJumpMove(newStart, new Position(newStart.getRow() - 2, newColLeft));
+        }
+
+        //if either of the potential moves are valid, there is a move left
+        return (jump1.validateMove(this) || jump2.validateMove(this));
+
     }
 }
