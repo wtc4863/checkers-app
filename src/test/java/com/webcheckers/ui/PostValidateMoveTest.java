@@ -47,12 +47,17 @@ public class PostValidateMoveTest {
         Session session = mock(Session.class);
         response = mock(Response.class);
         request = mock(Request.class);
+        turnController = mock(TurnController.class);
+        playerLobby = mock(PlayerLobby.class);
         when(request.session()).thenReturn(session);
+        when(request.session().id()).thenReturn(TEST_ID);
+        when(request.body()).thenReturn(JSON_MOVE_PASS);
         when(turnController.handleValidation(JSON_MOVE_PASS, TEST_ID)).thenReturn(msg);
         when(turnController.MessageFromModeltoUI(msg)).thenReturn(MSG_BODY);
 
+        CuT = new PostValidateMoveRoute(playerLobby, turnController);
         Object serv_response = CuT.handle(request, response);
-        Assertions.assertEquals(MSG_BODY, (String)serv_response);
+        Assertions.assertEquals(MSG_BODY, serv_response);
     }
 
 
