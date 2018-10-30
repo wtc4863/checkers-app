@@ -15,6 +15,7 @@ import spark.Route;
 import spark.Session;
 import spark.TemplateEngine;
 
+import static com.webcheckers.ui.WebServer.GAME_URL;
 import static spark.Spark.halt;
 
 /**
@@ -28,6 +29,7 @@ public class GetHomeRoute implements Route {
     //
     // Constants
     //
+    static final String TITLE = "Welcome!";
     static final String TITLE_ATTR = "title";
     static final String SIGNED_IN_PLAYERS = "signedInPlayers";
     static final String IS_SIGNED_IN = "isUserSignedIn";
@@ -75,7 +77,7 @@ public class GetHomeRoute implements Route {
         final String sessionID = httpSession.id();
 
         if(playerLobby.getGame(playerLobby.getPlayerBySessionID(sessionID)) != null) {
-            response.redirect("/game");
+            response.redirect(GAME_URL);
             halt();
             return null;
         }
@@ -83,7 +85,7 @@ public class GetHomeRoute implements Route {
         // start building the view-model
         Map<String, Object> vm = new HashMap<>();
 
-        vm.put(TITLE_ATTR, "Welcome!");
+        vm.put(TITLE_ATTR, TITLE);
         vm.put(MESSAGE_ATTR, "");
 
         // if the player is signed in return the name of the player
