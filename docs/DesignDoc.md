@@ -179,6 +179,21 @@ player, the GameCenter creates a game between these two players, and the game is
 the GameCenter's list of current games. The two players are also added to a HashMap that connects
 players to their current opponents.
 
+#### TurnControl Subsystem
+When making a move, the client-side code will check with the server to make
+sure the move that the user selected is valid. This is handled by the
+**_TurnControl_** class, which provides an interface for the UI-tier
+**_PostValidateMoveRoute_** class to interact with the application logic. This
+**_TurnControl_** class then parses the JSON request sent by the client and
+creates one of multiple kinds of Model-tier representations of classes. This
+object is then used to validate the move. If the move is determined to be
+valid, it is stored on the move queue for the **_Game_**. If the move is
+invalid, it does not get stored on the move queue. Then, the **_TurnControl_**
+class creates a message that gets passed back to the route component, which
+renders the message for the user.
+
+[The TurnControl Subsystem, and it's interactions](start-a-game.png)
+
 ### Model Tier
 
 Prior to signing in, users have very little access to anything on the site. It isn't until after
@@ -195,6 +210,19 @@ if the space is colored black.
 
 Players take turns moving their pieces from space to space on the board to remove their opponents pieces,
 and ultimately win the game.
+
+#### Moves
+The different types of moves are represented by the **_Move_** class and its
+subclasses. This class stores the information for the starting and ending
+position of a piece being moved. It can check a game to see if the move is
+valid, and it can apply itself to the game once the turn is submitted.
+
+Subclasses to the **_Move_** class must override the functionality for
+validating and executing the move. This is because each type of move has
+different moves that may make it valid or invalid.
+
+The first **_Move_** subclass is the **_SimpleMove_**. This represents a
+typical move, that travels diagonally a single space without capturing a piece.
 
 ### Design Improvements
 
