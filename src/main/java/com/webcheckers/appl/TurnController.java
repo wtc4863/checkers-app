@@ -10,6 +10,7 @@ import java.util.logging.Logger;
 public class TurnController {
     private static final Logger LOG = Logger.getLogger(TurnController.class.getName());
 
+    static final String JUMP_MOVE_ERROR_MSG = "You must jump exactly one opponent piece.";
     static final String SIMPLE_MOVE_ERROR_MSG = "You must move a piece to an empty adjacent space.";
     static final String TOO_MANY_MOVES_ERROR_MSG = "Too many moves made";
     static final String VALID_MOVE = "Valid move!";

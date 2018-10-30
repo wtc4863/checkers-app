@@ -2,6 +2,11 @@ package com.webcheckers.model;
 
 import java.util.ArrayList;
 
+/**
+ * A representation of a capture move, where a player's piece jumps over an
+ * opponent piece to capture it. This move will move the piece two spaces
+ * vertically and two spaces horizontally.
+ */
 public class JumpMove extends Move {
 
     Position middle;
@@ -23,6 +28,14 @@ public class JumpMove extends Move {
         this.middle = middle;
     }
 
+    /**
+     * Calculate the "middle" position, AKA the position/space that this move
+     * jumps over, given the starting and ending locations of the move.
+     *
+     * @param start the position the move starts at
+     * @param end the position the move ends at
+     * @return the calculated "middle" position
+     */
     private static Position calculateMiddle(Position start, Position end) {
         int middleRow = (start.getRow() + end.getRow()) / 2;
         int middleCell = (start.getCell() + end.getCell()) / 2;
@@ -125,7 +138,7 @@ public class JumpMove extends Move {
      * Checks a position in a given game to see if it has any jump moves
      * available.
      *
-     * @param position the position to check for moves
+     * @param pos the position to check for moves
      * @param game the game that is currently running
      * @return true if the position has jump moves available, false otherwise
      */
