@@ -23,6 +23,7 @@ public class BoardTest {
         assertFalse(board.boardArray[3][0].doesHasPiece());
     }
 
+    /*
     @Test
     public void testBadMoveWhiteSpace() {
         Position oldPos = new Position(5,0);
@@ -39,6 +40,7 @@ public class BoardTest {
         board.move(oldPos, newPos);
         assertTrue(board.boardArray[5][2].doesHasPiece());
     }
+    */
 
     @Test
     public void testGoodMove() {
