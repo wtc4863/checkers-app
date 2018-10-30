@@ -114,7 +114,7 @@ public class PlayerLobby {
      *      true if the player was signed in successfully, false if the player
      *      could not be signed in.
      */
-    synchronized boolean signIn(Player player) {
+    public synchronized boolean signIn(Player player) {
         if(!validName(player.getName())) {
             return false;
         } else if (getSignedInPlayers().contains(player.getName())) {

@@ -19,7 +19,7 @@ public class Game {
     private Turn turn;
     private ArrayList<Move> queuedTurnMoves;
 
-    enum Turn {
+    public enum Turn {
         WHITE, RED;
     }
 
@@ -31,6 +31,7 @@ public class Game {
         this.whitePlayer = whitePlayer;
         this.turn = Turn.RED;
         this.board = new Board();
+        this.queuedTurnMoves = new ArrayList<>();
     }
 
     // used for custom configuration
@@ -105,6 +106,7 @@ public class Game {
         } else {
             this.turn = Turn.RED;
         }
+        queuedTurnMoves.clear();
     }
 
     /**
@@ -131,5 +133,9 @@ public class Game {
         //if either of the potential moves are valid, there is a move left
         return (jump1.validateMove(this) || jump2.validateMove(this));
 
+    }
+
+    public void addMove(Move move) {
+        queuedTurnMoves.add(move);
     }
 }
