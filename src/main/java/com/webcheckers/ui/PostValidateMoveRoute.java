@@ -48,12 +48,4 @@ public class PostValidateMoveRoute implements Route {
         return turnController.MessageFromModeltoUI(res);
 
     }
-
-    /**
-     * Get player lobby should only be used for test purposes
-     * @return the playerLobby attribute
-     */
-    PlayerLobby getPlayerLobby() {
-        return playerLobby;
-    }
 }
