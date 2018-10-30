@@ -4,7 +4,6 @@ import static spark.Spark.*;
 
 import java.util.Objects;
 import java.util.logging.Logger;
-
 import com.google.gson.Gson;
 
 import com.webcheckers.appl.PlayerLobby;
@@ -65,6 +64,12 @@ public class WebServer {
      * The URL pattern to request the Game page.
      */
     public static final String GAME_URL = "/game";
+
+    /**
+     * The URL pattern to request the Game page.
+     */
+    public static final String CHECK_TURN_URL = "/game";
+
     //
     // Attributes
     //
@@ -158,6 +163,7 @@ public class WebServer {
         //Shows the Checkers game page
         get(GAME_URL, new GetGameRoute(playerLobby, templateEngine));
 
+        post(CHECK_TURN_URL, new PostCheckTurnRoute(playerLobby));
         //
         LOG.config("WebServer is initialized.");
     }
