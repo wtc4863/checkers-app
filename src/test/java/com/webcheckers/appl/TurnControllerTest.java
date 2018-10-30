@@ -66,6 +66,7 @@ public class TurnControllerTest {
         Assertions.assertEquals(expectedJson, json);
     }
 
+    /*
     @Test
     public void handleValidationShouldPassSimpleMove() {
         Player redPlayer = new Player(TEST_RED_NAME, TEST_RED_ID);
@@ -95,4 +96,5 @@ public class TurnControllerTest {
         Message message = CuT.handleValidation(JSON_MOVE_ERR, TEST_RED_ID);
         Assertions.assertEquals(message.getText(), TurnController.SIMPLE_MOVE_ERROR_MSG);
     }
+    */
 }
