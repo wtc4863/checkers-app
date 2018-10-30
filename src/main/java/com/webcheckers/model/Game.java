@@ -1,6 +1,7 @@
 package com.webcheckers.model;
 
 import com.webcheckers.ui.BoardView;
+import java.util.Queue;
 
 /**
  * Object that holds all of the data for a specific game
@@ -14,6 +15,7 @@ public class Game {
     private Player whitePlayer;
     private Board board;
     private Turn turn;
+    private Queue<Move> queuedTurnMoves;
 
     enum Turn {
         WHITE, RED;
@@ -27,6 +29,14 @@ public class Game {
         this.whitePlayer = whitePlayer;
         this.turn = Turn.RED;
         this.board = new Board();
+    }
+
+    // used for custom configuration
+    public Game(Player redPlayer, Player whitePlayer, Turn turn, Board board) {
+        this.redPlayer = redPlayer;
+        this.whitePlayer = whitePlayer;
+        this.turn = turn;
+        this.board = board;
     }
 
     //
@@ -72,5 +82,19 @@ public class Game {
      */
     public Turn getTurn() {
         return this.turn;
+    }
+
+    public void switchTurn() {
+        if(this.turn == Turn.RED)
+            this.turn = Turn.WHITE;
+        else
+            this.turn = Turn.RED;
+    }
+
+    /**
+     * Applies the current players moves to the board.
+     */
+    public void applyTurnMoves() {
+        //TODO: implement doing all these moves to the board
     }
 }

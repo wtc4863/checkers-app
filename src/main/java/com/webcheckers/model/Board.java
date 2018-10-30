@@ -1,11 +1,5 @@
 package com.webcheckers.model;
 
-import com.webcheckers.ui.BoardView;
-import com.webcheckers.ui.PieceView;
-import com.webcheckers.ui.RowView;
-import com.webcheckers.ui.SpaceView;
-
-import java.util.ArrayList;
 
 /**
  * Object that holds all of the game data for the state of the board
@@ -72,18 +66,23 @@ public class Board {
     // Methods
     //
     /**
-     * Move piece from one location to another, if possible
+     * Move piece from one location to another, not worrying
+     * about validation. We assume the move calling this
+     * has already validated
      * @param location1 location the piece starts in
      * @param location2 the desired location of the piece
      */
-    public void move(Space location1, Space location2) {
-        if (location1.doesHasPiece()) {
-            Piece beingMoved = location1.pieceInfo();
-            if(location2.isValid()) {
-                location1.removePiece();
-                location2.addPiece(beingMoved);
-            }
-        }
+    public void move(Position location1, Position location2) {
+        Space startSpace = boardArray[location1.getRow()][location1.getCell()];
+        Space endSpace = boardArray[location2.getRow()][location2.getCell()];
+        Piece beingMoved = startSpace.pieceInfo();
+            startSpace.removePiece();
+            endSpace.addPiece(beingMoved);
+    }
+
+    public boolean spaceIsValid(Position position) {
+        Space space = boardArray[position.getRow()][position.getCell()];
+        return space.isValid();
     }
 
     /**
@@ -93,9 +92,5 @@ public class Board {
      */
     public Space[] getRow(int rowIndex) {
         return this.boardArray[rowIndex];
-    }
-
-    public Space getSpace(int rowIndex, int colIndex) {
-        return boardArray[rowIndex][colIndex];
     }
 }

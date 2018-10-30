@@ -30,7 +30,7 @@ public class GetGameRoute implements Route{
     final static String IS_SIGNED_IN = "isUserSignedIn";
     final static String TEMPLATE_NAME_REDIRECT = "home.ftl";
 
-    private enum View {
+    public enum View {
         PLAY, SPECTATOR, REPLAY;
     }
 

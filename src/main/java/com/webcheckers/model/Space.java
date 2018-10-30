@@ -74,12 +74,11 @@ public class Space {
      * @param pieceAdd Piece to be added to the space
      */
     public void addPiece(Piece pieceAdd){
-        if(isValid()) {
+        // Make sure the piece we're being passed isn't null and that the space
+        // is valid
+        if(isValid() && pieceAdd != null) {
             this.PieceOnSpace = pieceAdd;
             this.hasPiece = true;
-        }
-        else {
-
         }
     }
     /**
