@@ -25,10 +25,12 @@ public class GetGameRoute implements Route{
     final static String MESSAGE_ATTR = "message";
     final static String TEMPLATE_NAME = "game.ftl";
     final static String TITLE_ATTR = "title";
+    final static String TITLE = "Welcome!";
 
     final static String SIGNED_IN_PLAYERS = "signedInPlayers";
     final static String IS_SIGNED_IN = "isUserSignedIn";
-    final static String TEMPLATE_NAME_REDIRECT = "home.ftl";
+
+    final static String PLAYER_IN_GAME_MSG = "Requested player is already in a game. Choose another player.";
 
     public enum View {
         PLAY, SPECTATOR, REPLAY;
@@ -93,10 +95,10 @@ public class GetGameRoute implements Route{
             onlinePlayers.remove(usersPlayer);
             vmRedirect.put(SIGNED_IN_PLAYERS, onlinePlayers);
             vmRedirect.put(IS_SIGNED_IN, true);
-            vmRedirect.put(TITLE_ATTR, "Welcome!");
-            vmRedirect.put(MESSAGE_ATTR, "Requested player is already in a game. Choose another player.");
+            vmRedirect.put(TITLE_ATTR, TITLE);
+            vmRedirect.put(MESSAGE_ATTR, PLAYER_IN_GAME_MSG);
 
-            return templateEngine.render(new ModelAndView(vmRedirect, TEMPLATE_NAME_REDIRECT));
+            return templateEngine.render(new ModelAndView(vmRedirect, GetHomeRoute.TEMPLATE_NAME));
         }
 
         //if the current player is red, make the other player white and start the game
