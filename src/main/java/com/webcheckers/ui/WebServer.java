@@ -170,7 +170,7 @@ public class WebServer {
         post(VALIDATE_MOVE_URL, new PostValidateMoveRoute(playerLobby));
 
         // Handles Turn Checking with  AJAX
-        post(CHECK_TURN_URL, new PostCheckTurnRoute(playerLobby));
+        post(CHECK_TURN_URL, new PostCheckTurnRoute(playerLobby, gson));
         //
         LOG.config("WebServer is initialized.");
     }

@@ -16,15 +16,14 @@ import spark.Session;
 public class PostCheckTurnRoute implements Route {
     private static Logger LOG = Logger.getLogger(PostCheckTurnRoute.class.getName());
 
-    private final PlayerLobby playerLobby;
-    private final Gson gson;
+    final PlayerLobby playerLobby;
+    final Gson gson;
 
-    public PostCheckTurnRoute(PlayerLobby playerLobby) {
+    public PostCheckTurnRoute(PlayerLobby playerLobby, Gson gson) {
         Objects.requireNonNull(playerLobby, "playLobby must not be null");
 
         this.playerLobby = playerLobby;
-        GsonBuilder gsonBuilder = new GsonBuilder();
-        this.gson = gsonBuilder.create();
+        this.gson = new Gson();
 
         LOG.config("PostCheckTurnRoute is initialized");
     }
