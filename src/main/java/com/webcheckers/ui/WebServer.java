@@ -4,7 +4,6 @@ import static spark.Spark.*;
 
 import java.util.Objects;
 import java.util.logging.Logger;
-
 import com.google.gson.Gson;
 
 import com.webcheckers.appl.PlayerLobby;
@@ -69,6 +68,11 @@ public class WebServer {
      * The URL pattern to request the Game page.
      */
     public static final String VALIDATE_MOVE_URL = "/validateMove";
+    /**
+     * The URL pattern to request the Game page.
+     */
+    public static final String CHECK_TURN_URL = "/checkTurn";
+
     //
     // Attributes
     //
@@ -165,6 +169,8 @@ public class WebServer {
         // Handles Move Validation
         post(VALIDATE_MOVE_URL, new PostValidateMoveRoute(playerLobby));
 
+        // Handles Turn Checking with  AJAX
+        post(CHECK_TURN_URL, new PostCheckTurnRoute(playerLobby));
         //
         LOG.config("WebServer is initialized.");
     }
