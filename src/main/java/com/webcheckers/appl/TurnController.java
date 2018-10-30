@@ -49,7 +49,11 @@ public class TurnController {
         Move translatedMove = gson.fromJson(json, Move.class);
 
         // Do checking for move type in order to return correct type
-        return new SimpleMove(translatedMove.getStart(), translatedMove.getEnd());
+        if(SimpleMove.isSimpleMove(translatedMove)) {
+            return new SimpleMove(translatedMove.getStart(), translatedMove.getEnd());
+        } else {
+            return new JumpMove(translatedMove.getStart(), translatedMove.getEnd());
+        }
     }
 
     /**
