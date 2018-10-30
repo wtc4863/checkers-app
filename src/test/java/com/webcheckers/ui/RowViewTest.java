@@ -7,41 +7,54 @@ import com.webcheckers.model.Space.SpColor;
 
 import java.lang.reflect.Array;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 @Tag("UI-Tier")
 public class RowViewTest {
+
+    //
+    // Constants
+    //
+    private static final int ROW_INDEX = 1;
+
+    //
+    // Attributes
+    //
     private RowView rowView;
-
-    Space space1 = new Space(SpColor.black);
-    Space space2 = new Space(SpColor.white);
     Space[] spaces = new Space[2];
-    SpaceView spaceView1 = new SpaceView(new Space(SpColor.black), 0);
-    SpaceView spaceView2 = new SpaceView(new Space(SpColor.white), 1);
+    SpaceView blackSpace = new SpaceView(new Space(SpColor.black), 0);
+    SpaceView whiteSpace = new SpaceView(new Space(SpColor.white), 1);
 
+    //
+    // Setup
+    //
+    @BeforeEach
+    public void setUp() {
+        spaces[0] = new Space(SpColor.black);
+        spaces[1] = new Space(SpColor.white);
+        // Set default value for the rowView
+        rowView = new RowView(spaces, ROW_INDEX, false);
+    }
 
+    //
+    // Tests
+    //
     @Test
     public void testConstructorStandard() {
-        spaces[0] = space1;
-        spaces[1] = space2;
-
-        rowView = new RowView(spaces, 0, false);
-        assertEquals(spaceView1, rowView.listSpaceViews.get(0), "RowView did not construct correctly");
+        assertEquals(blackSpace, rowView.listSpaceViews.get(0), "RowView did not construct correctly");
     }
 
     @Test
     public void testConstructorReverse() {
-        spaces[0] = space1;
-        spaces[1] = space2;
-
-        RowView rowView2 = new RowView(spaces, 0, true);
-        assertEquals(spaceView2, rowView2.listSpaceViews.get(0), "RowView did not reverse correctly");
+        // Override default with a reversed RowView
+        rowView = new RowView(spaces, ROW_INDEX, true);
+        assertEquals(whiteSpace, rowView.listSpaceViews.get(0), "RowView did not reverse correctly");
     }
 
     @Test
     public void testGetIndex() {
-        assertNotNull(rowView.getIndex(), "Index was null");
+        assertEquals(rowView.getIndex(), ROW_INDEX, "Index was null");
     }
-
 }
