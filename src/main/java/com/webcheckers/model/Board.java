@@ -117,7 +117,8 @@ public class Board {
         ArrayList<Position> pieces = new ArrayList<>();
         for(int row = 0; row < ROWS; row++) {
             for(int col = 0; col < COLUMNS; col++) {
-                if(this.boardArray[row][col].pieceInfo().pieceColor == color) {
+                Space currentSpace = this.boardArray[row][col];
+                if(currentSpace.doesHasPiece() && currentSpace.pieceInfo().pieceColor == color) {
                     pieces.add(new Position(row, col));
                 }
             }
