@@ -12,7 +12,7 @@ public class GameTest {
 
     private static final String RED_NAME = "redPlayerName";
     private static final String WHITE_NAME = "whitePlayerName";
-    private static final Turn CUSTOM_CONFIG_GAME_TURN = Turn.WHITE;
+    private static final Turn CUSTOM_GAME_TURN = Turn.WHITE;
 
     // Component Under Test
     private Game CuT;
@@ -38,48 +38,56 @@ public class GameTest {
 
     @Test
     public void testRegularConstructor() {
-        Assertions.assertNotNull(redPlayer);
+        Assertions.assertNotNull(CuT.redPlayer);
         Assertions.assertEquals(redPlayer, CuT.redPlayer);
-        Assertions.assertNotNull(whitePlayer);
+        Assertions.assertNotNull(CuT.whitePlayer);
         Assertions.assertEquals(whitePlayer, CuT.whitePlayer);
-        Assertions.assertNotNull(board);
-        Assertions.assertEquals(board, CuT.board);
+        Assertions.assertNotNull(CuT.board);
     }
 
     @Test
     public void testCustomConfigConstructor() {
-        redPlayer = new Player(RED_NAME);
-        whitePlayer = new Player(WHITE_NAME);
         board = new Board();
-        CuT = new Game(redPlayer, whitePlayer, CUSTOM_CONFIG_GAME_TURN, board);
+        CuT = new Game(redPlayer, whitePlayer, CUSTOM_GAME_TURN, board);
 
-        Assertions.assertNotNull(redPlayer);
+        Assertions.assertNotNull(CuT.redPlayer);
         Assertions.assertEquals(redPlayer, CuT.redPlayer);
-        Assertions.assertNotNull(whitePlayer);
+        Assertions.assertNotNull(CuT.whitePlayer);
         Assertions.assertEquals(whitePlayer, CuT.whitePlayer);
-        Assertions.assertNotNull(board);
+        Assertions.assertNotNull(CuT.board);
         Assertions.assertEquals(board, CuT.board);
-        Assertions.assertEquals(CuT.turn, CUSTOM_CONFIG_GAME_TURN);
+        Assertions.assertEquals(CuT.turn, CUSTOM_GAME_TURN);
     }
 
     @Test
     public void testGetRedPlayer() {
-
+        Assertions.assertEquals(redPlayer, CuT.getRedPlayer());
     }
 
     @Test
     public void testGetWhitePlayer() {
-
+        Assertions.assertEquals(whitePlayer, CuT.getWhitePlayer());
     }
 
     @Test
-    public void testIsPlayersTurn() {
-
+    public void testIsRedPlayersTurn() {
+        // This should be true because game is initiated with
+        // red players turn
+        Assertions.assertTrue(CuT.isPlayersTurn(redPlayer));
     }
 
     @Test
-    public void testGetBoar() {
+    public void restIsRedWhitePlayersTurn() {
+        // This should be false because game is initiated with
+        // red players turn
+        Assertions.assertFalse(CuT.isPlayersTurn(whitePlayer));
+    }
 
+    @Test
+    public void testGetBoard() {
+        board = new Board();
+        CuT = new Game(redPlayer, whitePlayer, Turn.RED, board);
+        Assertions.assertEquals(board, CuT.getBoard());
     }
 
     @Test
@@ -89,12 +97,21 @@ public class GameTest {
 
     @Test
     public void testGetTurn() {
-
+        board = new Board();
+        CuT = new Game(redPlayer, whitePlayer, CUSTOM_GAME_TURN, board);
+        Assertions.assertEquals(CUSTOM_GAME_TURN, CuT.getTurn());
     }
 
     @Test
     public void testSwitchTurn() {
-
+        board = new Board();
+        CuT = new Game(redPlayer, whitePlayer, CUSTOM_GAME_TURN, board);
+        Turn previous = CuT.getTurn();
+        CuT.switchTurn();
+        Assertions.assertNotEquals(previous, CuT.getTurn());
+        previous = CuT.getTurn();
+        CuT.switchTurn();
+        Assertions.assertNotEquals(previous, CuT.getTurn());
     }
 
     @Test
