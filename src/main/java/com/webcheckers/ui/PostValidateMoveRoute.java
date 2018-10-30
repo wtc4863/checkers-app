@@ -20,6 +20,7 @@ public class PostValidateMoveRoute implements Route {
     // Attributes
     //
     final PlayerLobby playerLobby;
+    final TurnController turnController;
 
     /**
      * Create the Spark Route (UI controller) for the {@code POST /signin} HTTP
@@ -27,11 +28,12 @@ public class PostValidateMoveRoute implements Route {
      *
      * @param playerLobby The model that handles player-tracking
      */
-    public PostValidateMoveRoute(PlayerLobby playerLobby) {
+    public PostValidateMoveRoute(PlayerLobby playerLobby, TurnController turnController) {
         // Validation
         Objects.requireNonNull(playerLobby, "playerLobby must not be null");
 
         this.playerLobby = playerLobby;
+        this.turnController = turnController;
 
         LOG.config("PostValidateMoveRoute is initialized.");
     }
@@ -42,7 +44,6 @@ public class PostValidateMoveRoute implements Route {
         final Session httpSession = request.session();
         final String moveToBeValidated = request.body();
 
-        TurnController turnController = new TurnController(playerLobby);
         Message res = turnController.handleValidation(moveToBeValidated, httpSession.id());
         return turnController.MessageFromModeltoUI(res);
 
