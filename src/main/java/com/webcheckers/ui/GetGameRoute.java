@@ -25,7 +25,7 @@ public class GetGameRoute implements Route{
     final static String MESSAGE_ATTR = "message";
     final static String TEMPLATE_NAME = "game.ftl";
     final static String TITLE_ATTR = "title";
-    final static String TITLE = "Welcome!";
+    final static String TITLE = "Game";
 
     final static String SIGNED_IN_PLAYERS = "signedInPlayers";
     final static String IS_SIGNED_IN = "isUserSignedIn";
@@ -95,7 +95,7 @@ public class GetGameRoute implements Route{
             onlinePlayers.remove(usersPlayer);
             vmRedirect.put(SIGNED_IN_PLAYERS, onlinePlayers);
             vmRedirect.put(IS_SIGNED_IN, true);
-            vmRedirect.put(TITLE_ATTR, TITLE);
+            vmRedirect.put(TITLE_ATTR, GetHomeRoute.TITLE);
             vmRedirect.put(MESSAGE_ATTR, PLAYER_IN_GAME_MSG);
 
             return templateEngine.render(new ModelAndView(vmRedirect, GetHomeRoute.TEMPLATE_NAME));
@@ -114,15 +114,13 @@ public class GetGameRoute implements Route{
             game = playerLobby.getGame(thisPlayer);
         }
 
-        vm.put(TITLE_ATTR, "Game");
+        vm.put(TITLE_ATTR, TITLE);
         vm.put(WHITE_PLAYER_ATTR, whitePlayer);
         vm.put(RED_PLAYER_ATTR, redPlayer);
         vm.put(CURRENT_PLAYER_ATTR, thisPlayer);
         vm.put(ACTIVE_COLOR_ATTR, game.getTurn());
         vm.put(BOARD_VIEW_ATTR, playerLobby.getBoardView(thisPlayer));
         vm.put(VIEW_MODE_ATTR, View.PLAY);
-
-
 
         return templateEngine.render(new ModelAndView(vm, TEMPLATE_NAME));
     }
