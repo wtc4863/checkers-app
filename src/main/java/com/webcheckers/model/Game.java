@@ -132,16 +132,16 @@ public class Game {
         Move lastMove = queuedTurnMoves.get(queuedTurnMoves.size() -1 );
         Position newStart = lastMove.getEnd();
         //we must check two spaces the piece could potentially move to
-        int newColLeft = newStart.getCol() + 2;
-        int newColRight = newStart.getCol() - 2;
-        SingleJumpMove jump1;
-        SingleJumpMove jump2;
+        int newColLeft = newStart.getCell() + 2;
+        int newColRight = newStart.getCell() - 2;
+        JumpMove jump1;
+        JumpMove jump2;
         if (turn == Turn.RED) {
-            jump1 = new SingleJumpMove(newStart, new Position(newStart.getRow() - 2, newColRight));
-            jump2 = new SingleJumpMove(newStart, new Position(newStart.getRow() - 2, newColLeft));
+            jump1 = new JumpMove(newStart, new Position(newStart.getRow() - 2, newColRight));
+            jump2 = new JumpMove(newStart, new Position(newStart.getRow() - 2, newColLeft));
         } else {
-            jump1 = new SingleJumpMove(newStart, new Position(newStart.getRow() + 2, newColRight));
-            jump2 = new SingleJumpMove(newStart, new Position(newStart.getRow() - 2, newColLeft));
+            jump1 = new JumpMove(newStart, new Position(newStart.getRow() + 2, newColRight));
+            jump2 = new JumpMove(newStart, new Position(newStart.getRow() - 2, newColLeft));
         }
 
         //if either of the potential moves are valid, there is a move left
