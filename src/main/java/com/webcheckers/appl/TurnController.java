@@ -10,6 +10,14 @@ import java.util.logging.Logger;
 public class TurnController {
     private static final Logger LOG = Logger.getLogger(TurnController.class.getName());
 
+    enum InvalidMoveTypes {
+        TOO_MANY_MOVES,
+        SIMPLE_MOVE_ERROR,
+        TOO_MANY_JUMPS,
+        PIECE_KINGED
+
+    }
+
     static final String JUMP_MOVE_ERROR_MSG = "You must jump exactly one opponent piece.";
     static final String SIMPLE_MOVE_ERROR_MSG = "You must move a piece to an empty adjacent space.";
     static final String TOO_MANY_SIMPLE_MOVES_ERROR_MSG = "You may only make one simple move per turn.";
@@ -67,6 +75,7 @@ public class TurnController {
         Player playerMakingMove = playerLobby.getPlayerBySessionID(sessionID);
         Game currentGame = playerLobby.getGame(playerMakingMove);
         Move currentMove = MovefromUItoModel(moveToBeValidated);
+        int movesMade = currentGame.getMovesInCurrentTurn();
         boolean result = currentMove.validateMove(currentGame);
         // test if move is valid
         if(result) {

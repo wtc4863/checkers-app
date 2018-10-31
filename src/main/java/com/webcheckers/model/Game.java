@@ -41,6 +41,7 @@ public class Game {
         this.whitePlayer = whitePlayer;
         this.turn = turn;
         this.board = board;
+        this.queuedTurnMoves = new ArrayList<>();
     }
 
     //
