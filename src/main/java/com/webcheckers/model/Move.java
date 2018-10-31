@@ -1,5 +1,6 @@
 package com.webcheckers.model;
 
+import com.webcheckers.model.Piece.PColor;
 import java.lang.UnsupportedOperationException;
 public class Move {
 
@@ -46,6 +47,23 @@ public class Move {
         throw new UnsupportedOperationException(GENERIC_EXECUTION_ERROR_MESSAGE);
     }
 
+    /**
+     * This function checks if the given move will result in a "kinging"
+     * of piece for a given color. Because red pieces are located at the top
+     * of the board (rows 0 - 2 inclusive) we can check if a red piece has
+     * reached king status by seeing if it has reached row 0. Conversely, white
+     * will be a King when reaching row 7
+     * @param colorCheckedForKing the color of the piece we're checking
+     * @return true if this move results in a kinging
+     */
+    public boolean isKingMove(Piece.PColor colorCheckedForKing) {
+        if(colorCheckedForKing == PColor.red) {
+            return end.getRow() == 7;
+        } else {
+            return end.getRow() == 0;
+        }
+    }
+
     @Override
     public boolean equals(Object obj) {
         if(!(obj instanceof Move)) {
@@ -54,7 +72,6 @@ public class Move {
             Move other = (Move)obj;
             return this.start.equals(other.start) && this.end.equals(other.end);
         }
-
     }
 
     @Override
