@@ -41,6 +41,10 @@ public class Piece {
         return pieceType == PType.king;
     }
 
+    public void makeKing() {
+        this.pieceType = PType.king;
+    }
+
     /**
      * Create a PieceView representation for this Piece object.
      * @return a PieceView object that accurately represents this Piece.
