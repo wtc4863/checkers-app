@@ -10,11 +10,12 @@ import java.util.logging.Logger;
 public class TurnController {
     private static final Logger LOG = Logger.getLogger(TurnController.class.getName());
 
-    enum InvalidMoveTypes {
+    enum MoveState {
         TOO_MANY_MOVES,
         SIMPLE_MOVE_ERROR,
         TOO_MANY_JUMPS,
-        PIECE_KINGED
+        PIECE_KINGED,
+        VALID
 
     }
 
@@ -75,15 +76,22 @@ public class TurnController {
         Player playerMakingMove = playerLobby.getPlayerBySessionID(sessionID);
         Game currentGame = playerLobby.getGame(playerMakingMove);
         Move currentMove = MovefromUItoModel(moveToBeValidated);
-        //int movesMade = currentGame.getMovesInCurrentTurn();
+        boolean movesMade = currentGame.hasMovesInCurrentTurn();
         boolean result = currentMove.validateMove(currentGame);
         // test if move is valid
+        //FIXME: Turn me into a state machine!
         if(result) {
-            // only one simple move per turn
-            if (this.simpleMoveMade) {
-                return returnMessageAndResetMoves(TOO_MANY_SIMPLE_MOVES_ERROR_MSG, true);
-            } else if(currentMove instanceof SimpleMove){
-                this.simpleMoveMade = true;
+            if (movesMade) {
+                Move lastMove = currentGame.getLastMoveMade();
+                if (currentMove instanceof SimpleMove || lastMove instanceof SimpleMove) {
+                    return new Message(TOO_MANY_SIMPLE_MOVES_ERROR_MSG, MessageType.error);
+                } else {
+                    currentGame.addMoveToCurrentTurn(currentMove);
+                    return new Message(VALID_MOVE);
+                }
+            } else {
+                currentGame.addMoveToCurrentTurn(currentMove);
+                return new Message(VALID_MOVE);
             }
             currentGame.addMove(currentMove);
             return new Message(VALID_MOVE, MessageType.info);
@@ -94,8 +102,8 @@ public class TurnController {
             } else if(currentMove instanceof JumpMove) {
                 return returnMessageAndResetMoves(JUMP_MOVE_ERROR_MSG, this.simpleMoveMade);
             } else {
-                // we should never get here
-                return returnMessageAndResetMoves(GENERIC_MOVE_ERR, this.simpleMoveMade);
+                // we should never get here because generic moves should not be instantiated
+                return new Message(GENERIC_MOVE_ERR, MessageType.error);
             }
         }
     }
