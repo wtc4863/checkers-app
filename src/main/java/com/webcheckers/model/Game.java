@@ -4,7 +4,7 @@ import com.webcheckers.ui.BoardView;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Queue;
+import java.util.ArrayList;
 
 /**
  * Object that holds all of the data for a specific game
@@ -74,6 +74,23 @@ public class Game {
         } else {
             return turn == Turn.WHITE;
         }
+    }
+
+    /**
+     * Returns the number of moves in the current turn
+     * @return the number of moves in the turn
+     */
+    public int getMovesInCurrentTurn() {
+        return queuedTurnMoves.size();
+    }
+
+    public Move getLastMoveMade() {
+        int index = queuedTurnMoves.size() - 1;
+        return queuedTurnMoves.get(index);
+    }
+
+    public void addMoveToCurrentTurn(Move newest) {
+        queuedTurnMoves.add(newest);
     }
 
 
