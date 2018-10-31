@@ -75,7 +75,7 @@ public class TurnController {
         Player playerMakingMove = playerLobby.getPlayerBySessionID(sessionID);
         Game currentGame = playerLobby.getGame(playerMakingMove);
         Move currentMove = MovefromUItoModel(moveToBeValidated);
-        int movesMade = currentGame.getMovesInCurrentTurn();
+        //int movesMade = currentGame.getMovesInCurrentTurn();
         boolean result = currentMove.validateMove(currentGame);
         // test if move is valid
         if(result) {

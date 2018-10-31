@@ -5,12 +5,15 @@ import com.webcheckers.ui.BoardView;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.ArrayList;
+import java.util.Queue;
+import java.util.logging.Logger;
 
 /**
  * Object that holds all of the data for a specific game
  */
 
 public class Game {
+    private static Logger LOG = Logger.getLogger(Game.class.getName());
     //
     // Attributes
     //
@@ -28,6 +31,7 @@ public class Game {
     // Constructor
     //
     public Game(Player redPlayer, Player whitePlayer) {
+        LOG.fine(String.format("Game created: (%s : %s", redPlayer, whitePlayer));
         this.redPlayer = redPlayer;
         this.whitePlayer = whitePlayer;
         this.turn = Turn.RED;
@@ -37,6 +41,7 @@ public class Game {
 
     // used for custom configuration
     public Game(Player redPlayer, Player whitePlayer, Turn turn, Board board) {
+        LOG.fine(String.format("Custom Game created: (%s : %s", redPlayer, whitePlayer));
         this.redPlayer = redPlayer;
         this.whitePlayer = whitePlayer;
         this.turn = turn;
@@ -79,10 +84,10 @@ public class Game {
 
     /**
      * Returns the number of moves in the current turn
-     * @return the number of moves in the turn
+     * @return true if there have been moves already made
      */
-    public int getMovesInCurrentTurn() {
-        return queuedTurnMoves.size();
+    public boolean hasMovesInCurrentTurn() {
+        return queuedTurnMoves.size() >= 1;
     }
 
     public Move getLastMoveMade() {
@@ -92,6 +97,7 @@ public class Game {
 
     public void addMoveToCurrentTurn(Move newest) {
         queuedTurnMoves.add(newest);
+        LOG.fine(String.format("Move added to current turn: %d", queuedTurnMoves.size()));
     }
 
 
