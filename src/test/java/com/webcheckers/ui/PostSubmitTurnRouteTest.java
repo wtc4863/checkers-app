@@ -5,6 +5,10 @@ import com.webcheckers.appl.PlayerLobby;
 import com.webcheckers.model.Board;
 import com.webcheckers.model.Game;
 import com.webcheckers.model.Game.Turn;
+import com.webcheckers.model.JumpMove;
+import com.webcheckers.model.Piece;
+import com.webcheckers.model.Piece.PColor;
+import com.webcheckers.model.Piece.PType;
 import com.webcheckers.model.Player;
 import com.webcheckers.model.Position;
 import com.webcheckers.model.SimpleMove;
@@ -22,6 +26,10 @@ import static org.mockito.Mockito.when;
 
 @Tag("UI-tier")
 public class PostSubmitTurnRouteTest {
+
+  private final String GOOD_COMPARE = "{\"text\":\"Turn submitted\",\"type\":\"info\"}";
+  private final String BAD_COMPARE = "{\"text\":\"Submitted turn is incomplete\",\"type\":\"error\"}";
+
   private PostSubmitTurnRoute CuT;
 
   private Player thisPlayer;
@@ -65,11 +73,32 @@ public class PostSubmitTurnRouteTest {
   public void testGoodMove() {
     game.addMove(new SimpleMove(new Position(5, 0), new Position(4, 1)));
 
-    String compare = "{\"text\":\"Turn submitted\",\"type\":\"info\"}";
-
-    assertEquals(compare, CuT.handle(request, response));
+    assertEquals(GOOD_COMPARE, CuT.handle(request, response));
     assertTrue(game.getTurn() == Turn.WHITE);
     assertFalse(game.getBoard().getSpace(new Position(5, 0)).doesHasPiece());
     assertTrue(game.getBoard().getSpace(new Position(4, 1)).doesHasPiece());
   }
+
+  @Test
+  public void testBadMove() {
+    for (int i = 0; i < 8; i++) {
+      for (int j = 0; j < 8; j++) {
+        board.getSpace(new Position(i, j)).removePiece();
+      }
+    }
+
+
+
+    board.getSpace(new Position(5, 0)).addPiece(new Piece(PColor.red, PType.single));
+    board.getSpace(new Position(4, 1)).addPiece(new Piece(PColor.white, PType.single));
+    board.getSpace(new Position(2, 1)).addPiece(new Piece(PColor.white, PType.single));
+
+    game.addMove(new JumpMove(new Position(5, 0), new Position(3, 2)));
+
+    assertEquals(BAD_COMPARE, CuT.handle(request, response));
+    assertFalse(game.getTurn() == Turn.WHITE);
+    assertTrue(board.getSpace(new Position(5, 0)).doesHasPiece());
+    assertFalse(board.getSpace(new Position(3, 2)).doesHasPiece());
+  }
 }
+

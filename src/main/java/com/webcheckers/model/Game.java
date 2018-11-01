@@ -113,22 +113,7 @@ public class Game {
         //if there is a move left, the most recent move's end position is the next move's start position
         Move lastMove = queuedTurnMoves.get(queuedTurnMoves.size() -1 );
         Position newStart = lastMove.getEnd();
-        //we must check two spaces the piece could potentially move to
-        int newColLeft = newStart.getCell() + 2;
-        int newColRight = newStart.getCell() - 2;
-        JumpMove jump1;
-        JumpMove jump2;
-        if (turn == Turn.RED) {
-            jump1 = new JumpMove(newStart, new Position(newStart.getRow() - 2, newColRight));
-            jump2 = new JumpMove(newStart, new Position(newStart.getRow() - 2, newColLeft));
-        } else {
-            jump1 = new JumpMove(newStart, new Position(newStart.getRow() + 2, newColRight));
-            jump2 = new JumpMove(newStart, new Position(newStart.getRow() - 2, newColLeft));
-        }
-
-        //if either of the potential moves are valid, there is a move left
-        return (jump1.validateMove(this) || jump2.validateMove(this));
-
+        return JumpMove.positionHasJumpMoveAvailable(newStart, this);
     }
 
     public void addMove(Move move) {
