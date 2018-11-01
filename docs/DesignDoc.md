@@ -124,6 +124,21 @@ of the home page, that shows all of the players available for a game.
 * Clicking on one of these players will redirect both users to the **_game_** page,
 where the checkers game will be played.
 
+![The Game interface statechart](gameview-interface.png)
+* When it is the user's turn, they will be able to click and drag any of their
+  own pieces.
+  - If they attempt to make an illegal move, it will be rejected and the piece
+    will be put back
+  - If they attempt to make a legal move, it will be accepted
+* If a player has made a move, they will be allowed to revert that move or
+  submit their turn
+  - If the player is required by game rules to continue making moves, then they
+    will not be allowed to submit their turn and must make the required moves
+* If the player has jumped a piece for their move, they may make additional
+  moves for any subsequent jumps that are possible
+* When it is not the user's turn, they will not be able to click and drag any
+  pieces.
+
 
 ### UI Tier
 
