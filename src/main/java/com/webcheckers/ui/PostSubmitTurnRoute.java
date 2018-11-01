@@ -1,9 +1,11 @@
 package com.webcheckers.ui;
 
 import com.webcheckers.appl.PlayerLobby;
+import com.webcheckers.appl.TurnController;
 import com.webcheckers.model.Board;
 import com.webcheckers.model.Game;
 import com.webcheckers.model.Player;
+import com.webcheckers.ui.Message.MessageType;
 import spark.*;
 
 import java.util.HashMap;
@@ -18,6 +20,7 @@ public class PostSubmitTurnRoute implements Route{
     // Constants
     //
     private static final String ERROR_MESSAGE = "Submitted turn is incomplete";
+    private static final String SUCCESS_MESSAGE = "Turn submitted";
 
     //
     // Attributes
@@ -56,23 +59,14 @@ public class PostSubmitTurnRoute implements Route{
         }
 
         Game game = playerLobby.getGame(thisPlayer);
-
-        vm.put(GetGameRoute.TITLE_ATTR, "Game");
-        vm.put(GetGameRoute.WHITE_PLAYER_ATTR, game.getWhitePlayer());
-        vm.put(GetGameRoute.RED_PLAYER_ATTR, game.getRedPlayer());
-        vm.put(GetGameRoute.CURRENT_PLAYER_ATTR, thisPlayer);
-        vm.put(GetGameRoute.VIEW_MODE_ATTR, GetGameRoute.View.PLAY);
-
+        TurnController turnController = new TurnController(playerLobby);
         if(game.movesLeft()) {
-            vm.put(GetGameRoute.MESSAGE_ATTR, ERROR_MESSAGE);
+
+          return turnController.MessageFromModeltoUI(new Message(ERROR_MESSAGE, MessageType.error));
 
         } else {
             game.applyTurnMoves();
-            vm.put(GetGameRoute.MESSAGE_ATTR, new Message("Submission successful", Message.MessageType.INFO));
+            return turnController.MessageFromModeltoUI(new Message(SUCCESS_MESSAGE, MessageType.info));
         }
-
-        vm.put(GetGameRoute.ACTIVE_COLOR_ATTR, game.getTurn());
-        vm.put(GetGameRoute.BOARD_VIEW_ATTR, playerLobby.getBoardView(thisPlayer));
-        return templateEngine.render(new ModelAndView(vm, GetGameRoute.TEMPLATE_NAME));
-}
+  }
 }

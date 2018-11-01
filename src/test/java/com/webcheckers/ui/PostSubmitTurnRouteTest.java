@@ -65,9 +65,11 @@ public class PostSubmitTurnRouteTest {
   public void testGoodMove() {
     game.addMove(new SimpleMove(new Position(5, 0), new Position(4, 1)));
 
-    assertFalse(CuT.handle(request, response) instanceof Message);
+    String compare = "{\"text\":\"Turn submitted\",\"type\":\"info\"}";
+
+    assertEquals(compare, CuT.handle(request, response));
     assertTrue(game.getTurn() == Turn.WHITE);
-    assertFalse(game.getBoard().getSpace(5, 0).doesHasPiece());
-    assertTrue(game.getBoard().getSpace(4, 1).doesHasPiece());
+    assertFalse(game.getBoard().getSpace(new Position(5, 0)).doesHasPiece());
+    assertTrue(game.getBoard().getSpace(new Position(4, 1)).doesHasPiece());
   }
 }
