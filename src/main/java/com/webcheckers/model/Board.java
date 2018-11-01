@@ -1,6 +1,8 @@
 package com.webcheckers.model;
 
 
+import java.util.ArrayList;
+
 /**
  * Object that holds all of the game data for the state of the board
  */
@@ -73,21 +75,17 @@ public class Board {
      * @param location2 the desired location of the piece
      */
     public void move(Position location1, Position location2) {
-        Space startSpace = boardArray[location1.getRow()][location1.getCol()];
-        Space endSpace = boardArray[location2.getRow()][location2.getCol()];
+        Space startSpace = boardArray[location1.getRow()][location1.getCell()];
+        Space endSpace = boardArray[location2.getRow()][location2.getCell()];
         Piece beingMoved = startSpace.pieceInfo();
             startSpace.removePiece();
             endSpace.addPiece(beingMoved);
     }
 
     public boolean spaceIsValid(Position position) {
-        if(position.isValid()) {
-            Space space = boardArray[position.getRow()][position.getCol()];
-            return space.isValid();
-        }
-        return false;
+        Space space = boardArray[position.getRow()][position.getCell()];
+        return space.isValid();
     }
-
 
     /**
      * Return a row of spaces at the specified index
@@ -98,10 +96,33 @@ public class Board {
         return this.boardArray[rowIndex];
     }
 
-    public Space getSpace(int rowIndex, int colIndex) {
-        if (new Position(rowIndex, colIndex).isValid()) {
-            return boardArray[rowIndex][colIndex];
+    /**
+     * Helper method to return a space at a specific location
+     * @param position
+     * @return
+     */
+    public Space getSpace(Position position) {
+        return this.boardArray[position.getRow()][position.getCell()];
+    }
+
+    /**
+     * Helper method that locates all the pieces on the board of a certain
+     * color, then returns their locations.
+     *
+     * @param color the piece color to search for
+     * @return a list of the positions that pieces of the specified color can
+     *      be found
+     */
+    public ArrayList<Position> getPieceLocations(Piece.PColor color) {
+        ArrayList<Position> pieces = new ArrayList<>();
+        for(int row = 0; row < ROWS; row++) {
+            for(int col = 0; col < COLUMNS; col++) {
+                Space currentSpace = this.boardArray[row][col];
+                if(currentSpace.doesHasPiece() && currentSpace.pieceInfo().pieceColor == color) {
+                    pieces.add(new Position(row, col));
+                }
+            }
         }
-        return null;
+        return pieces;
     }
 }

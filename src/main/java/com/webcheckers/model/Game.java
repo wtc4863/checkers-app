@@ -115,11 +115,7 @@ public class Game {
         for (Move move : queuedTurnMoves) {
             move.executeMove(this);
         }
-        if(this.turn == Turn.RED) {
-            this.turn = Turn.WHITE;
-        } else {
-            this.turn = Turn.RED;
-        }
+        switchTurn();
         queuedTurnMoves.clear();
     }
 

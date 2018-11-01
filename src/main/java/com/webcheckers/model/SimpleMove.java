@@ -21,7 +21,6 @@ public class SimpleMove extends Move {
         Board board = game.getBoard();
         if (validateMove(game)) {
             board.move(start, end);
-            game.switchTurn();
             return true;
         } else {
             return false;
