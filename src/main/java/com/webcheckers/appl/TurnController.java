@@ -93,8 +93,8 @@ public class TurnController {
                 currentGame.addMoveToCurrentTurn(currentMove);
                 return new Message(VALID_MOVE);
             }
-            currentGame.addMove(currentMove);
-            return new Message(VALID_MOVE, MessageType.info);
+            //currentGame.addMove(currentMove);
+            //return new Message(VALID_MOVE, MessageType.info);
         } else {
             // differentiate between different errors move types
             if(currentMove instanceof SimpleMove) {
