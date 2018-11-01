@@ -26,14 +26,9 @@ checkers.
 
  Term | Definition 
 ------|------------
-Player | A signed-in user 
-Game | A single game played between two players 
-Board | The model-tier representation of the game board 
-BoardView | The UI-tier representation of the game board 
-Space | The model-tier representation of a space on the game board 
-SpaceView | The UI-tier representation of a space on the game board 
-Piece | The model-tier representation of a piece on a space on the game board
-PieceView | The UI-tier representation of a piece on a space on the game board
+UI Tier | Part of the application that interacts with the user
+Model Tier | Part of the program that represents the state of the application
+Application Tier | Part of the application that manages user interactions with the application
 
 
 
@@ -54,8 +49,7 @@ clicking a player's name, a game will be started between them.
 
 * **Move and jump pieces:** upon entering a game, players must be
 able to move their pieces (during their turn)
- according to official checkers rules, 
-including jumping and removing pieces.
+according to official American checkers rules.
 
 * **Finish a game and return to lobby:** the game ends when a 
 player is out of turns, or all their pieces are removed. Upon the
@@ -76,15 +70,16 @@ players can always leave and come back to it when they are ready.
 ## Application Domain
 
 ![The WebCheckers Domain Model](domain-model.png)
-
 > _The Domain Model_
 
-When users log into the site, they are recognized as a **_player_**. Players can view other players that
-are logged in, and select them to start a **_game_**.
- New games start on a fresh **_board_**, which consists of an 8x8 grid of **_spaces_**, 
- that can hold **_pieces_**. Each player starts with 12 pieces, and take turns moving them
- around the board, jumping each other until one player's pieces are gone, or there are no moves left. 
- When a player wins and the game ends, both players are returned to the lobby.
+A **_game_** of checker consists of two **_players_**. New games start on a fresh **_board_**,
+which consists of an 8x8 grid of **_spaces_**, that can hold **_pieces_**. Each player starts
+with 12 pieces, and take turns moving them around the board. Each piece is either white or red
+and either a single piece or a king piece. During their turn, players can make two kinds of
+moves: **_simple moves_** or **_jump moves_**. Additionally, sometimes players are able
+to make multiple jump moves in sequence. Turns continue until one player's pieces are gone, or
+a player cannot make a move. When the game ends, the player who lost all their pieces or could
+not make a move loses the game.
 
 
 ## Architecture and Design
@@ -97,7 +92,7 @@ The following Tiers/Layers model shows a high-level view of the webapp's archite
 ![The Tiers & Layers of the Architecture](architecture-tiers-and-layers.png)
 
 As a web application, the user interacts with the system using a
-browser.  The client-side of the UI is composed of HTML pages with
+browser. The client-side of the UI is composed of HTML pages with
 some minimal CSS for styling the page.  There is also some JavaScript
 that has been provided to the team by the architect.
 
@@ -113,18 +108,19 @@ This section describes the web interface flow; this is how the user views and in
 with the WebCheckers application.
 
 ![The WebCheckers Web Interface Statechart](web-interface.png)
+_State chart of overall web application interface_
 
-* Upon arriving at the site, the user is greeted with a **_home_** page that tells the user
-how many users are currently logged into the service. 
-* By clicking on a sign in link,
-they are brought to the **_sign-in_** page, where they must enter a username that follows
-a certain set of rules. 
-* Upon entering a valid username, the user will be brought a new version
-of the home page, that shows all of the players available for a game.
-* Clicking on one of these players will redirect both users to the **_game_** page,
-where the checkers game will be played.
+* Upon arriving at the site, the user is greeted with a **_home_** page that
+  tells the user how many users are currently logged into the service. 
+* By clicking on a sign in link, they are brought to the **_sign-in_** page,
+  where they must enter a username that follows a certain set of rules. 
+* Upon entering a valid username, the user will be brought a new version of the
+  home page that shows all currently logged-in players.
+* Clicking on one of these players will redirect both users to the **_game_**
+  page, where the checkers game will be played.
 
 ![The Game interface statechart](gameview-interface.png)
+_State chart of gameplay interface_
 * When it is the user's turn, they will be able to click and drag any of their
   own pieces.
   - If they attempt to make an illegal move, it will be rejected and the piece
@@ -136,27 +132,29 @@ where the checkers game will be played.
     will not be allowed to submit their turn and must make the required moves
 * If the player has jumped a piece for their move, they may make additional
   moves for any subsequent jumps that are possible
-* When it is not the user's turn, they will not be able to click and drag any
-  pieces.
 
 
 ### UI Tier
 
-The UI tier works closely with the application to determine what information should be
-shown to the user. The GetHomeRoute class has the responsibility of passing relevant
-information to the _home.ftl_ file so that the home page can be rendered. When the user
-first accesses the home page before signing in, the **_GetGameRoute_** communicates with the
-PlayerLobby to determine if this user has been signed in. Because the user hasn't signed in,
-the limited home page is rendered. Usernames of signed in players can't be seen; only the number
-of online users is given.
+The UI tier works closely with the application to determine what information
+should be shown to the user. The GetHomeRoute class has the responsibility of
+passing relevant information to the _home.ftl_ file so that the home page can
+be rendered. When the user first accesses the home page before signing in, the
+**_GetGameRoute_** communicates with the PlayerLobby to determine if this user
+has been signed in. Because the user hasn't signed in, the limited home page is
+rendered. Usernames of signed in players can't be seen; only the number of
+online users is given.
 
-Next, the user wants to sign in, so that they can play a game. They click the sign-in link on the
-home page to cause the **_GetSignInRoute_** class to check if the player has been signed in already. Because
-this user hasn't, they are taken to the sign-in page using the _signin.ftl_ file, where they can enter their desired username.
+Next, the user wants to sign in, so that they can play a game. They click the
+sign-in link on the home page to cause the **_GetSignInRoute_** class to check
+if the player has been signed in already. Because this user hasn't, they are
+taken to the sign-in page using the _signin.ftl_ file, where they can enter
+their desired username.
 
-Upon submitting their username, the **_PostSignInRoute_** will conduct the checking of the username's validity.
-Entering an invalid username will cause the page to reload for the user to try again. A valid one will
-redirect the user back to the home page.
+Upon submitting their username, the **_PostSignInRoute_** will conduct the
+checking of the username's validity. Entering an invalid username will cause
+the page to reload for the user to try again. A valid one will redirect the
+user back to the home page.
 
 Except this time, the home page is different. The **_GetHomeRoute_** recognizes that the user is now signed in,
 so the full home page is rendered. Instead of the number of users being displayed, there is a list of
