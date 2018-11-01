@@ -3,6 +3,7 @@ package com.webcheckers.model;
 import com.webcheckers.ui.BoardView;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Queue;
 
 /**
@@ -111,9 +112,15 @@ public class Game {
      */
     public boolean movesLeft() {
         //if there is a move left, the most recent move's end position is the next move's start position
-        Move lastMove = queuedTurnMoves.get(queuedTurnMoves.size() -1 );
-        Position newStart = lastMove.getEnd();
-        return JumpMove.positionHasJumpMoveAvailable(newStart, this);
+        Collections.reverse(queuedTurnMoves);
+        if(queuedTurnMoves.size() != 0) {
+          Move lastMove = queuedTurnMoves.get(0);
+          Collections.reverse(queuedTurnMoves);
+          Position newStart = lastMove.getEnd();
+          return JumpMove.positionHasJumpMoveAvailable(newStart, this);
+        }
+        Collections.reverse(queuedTurnMoves);
+        return false;
     }
 
     public void addMove(Move move) {

@@ -70,7 +70,7 @@ public class PostSubmitTurnRouteTest {
   }
 
   @Test
-  public void testGoodMove() {
+  public void testGoodSimpleMove() {
     game.addMove(new SimpleMove(new Position(5, 0), new Position(4, 1)));
 
     assertEquals(GOOD_COMPARE, CuT.handle(request, response));
@@ -80,25 +80,21 @@ public class PostSubmitTurnRouteTest {
   }
 
   @Test
-  public void testBadMove() {
+  public void testGoodJumpMove() {
     for (int i = 0; i < 8; i++) {
       for (int j = 0; j < 8; j++) {
         board.getSpace(new Position(i, j)).removePiece();
       }
     }
 
-
-
     board.getSpace(new Position(5, 0)).addPiece(new Piece(PColor.red, PType.single));
     board.getSpace(new Position(4, 1)).addPiece(new Piece(PColor.white, PType.single));
-    board.getSpace(new Position(2, 1)).addPiece(new Piece(PColor.white, PType.single));
 
     game.addMove(new JumpMove(new Position(5, 0), new Position(3, 2)));
 
-    assertEquals(BAD_COMPARE, CuT.handle(request, response));
-    assertFalse(game.getTurn() == Turn.WHITE);
-    assertTrue(board.getSpace(new Position(5, 0)).doesHasPiece());
-    assertFalse(board.getSpace(new Position(3, 2)).doesHasPiece());
+    assertEquals(GOOD_COMPARE, CuT.handle(request, response));
+    assertFalse(board.getSpace(new Position(5, 0)).doesHasPiece());
+    assertTrue(board.getSpace(new Position(3, 2)).doesHasPiece());
   }
 }
 

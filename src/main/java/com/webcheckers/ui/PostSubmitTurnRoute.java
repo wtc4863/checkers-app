@@ -45,8 +45,6 @@ public class PostSubmitTurnRoute implements Route{
     //
     @Override
     public Object handle(Request request, Response response) {
-        Map<String, Object> vm = new HashMap<>();
-
         final Session httpSession = request.session();
         final String sessionID = httpSession.id();
 
@@ -60,12 +58,8 @@ public class PostSubmitTurnRoute implements Route{
 
         Game game = playerLobby.getGame(thisPlayer);
         TurnController turnController = new TurnController(playerLobby);
-        if(game.movesLeft()) {
-          return turnController.MessageFromModeltoUI(new Message(ERROR_MESSAGE, MessageType.error));
+        game.applyTurnMoves();
+        return turnController.MessageFromModeltoUI(new Message(SUCCESS_MESSAGE, MessageType.info));
 
-        } else {
-            game.applyTurnMoves();
-            return turnController.MessageFromModeltoUI(new Message(SUCCESS_MESSAGE, MessageType.info));
-        }
   }
 }

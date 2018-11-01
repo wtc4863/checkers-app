@@ -75,6 +75,7 @@ public class TurnController {
                 return returnMessageAndResetMoves(TOO_MANY_MOVES_ERROR_MSG, movesMade);
             } else {
                 movesMade++;
+                currentGame.addMove(currentMove);
                 return new Message(VALID_MOVE, MessageType.info);
             }
         } else {
