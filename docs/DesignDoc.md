@@ -140,7 +140,7 @@ The UI tier works closely with the application to determine what information
 should be shown to the user. The GetHomeRoute class has the responsibility of
 passing relevant information to the _home.ftl_ file so that the home page can
 be rendered. When the user first accesses the home page before signing in, the
-**_GetGameRoute_** communicates with the PlayerLobby to determine if this user
+**_GetHomeRoute_** communicates with the PlayerLobby to determine if this user
 has been signed in. Because the user hasn't signed in, the limited home page is
 rendered. Usernames of signed in players can't be seen; only the number of
 online users is given.
@@ -156,46 +156,54 @@ checking of the username's validity. Entering an invalid username will cause
 the page to reload for the user to try again. A valid one will redirect the
 user back to the home page.
 
-Except this time, the home page is different. The **_GetHomeRoute_** recognizes that the user is now signed in,
-so the full home page is rendered. Instead of the number of users being displayed, there is a list of
-all players currently online and not in a game.
+Except this time, the home page is different. The **_GetHomeRoute_** recognizes
+that the user is now signed in, so the full home page is rendered. Instead of
+the number of users being displayed, there is a list of all players currently
+online and not in a game.
 
-Clicking on one of these users will begin a game with them, unless they happen to have
-just been selected by someone else before you. This is where the **_GetGameRoute_** comes in. The
-GetGameRoute will match the current user and the challenged user in a new game, where
-the current user is the red player, and the selected player is the white player. The game page
-is rendered using this information.
+Clicking on one of these users will begin a game with them, unless they happen
+to have just been selected by someone else before you. This is where the
+**_GetGameRoute_** comes in. The GetGameRoute will match the current user and
+the challenged user in a new game, where the current user is the red player,
+and the selected player is the white player. The game page is rendered using
+this information.
 
-When in a game, players must be able to make turns only when it is his/her turn to move. In order to handle this
-we created the **_PostCheckTurnRoute_** which will do exactly that. Periodically, the client will send an
-AJAX request to the server asking to check if it is the players move. This route handles this by querying the
-underlying model to see if it said players turn. If it is, the client will receive a JSON response saying so. 
+When in a game, players must be able to make turns only when it is his/her turn
+to move. In order to handle this we created the **_PostCheckTurnRoute_** which
+will do exactly that. Periodically, the client will send an AJAX request to the
+server asking to check if it is the players move. This route handles this by
+querying the underlying model to see if it said players turn. If it is, the
+client will receive a JSON response saying so. 
 
-But, in order to render the game view, a visual representation of the board is needed. The board view
-is made up of several sub classes: a **_PieceView_** represents an individual piece that can be owned by 
-a **_SpaceView_**, that, when put together with others, makes up a **_RowView_**, the visual representation of a row of the board.
-Several RowViews make up the entire **_BoardView_**. These things are created based on the current state of the
-board, which, in this case, is a new, fresh board, with the current player's pieces
-appearing at the bottom of the board.
+But, in order to render the game view, a visual representation of the board is
+needed. The board view is made up of several sub classes: a **_PieceView_**
+represents an individual piece that can be owned by a **_SpaceView_**, that,
+when put together with others, makes up a **_RowView_**, the visual
+representation of a row of the board. Several RowViews make up the entire
+**_BoardView_**. These things are created based on the current state of the
+board, which, in this case, is a new, fresh board, with the current player's
+pieces appearing at the bottom of the board.
 
-Now that the BoardView is made, the game page can be rendered using the _game.ftl_ file 
-and the game can begin. The
-game page is reloaded consistently as the game progresses.
+Now that the BoardView is made, the game page can be rendered using the
+**_game.ftl_** file and the game can begin. The game page is reloaded
+consistently as the game progresses.
 
 
 ### Application Tier
 
-The most important aspect of the application tier is the **_PlayerLobby_** class, which
-keeps track of the players signed into the service. The PlayerLobby contains a HashMap
-that matches player usernames to their _Player_ objects. When a user is signed in, they are added to 
-the HashMap, and they are removed when they sign out.
+The most important aspect of the application tier is the **_PlayerLobby_**
+class, which keeps track of the players signed into the service. The
+PlayerLobby contains a HashMap that matches player usernames to their
+**_Player_** objects. When a user is signed in, they are added to the HashMap,
+and they are removed when they sign out.
 
-After signing in, the user can challenge another user to a game. Upon challenging another user,
-the PlayerLobby tells another class, the **_GameCenter_**, to start a new game. The GameCenter
-is in charge of creating new games and keeping track of all current games. When the user challenges another
-player, the GameCenter creates a game between these two players, and the game is added to
-the GameCenter's list of current games. The two players are also added to a HashMap that connects
-players to their current opponents.
+After signing in, the user can challenge another user to a game. Upon
+challenging another user, the PlayerLobby tells another class, the
+**_GameCenter_**, to start a new game. The GameCenter is in charge of creating
+new games and keeping track of all current games. When the user challenges
+another player, the GameCenter creates a game between these two players, and
+the game is added to the GameCenter's list of current games. The two players
+are also added to a HashMap that connects players to their current opponents.
 
 #### TurnControl Subsystem
 When making a move, the client-side code will check with the server to make
