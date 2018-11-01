@@ -68,6 +68,11 @@ public class WebServer {
      * The URL pattern to request the Game page.
      */
     public static final String VALIDATE_MOVE_URL = "/validateMove";
+
+    /**
+     * The URL pattern to submit a turn
+     */
+    public static final String SUBMIT_TURN_URL = "/submitTurn";
     /**
      * The URL pattern to request the Game page.
      */
@@ -171,6 +176,9 @@ public class WebServer {
 
         // Handles Turn Checking with  AJAX
         post(CHECK_TURN_URL, new PostCheckTurnRoute(playerLobby, gson));
+        //Handles Turn Validation
+        post(SUBMIT_TURN_URL, new PostSubmitTurnRoute(playerLobby, templateEngine));
+
         //
         LOG.config("WebServer is initialized.");
     }
