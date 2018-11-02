@@ -69,7 +69,7 @@ players can always leave and come back to it when they are ready.
 
 ## Application Domain
 
-![The WebCheckers Domain Model](domain-model.png)
+![The WebCheckers Domain Model](updated-domain.jpg)
 > _The Domain Model_
 
 A **_game_** of checker consists of two **_players_**. New games start on a fresh **_board_**,
@@ -204,6 +204,8 @@ new games and keeping track of all current games. When the user challenges
 another player, the GameCenter creates a game between these two players, and
 the game is added to the GameCenter's list of current games. The two players
 are also added to a HashMap that connects players to their current opponents.
+
+![The Sequence Diagram for starting a game](start-a-game.png)
 
 #### TurnControl Subsystem
 When making a move, the client-side code will check with the server to make
