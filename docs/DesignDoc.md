@@ -211,7 +211,7 @@ are also added to a HashMap that connects players to their current opponents.
 When making a move, the client-side code will check with the server to make
 sure the move that the user selected is valid. This is handled by the
 **_TurnControl_** class, which provides an interface for the UI-tier
-**_PostValidateMoveRoute_** class to interact with the application logic. This
+**_PostValidateMoveRoute_** class to interact with the Model-tier. This
 **_TurnControl_** class then parses the JSON request sent by the client and
 creates one of multiple kinds of Model-tier representations of classes. This
 object is then used to validate the move. If the move is determined to be
@@ -247,15 +247,19 @@ valid, and it can apply itself to the game once the turn is submitted.
 
 Subclasses to the **_Move_** class must override the functionality for
 validating and executing the move. This is because each type of move has
-different moves that may make it valid or invalid.
+different rules that may make it valid or invalid.
 
 The first **_Move_** subclass is the **_SimpleMove_**. This represents a
 typical move, that travels diagonally a single space without capturing a piece.
 
+The second **_Move_** subclass is the **_JumpMove_**. This represents a typical jump
+move in which a player jumps **one** piece that is diagonally to the left or right,
+given that the space they end on is empty.
+
 ### Design Improvements
 
-In the future, the team can be more careful to adhere to design principles such
-as Law of Demeter and Low Coupling. Up until recently, the _Board_ class had the 
+In the future, the team can adhere more to the design principles of
+Law of Demeter and Low Coupling. Up until recently, the _Board_ class had the 
 responsibility of building the _BoardView_ in the UI tier, which was a significant
 violation of design principles, as the Model and UI have no reason to directly interact.
 However, this violation has since been corrected. Hopefully, we will be more aware in 
