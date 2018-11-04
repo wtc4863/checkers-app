@@ -125,6 +125,11 @@ public class PlayerLobby {
         }
     }
 
+    public void signOut(String playerName) {
+        players.get(playerName).signOut();
+        players.remove(playerName);
+    }
+
     /**
      * Checks if the given sessionID is already registered to a player.
      * @param sessionID the session id to check
