@@ -191,6 +191,9 @@ public class JumpMoveTest {
         // Make sure the destination space looks valid
         when(board.spaceIsValid(validEnd)).thenReturn(true);
 
+        // Make it look like white's turn
+        when(game.getTurn()).thenReturn(Game.Turn.WHITE);
+
         // Add white piece at the start
         Space startSpace = makeWhiteSpace();
         when(board.getSpace(start)).thenReturn(startSpace);
@@ -228,6 +231,9 @@ public class JumpMoveTest {
     public void testBackwardsRedJumpMove() {
         // Make sure the destination space looks valid
         when(board.spaceIsValid(validEnd)).thenReturn(true);
+
+        // Make it look like red's turn
+        when(game.getTurn()).thenReturn(Game.Turn.RED);
 
         // Add a red space to the start
         Space startSpace = makeRedSpace();

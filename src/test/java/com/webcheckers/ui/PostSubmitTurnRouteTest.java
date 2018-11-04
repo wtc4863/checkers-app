@@ -66,7 +66,7 @@ public class PostSubmitTurnRouteTest {
     game = playerLobby.getGame(thisPlayer);
     board = game.getBoard();
 
-    CuT = new PostSubmitTurnRoute(playerLobby, templateEngine);
+    CuT = new PostSubmitTurnRoute(playerLobby);
   }
 
   @Test
