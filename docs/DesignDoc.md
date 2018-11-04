@@ -156,7 +156,7 @@ is rendered using this information.
 When in a game, players must be able to make turns only when it is his/her turn to move. In order to handle this
 we created the **_PostCheckTurnRoute_** which will do exactly that. Periodically, the client will send an
 AJAX request to the server asking to check if it is the players move. This route handles this by querying the
-underlying model to see if it said players turn. If it is, the client will recieve a JSON response saying so. 
+underlying model to see if it said players turn. If it is, the client will receive a JSON response saying so. 
 
 But, in order to render the game view, a visual representation of the board is needed. The board view
 is made up of several sub classes: a **_PieceView_** represents an individual piece that can be owned by 
