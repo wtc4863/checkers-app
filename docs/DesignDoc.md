@@ -273,12 +273,13 @@ through the process of correcting it.
 ### Acceptance Testing
 
 
-There have currently been three user stories and two spike stories completed:
+There have currently been four(4) user stories and two(2) spike stories completed:
 1. Player Sign-In
 2. Start a Game
 3. Spike: Domain-Driven Design
 4. Spike: Web Architecture
 5. Simple Move
+6. Turn Control
 
 These stories have all passed their acceptance criteria. No other stories have 
 reached the end of development to be tested as of yet.
