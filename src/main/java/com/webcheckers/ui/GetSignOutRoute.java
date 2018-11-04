@@ -34,12 +34,15 @@ public class GetSignOutRoute implements Route {
 
     Map<String, Object> vm = new HashMap<>();
 
-    playerLobby.signOut(playerName);
-
-    response.redirect("/");
-    halt();
-    return null;
-
+    if(playerName != null) {
+      playerLobby.signOut(playerName);
+      vm.put(GetHomeRoute.IS_SIGNED_IN, false);
+      vm.put(GetHomeRoute.NUM_SIGNED_IN, playerLobby.getSignedInPlayers().size());
+      vm.put(GetHomeRoute.TITLE_ATTR, GetHomeRoute.TITLE);
+      response.redirect("/");
+      return templateEngine.render(new ModelAndView(vm, GetHomeRoute.TEMPLATE_NAME));
+    }
+    return templateEngine.render(new ModelAndView(vm, GetHomeRoute.TEMPLATE_NAME));
   }
 
 }
