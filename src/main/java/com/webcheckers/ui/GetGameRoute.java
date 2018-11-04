@@ -87,7 +87,7 @@ public class GetGameRoute implements Route{
 
         // Set up list of signed-in players
         ArrayList<String> onlinePlayers = playerLobby.getSignedInPlayers();
-        onlinePlayers.remove(currentPlayer);
+        onlinePlayers.remove(currentPlayer.getName());
 
         // Set attributes
         vm.put(SIGNED_IN_PLAYERS, onlinePlayers);
@@ -106,9 +106,6 @@ public class GetGameRoute implements Route{
    */
     @Override
     public Object handle(Request request, Response response) {
-        // Template set-up
-        final Map<String, Object> vm = new HashMap<>();
-
         // Get the current player
         final Session httpSession = request.session();
         Player thisPlayer = playerLobby.getPlayerBySessionID(httpSession.id());
@@ -116,6 +113,8 @@ public class GetGameRoute implements Route{
         // If there is no player, redirect to the home page
         if (thisPlayer == null) {
             response.redirect(WebServer.HOME_URL);
+            halt();
+            return null;
         }
 
         // Get the other player
