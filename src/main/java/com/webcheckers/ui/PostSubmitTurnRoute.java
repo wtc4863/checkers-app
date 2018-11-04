@@ -26,18 +26,15 @@ public class PostSubmitTurnRoute implements Route{
     // Attributes
     //
     private final PlayerLobby playerLobby;
-    private final TemplateEngine templateEngine;
 
     //
     // Constructor
     //
-    public PostSubmitTurnRoute(PlayerLobby playerLobby, TemplateEngine templateEngine) {
+    public PostSubmitTurnRoute(PlayerLobby playerLobby) {
 
         Objects.requireNonNull(playerLobby, "playerLobby must not be null");
-        Objects.requireNonNull(templateEngine, "templateEngine must not be null");
 
         this.playerLobby = playerLobby;
-        this.templateEngine = templateEngine;
     }
 
     //
