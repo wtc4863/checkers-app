@@ -1,6 +1,9 @@
 package com.webcheckers.model;
 
 import com.webcheckers.ui.BoardView;
+
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Queue;
 
 /**
@@ -15,9 +18,9 @@ public class Game {
     Player whitePlayer;
     Board board;
     Turn turn;
-    Queue<Move> queuedTurnMoves;
+    ArrayList<Move> queuedTurnMoves;
 
-    enum Turn {
+    public enum Turn {
         WHITE, RED;
     }
 
@@ -29,6 +32,7 @@ public class Game {
         this.whitePlayer = whitePlayer;
         this.turn = Turn.RED;
         this.board = new Board();
+        this.queuedTurnMoves = new ArrayList<>();
     }
 
     // used for custom configuration
@@ -99,16 +103,45 @@ public class Game {
     }
 
     public void switchTurn() {
-        if(this.turn == Turn.RED)
-            this.turn = Turn.WHITE;
-        else
-            this.turn = Turn.RED;
+        switch(this.turn){
+            case RED:
+                this.turn = Turn.WHITE;
+                break;
+            case WHITE:
+                this.turn = Turn.RED;
+                break;
+        }
     }
 
     /**
-     * Applies the current players moves to the board.
+     * Applies the current players moves to the board, changes the turn to the other player
      */
     public void applyTurnMoves() {
-        //TODO: implement doing all these moves to the board
+        for (Move move : queuedTurnMoves) {
+            move.executeMove(this);
+        }
+        switchTurn();
+        queuedTurnMoves.clear();
+    }
+
+    /**
+     * Checks if there are moves left to be made in this turn
+     * @return true if there are moves left to be made in this turn
+     */
+    public boolean movesLeft() {
+        //if there is a move left, the most recent move's end position is the next move's start position
+        Collections.reverse(queuedTurnMoves);
+        if(queuedTurnMoves.size() != 0) {
+          Move lastMove = queuedTurnMoves.get(0);
+          Collections.reverse(queuedTurnMoves);
+          Position newStart = lastMove.getEnd();
+          return JumpMove.positionHasJumpMoveAvailable(newStart, this);
+        }
+        Collections.reverse(queuedTurnMoves);
+        return false;
+    }
+
+    public void addMove(Move move) {
+        queuedTurnMoves.add(move);
     }
 }

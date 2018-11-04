@@ -1,5 +1,7 @@
 package com.webcheckers.model;
 
+import com.webcheckers.model.Game.Turn;
+import com.webcheckers.model.Piece.PColor;
 import java.util.ArrayList;
 
 /**
@@ -72,12 +74,12 @@ public class JumpMove extends Move {
 
         // Make sure the starting position has a piece
         Board board = game.getBoard();
-        if(board.getSpace(start).doesHasPiece()) {
-            // We'll need this information later
-            movedPiece = board.getSpace(start).pieceInfo();
-        } else {
-            return false;
-        }
+//        if(board.getSpace(start).doesHasPiece()) {
+//            // We'll need this information later
+//            movedPiece = board.getSpace(start).pieceInfo();
+//        } else {
+//            return false;
+//        }
 
         // Make sure the ending position doesn't have a piece
         try {
@@ -93,7 +95,8 @@ public class JumpMove extends Move {
         // Make sure the middle position has an opponent piece
         if(board.getSpace(middle).doesHasPiece()) {
             jumpedPiece = board.getSpace(middle).pieceInfo();
-            if(jumpedPiece.pieceColor == movedPiece.pieceColor) {
+            if((game.getTurn() == Turn.RED && jumpedPiece.pieceColor == PColor.red) ||
+                (game.getTurn() == Turn.WHITE && jumpedPiece.pieceColor == PColor.white)) {
                 // Can only jump an opponent's piece
                 return false;
             }
@@ -103,7 +106,7 @@ public class JumpMove extends Move {
 
         // TODO: skip this block if the piece is a king
         // Make sure the piece is going in the right direction
-        if(movedPiece.pieceColor == Piece.PColor.red) {
+        if(game.getTurn() == Turn.RED) {
             // Red pieces should travel in the "negative" direction
             return start.getRow() > end.getRow();
         } else {
@@ -150,8 +153,8 @@ public class JumpMove extends Move {
          */
 
         // This is a big-time law of Demeter violation right here
-        Piece.PColor currentColor = game.getBoard().getSpace(pos).pieceInfo().pieceColor;
-        if(currentColor == Piece.PColor.red) {
+       // Piece.PColor currentColor = game.getBoard().getSpace(pos).pieceInfo().pieceColor;
+        if(game.getTurn() == Turn.RED) {
             // Lower-left
             possibleMoves.add(new JumpMove(pos, new Position(pos.getRow() - 2, pos.getCell() - 2)));
             // Lower-right
