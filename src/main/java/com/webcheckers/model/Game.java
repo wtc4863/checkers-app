@@ -103,10 +103,14 @@ public class Game {
     }
 
     public void switchTurn() {
-        if(this.turn == Turn.RED)
-            this.turn = Turn.WHITE;
-        else
-            this.turn = Turn.RED;
+        switch(this.turn){
+            case RED:
+                this.turn = Turn.WHITE;
+                break;
+            case WHITE:
+                this.turn = Turn.RED;
+                break;
+        }
     }
 
     /**
