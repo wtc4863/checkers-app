@@ -23,7 +23,7 @@ public class Position {
             return false;
         } else {
             Position pos = (Position)obj;
-            return this.row == pos.getRow() && this.cell == pos.getCell();
+            return this.getRow() == pos.getRow() && this.getCell() == pos.getCell();
         }
     }
     @Override

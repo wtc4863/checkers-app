@@ -197,7 +197,7 @@ invalid, it does not get stored on the move queue. Then, the **_TurnControl_**
 class creates a message that gets passed back to the route component, which
 renders the message for the user.
 
-[The TurnControl Subsystem, and it's interactions](start-a-game.png)
+[The TurnControl Subsystem, and its interactions](start-a-game.png)
 
 ### Model Tier
 
@@ -246,11 +246,12 @@ through the process of correcting it.
 ### Acceptance Testing
 
 
-There have currently been two user stories and two spike stories completed:
+There have currently been three user stories and two spike stories completed:
 1. Player Sign-In
 2. Start a Game
 3. Spike: Domain-Driven Design
 4. Spike: Web Architecture
+5. Simple Move
 
 These stories have all passed their acceptance criteria. No other stories have 
 reached the end of development to be tested as of yet.

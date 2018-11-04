@@ -1,6 +1,8 @@
 package com.webcheckers.model;
 
 
+import java.util.ArrayList;
+
 /**
  * Object that holds all of the game data for the state of the board
  */
@@ -92,5 +94,35 @@ public class Board {
      */
     public Space[] getRow(int rowIndex) {
         return this.boardArray[rowIndex];
+    }
+
+    /**
+     * Helper method to return a space at a specific location
+     * @param position
+     * @return
+     */
+    public Space getSpace(Position position) {
+        return this.boardArray[position.getRow()][position.getCell()];
+    }
+
+    /**
+     * Helper method that locates all the pieces on the board of a certain
+     * color, then returns their locations.
+     *
+     * @param color the piece color to search for
+     * @return a list of the positions that pieces of the specified color can
+     *      be found
+     */
+    public ArrayList<Position> getPieceLocations(Piece.PColor color) {
+        ArrayList<Position> pieces = new ArrayList<>();
+        for(int row = 0; row < ROWS; row++) {
+            for(int col = 0; col < COLUMNS; col++) {
+                Space currentSpace = this.boardArray[row][col];
+                if(currentSpace.doesHasPiece() && currentSpace.pieceInfo().pieceColor == color) {
+                    pieces.add(new Position(row, col));
+                }
+            }
+        }
+        return pieces;
     }
 }

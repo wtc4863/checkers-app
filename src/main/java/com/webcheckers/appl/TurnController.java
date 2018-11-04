@@ -1,11 +1,8 @@
 package com.webcheckers.appl;
 
-import com.webcheckers.model.Game;
-import com.webcheckers.model.Move;
+import com.webcheckers.model.*;
 import com.google.gson.GsonBuilder;
 import com.google.gson.Gson;
-import com.webcheckers.model.Player;
-import com.webcheckers.model.SimpleMove;
 import com.webcheckers.ui.Message;
 import com.webcheckers.ui.Message.MessageType;
 import java.util.logging.Logger;
@@ -13,6 +10,7 @@ import java.util.logging.Logger;
 public class TurnController {
     private static final Logger LOG = Logger.getLogger(TurnController.class.getName());
 
+    static final String JUMP_MOVE_ERROR_MSG = "You must jump exactly one opponent piece.";
     static final String SIMPLE_MOVE_ERROR_MSG = "You must move a piece to an empty adjacent space.";
     static final String TOO_MANY_MOVES_ERROR_MSG = "Too many moves made";
     static final String VALID_MOVE = "Valid move!";
@@ -52,7 +50,11 @@ public class TurnController {
         Move translatedMove = gson.fromJson(json, Move.class);
 
         // Do checking for move type in order to return correct type
-        return new SimpleMove(translatedMove.getStart(), translatedMove.getEnd());
+        if(SimpleMove.isSimpleMove(translatedMove)) {
+            return new SimpleMove(translatedMove.getStart(), translatedMove.getEnd());
+        } else {
+            return new JumpMove(translatedMove.getStart(), translatedMove.getEnd());
+        }
     }
 
     /**
@@ -69,15 +71,18 @@ public class TurnController {
         // test if move is valid
         if(result) {
             // only one move per turn
-            if(movesMade >= 1) {
+            if (movesMade >= 1) {
                 return returnMessageAndResetMoves(TOO_MANY_MOVES_ERROR_MSG, movesMade);
+            } else {
+                movesMade++;
+                return new Message(VALID_MOVE, MessageType.info);
             }
-            movesMade++;
-            return new Message(VALID_MOVE, MessageType.info);
         } else {
             // differentiate between different errors move types
             if(currentMove instanceof SimpleMove) {
                 return returnMessageAndResetMoves(SIMPLE_MOVE_ERROR_MSG, movesMade);
+            } else if(currentMove instanceof JumpMove) {
+                return returnMessageAndResetMoves(JUMP_MOVE_ERROR_MSG, movesMade);
             } else {
                 // we should never get here
                 return returnMessageAndResetMoves(GENERIC_MOVE_ERR, movesMade);
