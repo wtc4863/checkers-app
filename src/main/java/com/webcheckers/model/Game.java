@@ -11,11 +11,11 @@ public class Game {
     //
     // Attributes
     //
-    private Player redPlayer;
-    private Player whitePlayer;
-    private Board board;
-    private Turn turn;
-    private Queue<Move> queuedTurnMoves;
+    Player redPlayer;
+    Player whitePlayer;
+    Board board;
+    Turn turn;
+    Queue<Move> queuedTurnMoves;
 
     enum Turn {
         WHITE, RED;
@@ -60,9 +60,23 @@ public class Game {
     }
 
     /**
-     * Gets the board state of this Game
-     * @return board object of this Game
+     * Finds out of the supplied players is the player
+     * whos turn it is
+     * @return player object of white player
      */
+    public boolean isPlayersTurn(Player player) {
+        if(redPlayer.equals(player)) {
+            return turn == Turn.RED;
+        } else {
+            return turn == Turn.WHITE;
+        }
+    }
+
+
+        /**
+         * Gets the board state of this Game
+         * @return board object of this Game
+         */
     public Board getBoard() {
         return this.board;
     }
