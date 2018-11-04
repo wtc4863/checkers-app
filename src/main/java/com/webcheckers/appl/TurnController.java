@@ -12,12 +12,11 @@ public class TurnController {
 
     static final String JUMP_MOVE_ERROR_MSG = "You must jump exactly one opponent piece.";
     static final String SIMPLE_MOVE_ERROR_MSG = "You must move a piece to an empty adjacent space.";
-    static final String TOO_MANY_MOVES_ERROR_MSG = "Too many moves made";
+    static final String TOO_MANY_SIMPLE_MOVES_ERROR_MSG = "You may only make one simple move per turn.";
     static final String VALID_MOVE = "Valid move!";
     static final String GENERIC_MOVE_ERR = "GENERIC MOVE ERROR";
 
-    // Keep track of the moves made during this turn
-    static int movesMade = 0;
+    private boolean simpleMoveMade;
 
     // Private attributes
     GsonBuilder builder;
@@ -26,6 +25,7 @@ public class TurnController {
     public TurnController(PlayerLobby playerLobby) {
         builder = new GsonBuilder();
         this.playerLobby = playerLobby;
+        this.simpleMoveMade = false;
     }
 
     /**
@@ -70,29 +70,37 @@ public class TurnController {
         boolean result = currentMove.validateMove(currentGame);
         // test if move is valid
         if(result) {
-            // only one move per turn
-            if (movesMade >= 1) {
-                return returnMessageAndResetMoves(TOO_MANY_MOVES_ERROR_MSG, movesMade);
-            } else {
-                movesMade++;
-                currentGame.addMove(currentMove);
-                return new Message(VALID_MOVE, MessageType.info);
+            // only one simple move per turn
+            if (this.simpleMoveMade) {
+                return returnMessageAndResetMoves(TOO_MANY_SIMPLE_MOVES_ERROR_MSG, true);
+            } else if(currentMove instanceof SimpleMove){
+                this.simpleMoveMade = true;
             }
+            currentGame.addMove(currentMove);
+            return new Message(VALID_MOVE, MessageType.info);
         } else {
             // differentiate between different errors move types
             if(currentMove instanceof SimpleMove) {
-                return returnMessageAndResetMoves(SIMPLE_MOVE_ERROR_MSG, movesMade);
+                return returnMessageAndResetMoves(SIMPLE_MOVE_ERROR_MSG, this.simpleMoveMade);
             } else if(currentMove instanceof JumpMove) {
-                return returnMessageAndResetMoves(JUMP_MOVE_ERROR_MSG, movesMade);
+                return returnMessageAndResetMoves(JUMP_MOVE_ERROR_MSG, this.simpleMoveMade);
             } else {
                 // we should never get here
-                return returnMessageAndResetMoves(GENERIC_MOVE_ERR, movesMade);
+                return returnMessageAndResetMoves(GENERIC_MOVE_ERR, this.simpleMoveMade);
             }
         }
     }
 
-    private Message returnMessageAndResetMoves(String message, int currMoveCount) {
-        movesMade = currMoveCount;
+    private Message returnMessageAndResetMoves(String message, boolean simpleMoveMade) {
+        this.simpleMoveMade = simpleMoveMade;
         return new Message(message, MessageType.error);
+    }
+
+    /**
+     * Reset the moves counter to zero, such as when the user has submitted
+     * their turn.
+     */
+    public void resetMoves() {
+        this.simpleMoveMade = false;
     }
 }
