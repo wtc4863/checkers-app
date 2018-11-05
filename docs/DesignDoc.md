@@ -229,7 +229,7 @@ another player, the GameCenter creates a game between these two players, and
 the game is added to the GameCenter's list of current games. The two players
 are also added to a HashMap that connects players to their current opponents.
 
-![The Sequence Diagram for starting a game](start-a-game.png)
+[The Sequence Diagram for starting a game](start-a-game.png)
 
 #### TurnControl Subsystem
 When making a move, the client-side code will check with the server to make
@@ -244,7 +244,7 @@ invalid, it does not get stored on the move queue. Then, the **_TurnControl_**
 class creates a message that gets passed back to the route component, which
 renders the message for the user.
 
-![The TurnControl Subsystem, and its interactions](turn-control-seq.png)
+[The Sequence Diagram for the Turn-Control Subsystem](turn-control-seq.png)
 
 ### Model Tier
 
