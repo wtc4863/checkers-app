@@ -239,7 +239,7 @@ invalid, it does not get stored on the move queue. Then, the **_TurnControl_**
 class creates a message that gets passed back to the route component, which
 renders the message for the user.
 
-[The TurnControl Subsystem, and its interactions](start-a-game.png)
+[The TurnControl Subsystem, and its interactions](turn-control-seq.png)
 
 ### Model Tier
 
