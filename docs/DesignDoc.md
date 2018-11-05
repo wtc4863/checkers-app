@@ -29,8 +29,13 @@ checkers.
 UI Tier | Part of the application that interacts with the user
 Model Tier | Part of the program that represents the state of the application
 Application Tier | Part of the application that manages user interactions with the application
-
-
+Route | A part of a URL that executes code on the server when visited by a user
+Client | A user of the webcheckers game connecting via a computer
+Server | The computer running the website 
+AJAX | A *conversation* between the client and the server to exchange information
+JSON | The *language* used between the client and the server
+GET | A HTTP request that gets information from the server
+POST | a HTTP method that sends data to the server so that it can update resources
 
 ## Requirements
 
