@@ -290,6 +290,12 @@ However, this violation has since been corrected. Hopefully, we will be more awa
 the future to avoid violations such as that, now that we have identified one and gone
 through the process of correcting it.
 
+Another improvement we can make on top of our previous improvement is the creation of another "controller" 
+element that facilitates the translation of the Model and UI tiers. So far, our implementation
+relies on the `GameController` class to translate the backend representation of the board to
+the model for the client. However, the responsibility of the `GameController` class should
+only fall within game administration related things, not Server/Client interactions. 
+
 ## Testing
 > _This section will provide information about the testing performed
 > and the results of the testing._
@@ -297,17 +303,24 @@ through the process of correcting it.
 ### Acceptance Testing
 
 
-There have currently been four(4) user stories and two(2) spike stories completed:
+There have currently been five(5) user stories and two(2) spike stories completed:
 1. Player Sign-In
 2. Start a Game
 3. Spike: Domain-Driven Design
 4. Spike: Web Architecture
 5. Simple Move
 6. Turn Control
+7. Submit Turn
 
 These stories have all passed their acceptance criteria. No other stories have 
 reached the end of development to be tested as of yet.
 
+The following stories are currently in development or ready for testing:
+1. Sign-out
+2. Multi-jump Move
+3. Win-Condition
+4. King Pieces
+5. Undo-Move
 
 ### Unit Testing and Code Coverage
 
