@@ -1,7 +1,6 @@
 package com.webcheckers.ui;
 
 import com.webcheckers.appl.PlayerLobby;
-import com.webcheckers.model.Player;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -100,6 +99,6 @@ public class GetSignInRouteTest {
         testHelper.assertViewModelAttribute(GetSignInRoute.TITLE_ATTR, "Sign-in");
         testHelper.assertViewModelAttribute(GetSignInRoute.MESSAGE_ATTR, "Please enter your username to sign in.");
         // Test view name
-        testHelper.assertViewName(GetGameRoute.TEMPLATE_NAME);
+        testHelper.assertViewName(GetSignInRoute.TEMPLATE_NAME);
     }
 }
