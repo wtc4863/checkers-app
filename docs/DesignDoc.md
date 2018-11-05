@@ -183,11 +183,16 @@ and the selected player is the white player. The game page is rendered using
 this information.
 
 When in a game, players must be able to make turns only when it is his/her turn
-to move. In order to handle this we created the **_PostCheckTurnRoute_** which
+to move. In order to handle this, we created the **_PostCheckTurnRoute_** which
 will do exactly that. Periodically, the client will send an AJAX request to the
 server asking to check if it is the players move. This route handles this by
 querying the underlying model to see if it said players turn. If it is, the
 client will receive a JSON response saying so. 
+
+When a valid move has been made, the player unlocks the option to submit their
+turn and let their opponent take theirs. Our **_PostSubmitTurnRoute_** handles
+this task. The client sends an AJAX request to the server to asking to complete the
+turn and switch. The client receives a JSON response confirming the action.
 
 But, in order to render the game view, a visual representation of the board is
 needed. The board view is made up of several sub classes: a **_PieceView_**
