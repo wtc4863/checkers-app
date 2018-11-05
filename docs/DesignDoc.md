@@ -238,6 +238,8 @@ renders the message for the user.
 
 ### Model Tier
 
+![Class diagram of the Model-Tier classes](game-class-diagram.png)
+
 Prior to signing in, users have very little access to anything on the site. It isn't until after
 signing in that an instance of **_Player_** is created for the user. Players are identified not only by
 the unique username that the user submits when signing in, but also the user's session ID.
@@ -254,6 +256,9 @@ Players take turns moving their pieces from space to space on the board to remov
 and ultimately win the game.
 
 #### Moves
+
+![Class diagram of the Move class and its subclasses](move-class-diagram.png)
+
 The different types of moves are represented by the **_Move_** class and its
 subclasses. This class stores the information for the starting and ending
 position of a piece being moved. It can check a game to see if the move is
