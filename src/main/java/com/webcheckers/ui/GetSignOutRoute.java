@@ -13,11 +13,19 @@ import spark.Route;
 import spark.Session;
 import spark.TemplateEngine;
 
+/**
+ * UI Controller to GET the home page upon signing out
+ */
 public class GetSignOutRoute implements Route {
-
+  //
+  // Attributes
+  //
   private TemplateEngine templateEngine;
   private PlayerLobby playerLobby;
 
+  //
+  // Constructor
+  //
   public GetSignOutRoute(PlayerLobby playerLobby, TemplateEngine templateEngine) {
     Objects.requireNonNull(templateEngine, "templateEngine cannot be null");
     Objects.requireNonNull(playerLobby, "playerLobby cannot be null");
@@ -26,6 +34,15 @@ public class GetSignOutRoute implements Route {
     this.playerLobby = playerLobby;
   }
 
+  //
+  // Methods
+  //
+  /**
+   * Renders the Home page and signs the user out
+   * @param request the HTTP request
+   * @param response the HTTP response
+   * @return rendered HTML for the Home page
+   */
   public Object handle(Request request, Response response) {
     final Session httpSession = request.session();
     final String sessionID = httpSession.id();
@@ -34,6 +51,7 @@ public class GetSignOutRoute implements Route {
 
     Map<String, Object> vm = new HashMap<>();
 
+    //if this player is currently signed in, sign them out
     if(playerName != null) {
       playerLobby.signOut(playerName);
       vm.put(GetHomeRoute.IS_SIGNED_IN, false);

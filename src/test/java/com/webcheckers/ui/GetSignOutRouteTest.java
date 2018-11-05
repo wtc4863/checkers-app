@@ -21,11 +21,17 @@ import static org.junit.jupiter.api.Assertions.*;
 @Tag("UI-Tier")
 public class GetSignOutRouteTest {
 
+  //
+  // Constants
+  //
   private static final String SESSION_ID = "12345";
   private static final String OTHER_ID = "54321";
   private static final String MY_USERNAME = "jimmy";
   private static final String OTHER_USERNAME = "other";
 
+  //
+  // Attributes
+  //
   private Request request;
   private Response response;
   private Session session;
@@ -68,20 +74,28 @@ public class GetSignOutRouteTest {
   }
 
   @Test
-  public void testSignOut() {
+  public void testSignOutSuccess() {
     playerLobby.signIn(thisPlayer);
     playerLobby.signIn(otherPlayer);
 
+    TemplateEngineTester testHelper = new TemplateEngineTester();
+    when(templateEngine.render(any(ModelAndView.class))).thenAnswer(testHelper.makeAnswer());
+
     CuT.handle(request, response);
 
+    //Check that the player has been properly removed from the application
     assertEquals(null, playerLobby.getPlayerBySessionID(SESSION_ID));
     assertEquals(1, playerLobby.getSignedInPlayers().size());
     assertNotNull(playerLobby.getPlayer(OTHER_USERNAME));
-//
-//    TemplateEngineTester testHelper = new TemplateEngineTester();
-//    when(templateEngine.render(any(ModelAndView.class))).thenAnswer(testHelper.makeAnswer());
-//    testHelper.assertViewModelExists();
-  }
 
+    //Model is a non-null map
+    testHelper.assertViewModelExists();
+    testHelper.assertViewModelIsaMap();
+
+    //Model contains necessary attributes
+    testHelper.assertViewModelAttribute(GetHomeRoute.TITLE_ATTR, GetHomeRoute.TITLE);
+    testHelper.assertViewName(GetHomeRoute.TEMPLATE_NAME);
+
+  }
 
 }
