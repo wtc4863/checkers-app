@@ -101,6 +101,15 @@ Controllers are built using the Spark framework and View are built using the Fre
 
 Details of the components within these tiers are supplied below.
 
+![Current Tiers Implementation](tiers.png)
+
+This is a diagram showing an overview of our how our current design is split
+between the three tiers. In the UI tier, we have all of the route controller
+objects which handle requests to specific routes and some simple value objects
+used to interface with the frontend. Three subsystems reside in the Application
+tier, and these are used by the UI tier to perform operations on the model. All
+classes which contain dome domain logic reside in the model tier.
+
 
 ### Overview of User Interface
 
