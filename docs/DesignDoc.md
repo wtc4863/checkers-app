@@ -145,6 +145,11 @@ _State chart of gameplay interface_
 
 ### UI Tier
 
+![UI Tier Overview](ui-tier.png)
+
+This diagram shows a general overview of the classes implemented in the UI tier
+so far.
+
 The UI tier works closely with the application to determine what information
 should be shown to the user. The GetHomeRoute class has the responsibility of
 passing relevant information to the _home.ftl_ file so that the home page can
