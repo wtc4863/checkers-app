@@ -168,4 +168,18 @@ public class Game {
         }
         return false;
     }
+
+    public void addMove(Move move) {
+        queuedTurnMoves.add(move);
+    }
+
+    public Move removeMove() {
+        int size = queuedTurnMoves.size();
+        if(size > 0) {
+            Move move = queuedTurnMoves.get(size - 1);
+            queuedTurnMoves.remove(size - 1);
+            return move;
+        }
+        return null;
+    }
 }
