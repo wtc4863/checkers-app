@@ -338,3 +338,13 @@ component to be tested. Our coverage of the classes we did test, however, can be
 the UI tier, results of testing are good, but could use more branch coverage. Our testing
 in the model and application seem more thorough, with the outlier being the PlayerLobby class and 
 Player classes, which are missing some coverage and need to be revisited.
+
+#### Overall Coverage
+![Overall Coverage Report](coverage/overall.PNG)
+#### Application Tier Coverage
+![Application Tier Coverage](coverage/appl.PNG)
+#### Model Tier Coverage
+![Model Tier Coverage](coverage/model.PNG)
+#### UI Tier Coverage
+![UI Tier Coverage](coverage/ui.PNG)
+
