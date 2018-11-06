@@ -13,8 +13,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @Tag("UI-Tier")
-public class PostSignInRouteTest {
-
+public class GetSignInRouteTest {
     //
     // Constants
     //
@@ -29,7 +28,7 @@ public class PostSignInRouteTest {
     private PlayerLobby playerLobby;
     private TemplateEngine templateEngine;
     private Session session;
-    private PostSignInRoute CuT;
+    private GetSignInRoute CuT;
 
     //
     // Setup
@@ -43,7 +42,6 @@ public class PostSignInRouteTest {
         // Set up the request
         request = mock(Request.class);
         when(request.session()).thenReturn(session);
-        when(request.queryParams("username")).thenReturn(USERNAME);
 
         // Set up the response
         response = mock(Response.class);
@@ -55,7 +53,7 @@ public class PostSignInRouteTest {
         playerLobby = mock(PlayerLobby.class);
 
         // Set up the route component
-        CuT = new PostSignInRoute(playerLobby, templateEngine);
+        CuT = new GetSignInRoute(playerLobby, templateEngine);
     }
 
     //
@@ -63,12 +61,13 @@ public class PostSignInRouteTest {
     //
 
     /**
-     * Make sure that a player can sign in successfully.
+     * Check that a user which is already signed in will be redirected back to
+     * the home page.
      */
     @Test
-    public void testValidSignIn() {
-        // Make it look like we signed in
-        when(playerLobby.signIn(USERNAME, SESSION_ID)).thenReturn(true);
+    public void testSignedInPlayerRedirect() {
+        // Make it look like we're signed in
+        when(playerLobby.getPlayerNameBySessionID(SESSION_ID)).thenReturn(USERNAME);
 
         // Make sure we redirect
         assertThrows(spark.HaltException.class, () -> {
@@ -78,13 +77,12 @@ public class PostSignInRouteTest {
     }
 
     /**
-     * Make sure that invalid sign in attempts will return a properly rendered
-     * template.
+     * Check that a user which is not yet signed in will be able to sign in.
      */
     @Test
-    public void testInvalidSignIn() {
-        // Make it look like sign in failed
-        when(playerLobby.signIn(USERNAME, SESSION_ID)).thenReturn(false);
+    public void testSigningIn() {
+        // Make it look like we're not signed in
+        when(playerLobby.getPlayerNameBySessionID(SESSION_ID)).thenReturn(null);
 
         // Prepare the template engine tester
         TemplateEngineTester testHelper = new TemplateEngineTester();
@@ -98,8 +96,8 @@ public class PostSignInRouteTest {
         testHelper.assertViewModelExists();
         testHelper.assertViewModelIsaMap();
         // Model contains the correct View-Model data
-        testHelper.assertViewModelAttribute(GetSignInRoute.TITLE_ATTR, "Retry Sign-in");
-        testHelper.assertViewModelAttribute(GetSignInRoute.MESSAGE_ATTR, PostSignInRoute.ERROR_MESSAGE);
+        testHelper.assertViewModelAttribute(GetSignInRoute.TITLE_ATTR, "Sign-in");
+        testHelper.assertViewModelAttribute(GetSignInRoute.MESSAGE_ATTR, "Please enter your username to sign in.");
         // Test view name
         testHelper.assertViewName(GetSignInRoute.TEMPLATE_NAME);
     }
