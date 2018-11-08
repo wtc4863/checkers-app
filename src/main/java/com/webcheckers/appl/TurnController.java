@@ -10,15 +10,6 @@ import java.util.logging.Logger;
 public class TurnController {
     private static final Logger LOG = Logger.getLogger(TurnController.class.getName());
 
-    enum MoveState {
-        TOO_MANY_MOVES,
-        SIMPLE_MOVE_ERROR,
-        TOO_MANY_JUMPS,
-        PIECE_KINGED,
-        VALID
-
-    }
-
     static final String JUMP_MOVE_ERROR_MSG = "You must jump exactly one opponent piece.";
     static final String SIMPLE_MOVE_ERROR_MSG = "You must move a piece to an empty adjacent space.";
     static final String TOO_MANY_SIMPLE_MOVES_ERROR_MSG = "You may only make one simple move per turn.";
@@ -77,31 +68,19 @@ public class TurnController {
         boolean movesMade = currentGame.hasMovesInCurrentTurn();
         boolean result = currentMove.validateMove(currentGame);
         // test if move is valid
-        //FIXME: Turn me into a state machine!
         if(result) {
             if (movesMade) {
                 Move lastMove = currentGame.getLastMoveMade();
                 if (currentMove instanceof SimpleMove || lastMove instanceof SimpleMove) {
                     return new Message(TOO_MANY_SIMPLE_MOVES_ERROR_MSG, MessageType.error);
-                } else {
-                    currentGame.addMoveToCurrentTurn(currentMove);
-                    return new Message(VALID_MOVE);
                 }
-            } else {
-                currentGame.addMoveToCurrentTurn(currentMove);
-                return new Message(VALID_MOVE);
             }
+            currentGame.addMoveToCurrentTurn(currentMove);
+            return new Message(VALID_MOVE);
         } else {
             // differentiate between different errors move types
-            if(currentMove instanceof SimpleMove) {
-                return new Message(SIMPLE_MOVE_ERROR_MSG, MessageType.error);
-            } else if(currentMove instanceof JumpMove) {
-                String msg = currentMove.getCurrentMsg();
-                return new Message(msg, MessageType.error);
-            } else {
-                // we should never get here because generic moves should not be instantiated
-                return new Message(GENERIC_MOVE_ERR, MessageType.error);
-            }
+            String msg = currentMove.getCurrentMsg();
+            return new Message(msg, MessageType.error);
         }
     }
 }
