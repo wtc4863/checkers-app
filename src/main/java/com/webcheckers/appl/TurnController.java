@@ -25,7 +25,6 @@ public class TurnController {
     static final String VALID_MOVE = "Valid move!";
     static final String GENERIC_MOVE_ERR = "GENERIC MOVE ERROR";
 
-    private boolean simpleMoveMade;
 
     // Private attributes
     GsonBuilder builder;
@@ -34,7 +33,6 @@ public class TurnController {
     public TurnController(PlayerLobby playerLobby) {
         builder = new GsonBuilder();
         this.playerLobby = playerLobby;
-        this.simpleMoveMade = false;
     }
 
     /**
@@ -93,31 +91,16 @@ public class TurnController {
                 currentGame.addMoveToCurrentTurn(currentMove);
                 return new Message(VALID_MOVE);
             }
-            //currentGame.addMove(currentMove);
-            //return new Message(VALID_MOVE, MessageType.info);
         } else {
             // differentiate between different errors move types
             if(currentMove instanceof SimpleMove) {
-                return returnMessageAndResetMoves(SIMPLE_MOVE_ERROR_MSG, this.simpleMoveMade);
+                return new Message(SIMPLE_MOVE_ERROR_MSG, MessageType.error);
             } else if(currentMove instanceof JumpMove) {
-                return returnMessageAndResetMoves(JUMP_MOVE_ERROR_MSG, this.simpleMoveMade);
+                return new Message(JUMP_MOVE_ERROR_MSG, MessageType.error);
             } else {
                 // we should never get here because generic moves should not be instantiated
                 return new Message(GENERIC_MOVE_ERR, MessageType.error);
             }
         }
-    }
-
-    private Message returnMessageAndResetMoves(String message, boolean simpleMoveMade) {
-        this.simpleMoveMade = simpleMoveMade;
-        return new Message(message, MessageType.error);
-    }
-
-    /**
-     * Reset the moves counter to zero, such as when the user has submitted
-     * their turn.
-     */
-    public void resetMoves() {
-        this.simpleMoveMade = false;
     }
 }

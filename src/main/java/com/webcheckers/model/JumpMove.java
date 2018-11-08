@@ -65,14 +65,14 @@ public class JumpMove extends Move {
      */
     @Override
     public boolean validateMove(Game game) {
-        LOG.finer("JumpMove validation invoked");
+        LOG.fine("JumpMove validation invoked");
         // Init variables
         Piece movedPiece;
         Piece jumpedPiece;
 
         // Make sure the spacing is right
         if(!validSpacing(this.start, this.end)) {
-            LOG.finer("Failed valid spacing");
+            LOG.fine("Failed valid spacing");
             return false;
         }
 
@@ -81,22 +81,20 @@ public class JumpMove extends Move {
         if(board.getSpace(start).doesHasPiece()) {
             // We'll need this information later
             movedPiece = board.getSpace(start).pieceInfo();
+        } else if (game.hasMovesInCurrentTurn()) {
+            // Check if last turn made
+            Move lastMove = game.getLastMoveMade();
+            Position end = lastMove.getEnd();
+            return this.start.equals(end);
         } else {
-            return false;
-        }
-
-        if(board.getSpace(start).doesHasPiece()) {
-            // We'll need this information later
-            movedPiece = board.getSpace(start).pieceInfo();
-        } else {
-            LOG.finer("Failed starting space has piece");
+            LOG.fine("Failed starting space has piece");
             return false;
         }
 
         // Make sure the ending position doesn't have a piece
         try {
             if(!board.spaceIsValid(end)) {
-                LOG.finer("Failed ending space");
+                LOG.fine("Failed ending space");
                 return false;
             }
         } catch(IndexOutOfBoundsException except) {
@@ -111,11 +109,11 @@ public class JumpMove extends Move {
             if((game.getTurn() == Turn.RED && jumpedPiece.pieceColor == PColor.red) ||
                 (game.getTurn() == Turn.WHITE && jumpedPiece.pieceColor == PColor.white)) {
                 // Can only jump an opponent's piece
-                LOG.finer("Failed middle position same color");
+                LOG.fine("Failed middle position same color");
                 return false;
             }
         } else {
-            LOG.finer("Failed space has middle piece");
+            LOG.fine("Failed space has middle piece");
             return false;
         }
 

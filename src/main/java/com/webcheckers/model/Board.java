@@ -1,6 +1,8 @@
 package com.webcheckers.model;
 
 
+import com.webcheckers.model.Piece.PColor;
+import com.webcheckers.model.Piece.PType;
 import java.util.ArrayList;
 
 /**
