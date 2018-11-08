@@ -96,7 +96,8 @@ public class TurnController {
             if(currentMove instanceof SimpleMove) {
                 return new Message(SIMPLE_MOVE_ERROR_MSG, MessageType.error);
             } else if(currentMove instanceof JumpMove) {
-                return new Message(JUMP_MOVE_ERROR_MSG, MessageType.error);
+                String msg = currentMove.getCurrentMsg();
+                return new Message(msg, MessageType.error);
             } else {
                 // we should never get here because generic moves should not be instantiated
                 return new Message(GENERIC_MOVE_ERR, MessageType.error);
