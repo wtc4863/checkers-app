@@ -11,7 +11,7 @@ import java.util.logging.Logger;
  * vertically and two spaces horizontally.
  */
 public class JumpMove extends Move {
-    Logger LOG = Logger.getLogger(JumpMove.class.getName());
+    static Logger LOG = Logger.getLogger(JumpMove.class.getName());
 
     static final String INVALID_JUMP_SPACING = "Jump does not jump the correct distance.";
     static final String INVALID_JUMP_PIECE = "Please continue jumping with your current piece.";
@@ -61,6 +61,7 @@ public class JumpMove extends Move {
      * @return true if the spacing is valid for a jump move, false otherwise
      */
     private static boolean validSpacing(Position start, Position end) {
+        //TODO: fix the absolute value because it still checks if off the board
         return (Math.abs(start.getRow() - end.getRow()) == 2 &&
                 Math.abs(start.getCell() - end.getCell()) == 2);
     }
@@ -208,6 +209,7 @@ public class JumpMove extends Move {
         // Check all the possible spaces to see if any one of them is valid
         for(JumpMove move : possibleMoves) {
             if(move.validateMove(game)) {
+                LOG.fine("jumpMove found to be true. Must make jump" + move.toString());
                 return true;
             }
         }
@@ -216,6 +218,7 @@ public class JumpMove extends Move {
 
     /**
      * Checks a game to see if the current player has a jump move available.
+     * Used for testing in simple move to check if the player has to make a jump
      *
      * @param game the game state to check for possible jump moves
      * @return true if a jump move is available, false otherwise
