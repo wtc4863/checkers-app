@@ -63,6 +63,13 @@ public class Board {
             }
         }
 
+        boardArray[6][1].removePiece();
+        boardArray[6][1].addPiece(new Piece(PColor.white, PType.single));
+        boardArray[5][2].removePiece();
+        boardArray[4][3].addPiece(new Piece(PColor.white, PType.single));
+        boardArray[3][4].removePiece();
+        boardArray[1][6].removePiece();
+
 
     }
 

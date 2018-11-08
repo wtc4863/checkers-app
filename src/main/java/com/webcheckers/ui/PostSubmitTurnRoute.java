@@ -57,7 +57,11 @@ public class PostSubmitTurnRoute implements Route{
         TurnController turnController = new TurnController(playerLobby);
         //TODO: implement what happens when an unfinished turn is submitted
         game.applyTurnMoves();
-        return turnController.MessageFromModeltoUI(new Message(SUCCESS_MESSAGE, MessageType.info));
+        if(game.movesLeft()) {
+            return turnController.MessageFromModeltoUI(new Message(ERROR_MESSAGE, MessageType.error));
+        } else {
+            return turnController.MessageFromModeltoUI(new Message(SUCCESS_MESSAGE, MessageType.info));
+        }
 
   }
 }
