@@ -78,20 +78,16 @@ public class JumpMove extends Move {
 
         // Make sure the starting position has a piece
         Board board = game.getBoard();
-//        if(board.getSpace(start).doesHasPiece()) {
-//            // We'll need this information later
-//            movedPiece = board.getSpace(start).pieceInfo();
-//        } else {
-//            return false;
-//        }
         if(board.getSpace(start).doesHasPiece()) {
             // We'll need this information later
             movedPiece = board.getSpace(start).pieceInfo();
-        } else if(game.hasMovesInCurrentTurn()) {
-            // Check if last turn made
-            Move lastMove = game.getLastMoveMade();
-            Position end = lastMove.getEnd();
-            return this.start.equals(end);
+        } else {
+            return false;
+        }
+
+        if(board.getSpace(start).doesHasPiece()) {
+            // We'll need this information later
+            movedPiece = board.getSpace(start).pieceInfo();
         } else {
             LOG.finer("Failed starting space has piece");
             return false;
