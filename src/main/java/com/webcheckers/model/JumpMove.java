@@ -13,14 +13,12 @@ import java.util.logging.Logger;
 public class JumpMove extends Move {
     Logger LOG = Logger.getLogger(JumpMove.class.getName());
 
-    static final String INVALID_SPACING = "Jump does not jump the correct distance.";
+    static final String INVALID_JUMP_SPACING = "Jump does not jump the correct distance.";
     static final String INVALID_JUMP_PIECE = "Please continue jumping with your current piece.";
     static final String INVALID_START_PIECE = "This space does not contain a piece.";
-    static final String INVALID_LANDING_SPACE = "You cannot end a jump move on a piece.";
-    static final String OUT_OF_BOUNDS = "Please place the piece inside the board.";
+    static final String INVALID_LANDING_SPACE = "You cannot end a jump move on a space with a piece.";
     static final String MIDDLE_SAME_COLOR = "You cannot jump your own piece.";
     static final String MIDDLE_NO_PIECE = "You cannot jump an empty space.";
-    static final String MOVE_PIECE_FORWARD = "You must move non-kinged pieces forward";
 
 
     Position middle;
@@ -83,7 +81,7 @@ public class JumpMove extends Move {
         // Make sure the spacing is right
         if(!validSpacing(this.start, this.end)) {
             LOG.fine("Failed valid spacing");
-            this.currentMsg = INVALID_SPACING;
+            this.currentMsg = INVALID_JUMP_SPACING;
             return false;
         }
 

@@ -6,7 +6,10 @@ public class Move {
 
     static final String GENERIC_VALIDATION_ERROR_MESSAGE = "Generic move validation not supported.";
     static final String GENERIC_EXECUTION_ERROR_MESSAGE = "Generic move execution not supported.";
+    static final String MOVE_PIECE_FORWARD = "You must move non-kinged pieces forward";
     static final String MOVE_NOT_VALIDATED = "Move has not been validated";
+    static final String OUT_OF_BOUNDS = "Please place the piece inside the board.";
+    static final String MOVE_VALID = "Valid Move!";
 
 
     Position start;
