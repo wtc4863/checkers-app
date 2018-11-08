@@ -6,14 +6,17 @@ public class Move {
 
     static final String GENERIC_VALIDATION_ERROR_MESSAGE = "Generic move validation not supported.";
     static final String GENERIC_EXECUTION_ERROR_MESSAGE = "Generic move execution not supported.";
+    static final String MOVE_NOT_VALIDATED = "Move has not been validated";
 
 
     Position start;
     Position end;
+    String currentMsg;
 
     public Move(Position start, Position end) {
         this.start = start;
         this.end = end;
+        this.currentMsg = MOVE_NOT_VALIDATED;
     }
 
     public Position getEnd() {
@@ -22,6 +25,10 @@ public class Move {
 
     public Position getStart() {
         return start;
+    }
+
+    public String getCurrentMsg(){
+        return this.currentMsg;
     }
 
     /**
