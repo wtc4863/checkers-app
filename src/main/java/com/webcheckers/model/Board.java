@@ -134,4 +134,24 @@ public class Board {
         }
         return pieces;
     }
+
+    @Override
+    public String toString() {
+        String out = "\n";
+        for (int i = 0; i < ROWS; i++) {
+            for (int j = 0; j < COLUMNS; j++) {
+                if(boardArray[i][j].doesHasPiece()) {
+                    if(boardArray[i][j].pieceInfo().pieceColor == PColor.red) {
+                        out = out + "X";
+                    } else {
+                        out = out + "O";
+                    }
+                } else {
+                    out = out + "_";
+                }
+            }
+            out = out + "\n";
+        }
+        return out;
+    }
 }
