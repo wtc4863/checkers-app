@@ -135,6 +135,7 @@ public class Game {
                 this.turn = Turn.RED;
                 break;
         }
+        LOG.fine(this.turn.toString() + "'s Turn");
     }
 
     /**

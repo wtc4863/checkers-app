@@ -6,6 +6,7 @@ import com.webcheckers.model.Board;
 import com.webcheckers.model.Game;
 import com.webcheckers.model.Player;
 import com.webcheckers.ui.Message.MessageType;
+import java.util.logging.Logger;
 import spark.*;
 
 import java.util.HashMap;
@@ -15,6 +16,7 @@ import java.util.Objects;
 import static spark.Spark.halt;
 
 public class PostSubmitTurnRoute implements Route{
+    public static final Logger LOG = Logger.getLogger(PostSubmitTurnRoute.class.getName());
 
     //
     // Constants
@@ -42,6 +44,7 @@ public class PostSubmitTurnRoute implements Route{
     //
     @Override
     public Object handle(Request request, Response response) {
+        LOG.fine("PostSubmitTurnRoute invoked");
         final Session httpSession = request.session();
         final String sessionID = httpSession.id();
 
