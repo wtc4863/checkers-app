@@ -62,6 +62,7 @@ public class JumpMove extends Move {
      */
     private static boolean validSpacing(Position start, Position end) {
         //TODO: fix the absolute value because it still checks if off the board
+        if (end.outOfBounds()) return false;
         return (Math.abs(start.getRow() - end.getRow()) == 2 &&
                 Math.abs(start.getCell() - end.getCell()) == 2);
     }
@@ -75,6 +76,7 @@ public class JumpMove extends Move {
     @Override
     public boolean validateMove(Game game) {
         LOG.fine("JumpMove validation invoked");
+        LOG.fine(game.getBoard().toString());
         // Init variables
         Piece movedPiece;
         Piece jumpedPiece;
@@ -100,8 +102,8 @@ public class JumpMove extends Move {
                 this.currentMsg = MOVE_VALID;
             } else {
                 this.currentMsg = INVALID_JUMP_PIECE;
+                return false;
             }
-            return endEqualsStart;
         } else {
             LOG.fine("Failed starting space has piece");
             this.currentMsg = INVALID_START_PIECE;
@@ -124,6 +126,8 @@ public class JumpMove extends Move {
 
         // Make sure the middle position has an opponent piece
         if(board.getSpace(middle).doesHasPiece()) {
+            LOG.fine("Middle: " + middle.toString());
+            LOG.fine("Board has piece.");
             jumpedPiece = board.getSpace(middle).pieceInfo();
             if((game.getTurn() == Turn.RED && jumpedPiece.pieceColor == PColor.red) ||
                 (game.getTurn() == Turn.WHITE && jumpedPiece.pieceColor == PColor.white)) {
@@ -164,17 +168,26 @@ public class JumpMove extends Move {
     @Override
     public boolean executeMove(Game game) {
         // Double-check that the move is valid
-        if(validateMove(game)) {
-            Board board = game.getBoard();
-            // Move the piece
-            board.move(start, end);
+        //if(validateMove(game)) {
+        //    LOG.fine("Executing Move " + toString());
+        //    Board board = game.getBoard();
+        //    // Move the piece
+        //    board.move(start, end);
 
-            // Remove the jumped piece
-            board.getSpace(middle).removePiece();
-            return true;
-        } else {
-            return false;
-        }
+        //    // Remove the jumped piece
+        //    board.getSpace(middle).removePiece();
+        //    return true;
+        //} else {
+        //    return false;
+        //}
+        LOG.fine("Executing Move " + toString());
+        Board board = game.getBoard();
+        // Move the piece
+        board.move(start, end);
+
+        // Remove the jumped piece
+        board.getSpace(middle).removePiece();
+        return true;
     }
 
     /**
