@@ -76,7 +76,6 @@ public class JumpMove extends Move {
     @Override
     public boolean validateMove(Game game) {
         LOG.fine("JumpMove validation invoked");
-        LOG.fine(game.getBoard().toString());
         // Init variables
         Piece movedPiece;
         Piece jumpedPiece;
@@ -168,26 +167,18 @@ public class JumpMove extends Move {
     @Override
     public boolean executeMove(Game game) {
         // Double-check that the move is valid
-        //if(validateMove(game)) {
-        //    LOG.fine("Executing Move " + toString());
-        //    Board board = game.getBoard();
-        //    // Move the piece
-        //    board.move(start, end);
+        if(validateMove(game)) {
+            LOG.fine("Executing Move " + toString());
+            Board board = game.getBoard();
+            // Move the piece
+            board.move(start, end);
 
-        //    // Remove the jumped piece
-        //    board.getSpace(middle).removePiece();
-        //    return true;
-        //} else {
-        //    return false;
-        //}
-        LOG.fine("Executing Move " + toString());
-        Board board = game.getBoard();
-        // Move the piece
-        board.move(start, end);
-
-        // Remove the jumped piece
-        board.getSpace(middle).removePiece();
-        return true;
+            // Remove the jumped piece
+            board.getSpace(middle).removePiece();
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**
