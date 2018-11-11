@@ -189,9 +189,6 @@ public class WebServer {
         //Handles Turn Validation
         post(SUBMIT_TURN_URL, new PostSubmitTurnRoute(playerLobby));
 
-        //Handles Turn Validation
-        post(SUBMIT_TURN_URL, new PostSubmitTurnRoute(playerLobby, templateEngine));
-
         //Handles signing out
         get(SIGN_OUT_URL, new GetSignOutRoute(playerLobby, templateEngine));
 
