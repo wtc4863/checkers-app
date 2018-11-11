@@ -15,6 +15,18 @@
     "whitePlayer" : "${whitePlayer.name}",
     "activeColor" : "${activeColor}"
   };
+  var winner = "${winnerName}";
+  if(winner === "${currentPlayer.name}") {
+      // This player has won
+      alert("Congratulations! You have won the game!");
+      window.location = "/";
+  } else if(winner === "NO_WINNER") {
+      // Nobody has won yet
+  } else {
+      // The other player has won
+      alert("Darn! You lost the game!");
+      window.location = "/";
+  }
   </script>
 </head>
 <body>
