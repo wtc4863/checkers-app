@@ -12,6 +12,7 @@ import com.webcheckers.model.Piece.PType;
 import com.webcheckers.model.Player;
 import com.webcheckers.model.Position;
 import com.webcheckers.model.SimpleMove;
+import com.webcheckers.ui.Message.MessageType;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.BeforeEach;
@@ -38,7 +39,6 @@ public class PostSubmitTurnRouteTest {
   private PlayerLobby playerLobby;
   private Gson gson;
   private Board board;
-  private TemplateEngine templateEngine;
 
   private Request request;
   private Response response;
@@ -51,8 +51,6 @@ public class PostSubmitTurnRouteTest {
     session = mock(Session.class);
     when(request.session()).thenReturn(session);
     when(session.id()).thenReturn("id");
-
-    templateEngine = mock(TemplateEngine.class);
 
     playerLobby = new PlayerLobby();
     gson = new Gson();
@@ -101,6 +99,18 @@ public class PostSubmitTurnRouteTest {
     assertEquals(GOOD_COMPARE, result);
     assertFalse(board.getSpace(new Position(5, 0)).doesHasPiece());
     assertTrue(board.getSpace(new Position(3, 2)).doesHasPiece());
+  }
+
+  @Test public void testSubmitMidMultiJumpFailure() {
+      playerLobby = mock(PlayerLobby.class);
+      Game mockGame = mock(Game.class);
+      when(playerLobby.getPlayerBySessionID("id")).thenReturn(thisPlayer);
+      when(playerLobby.getGame(thisPlayer)).thenReturn(mockGame);
+      when(mockGame.movesLeft()).thenReturn(true);
+      CuT = new PostSubmitTurnRoute(playerLobby);
+      Object actual = CuT.handle(request, response);
+      assertEquals(actual, BAD_COMPARE);
+
   }
 }
 

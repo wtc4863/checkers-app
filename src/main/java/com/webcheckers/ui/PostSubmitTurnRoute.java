@@ -21,8 +21,8 @@ public class PostSubmitTurnRoute implements Route{
     //
     // Constants
     //
-    private static final String ERROR_MESSAGE = "Submitted turn is incomplete";
-    private static final String SUCCESS_MESSAGE = "Turn submitted";
+    static final String ERROR_MESSAGE = "Submitted turn is incomplete";
+    static final String SUCCESS_MESSAGE = "Turn submitted";
 
     //
     // Attributes
