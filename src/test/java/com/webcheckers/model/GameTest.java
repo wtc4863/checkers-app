@@ -1,11 +1,17 @@
 package com.webcheckers.model;
 
 import com.webcheckers.model.Game.Turn;
+import java.util.ArrayList;
+import java.util.Arrays;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @Tag("Model-tier")
 public class GameTest {
@@ -116,8 +122,69 @@ public class GameTest {
 
     @Test
     public void testApplyTurnMoves() {
+        JumpMove mockJump = mock(JumpMove.class);
+        SimpleMove mockSimple = mock(SimpleMove.class);
+        CuT.addMoveToCurrentTurn(mockJump);
+        CuT.addMoveToCurrentTurn(mockSimple);
 
+        CuT.applyTurnMoves();
+        verify(mockJump, times(1)).executeMove(CuT);
+        verify(mockSimple, times(1)).executeMove(CuT);
+        Assertions.assertEquals(0,CuT.queuedTurnMoves.size());
     }
+
+    @Test
+    public void testHasMovesInCurrentTurn() {
+        boolean actual = CuT.hasMovesInCurrentTurn();
+        Assertions.assertEquals(false, actual);
+    }
+
+    @Test
+    public void testGetLastMoveMadeWhenTrue() {
+        JumpMove mockJump = mock(JumpMove.class);
+        CuT.addMoveToCurrentTurn(mockJump);
+        Move actual = CuT.getLastMoveMade();
+        Assertions.assertEquals(mockJump, actual);
+    }
+
+    @Test
+    public void testGetLastMoveMadeWhenNot() {
+        Move actual = CuT.getLastMoveMade();
+        Assertions.assertNull(actual);
+    }
+
+    @Test
+    public void testAddMoveToCurrentTurn() {
+        JumpMove mockJump = mock(JumpMove.class);
+        CuT.addMoveToCurrentTurn(mockJump);
+        Assertions.assertEquals(1, CuT.queuedTurnMoves.size());
+    }
+
+    @Test
+    public void testMovesLeftNone() {
+        Assertions.assertFalse(CuT.movesLeft());
+    }
+
+    @Test
+    public void testMovesLeftWithSimpleMove() {
+        CuT.addMoveToCurrentTurn(mock(SimpleMove.class));
+        Assertions.assertFalse(CuT.movesLeft());
+    }
+
+    @Test
+    public void testMovesLeftWithValidJumpLeft() {
+        ArrayList<Position> red = new ArrayList<>(Arrays.asList(new Position(5,0)));
+        ArrayList<Position> white = new ArrayList<>(Arrays.asList(new Position(4,1)));
+        Board testBoard = new Board(red, white);
+        Position end = new Position(5, 0);
+        JumpMove mockJump = mock(JumpMove.class);
+        when(mockJump.getEnd()).thenReturn(end);
+
+        CuT = new Game(redPlayer, whitePlayer, Turn.RED, testBoard);
+        CuT.addMoveToCurrentTurn(mockJump);
+        Assertions.assertTrue(CuT.movesLeft());
+    }
+
 
 
 

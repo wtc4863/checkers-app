@@ -75,7 +75,7 @@ public class PostSubmitTurnRouteTest {
       }
     }
     board.getSpace(new Position(5, 0)).addPiece(new Piece(PColor.red, PType.single));
-    game.addMove(new SimpleMove(new Position(5, 0), new Position(4, 1)));
+    game.addMoveToCurrentTurn(new SimpleMove(new Position(5, 0), new Position(4, 1)));
 
     assertEquals(GOOD_COMPARE, CuT.handle(request, response));
     assertTrue(game.getTurn() == Turn.WHITE);
@@ -94,7 +94,7 @@ public class PostSubmitTurnRouteTest {
     board.getSpace(new Position(5, 0)).addPiece(new Piece(PColor.red, PType.single));
     board.getSpace(new Position(4, 1)).addPiece(new Piece(PColor.white, PType.single));
 
-    game.addMove(new JumpMove(new Position(5, 0), new Position(3, 2)));
+    game.addMoveToCurrentTurn(new JumpMove(new Position(5, 0), new Position(3, 2)));
     Object result = CuT.handle(request, response);
     assertEquals(GOOD_COMPARE, result);
     assertFalse(board.getSpace(new Position(5, 0)).doesHasPiece());
