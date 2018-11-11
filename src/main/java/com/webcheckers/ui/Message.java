@@ -6,7 +6,7 @@ package com.webcheckers.ui;
  */
 public class Message {
     public enum MessageType {
-        info,error;
+        info, error
     }
 
     //

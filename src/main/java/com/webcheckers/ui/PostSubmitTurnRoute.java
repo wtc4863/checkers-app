@@ -26,18 +26,16 @@ public class PostSubmitTurnRoute implements Route{
     // Attributes
     //
     private final PlayerLobby playerLobby;
-    private final TemplateEngine templateEngine;
 
     //
     // Constructor
     //
-    public PostSubmitTurnRoute(PlayerLobby playerLobby, TemplateEngine templateEngine) {
+
+    public PostSubmitTurnRoute(PlayerLobby playerLobby) {
 
         Objects.requireNonNull(playerLobby, "playerLobby must not be null");
-        Objects.requireNonNull(templateEngine, "templateEngine must not be null");
 
         this.playerLobby = playerLobby;
-        this.templateEngine = templateEngine;
     }
 
     //
@@ -60,6 +58,7 @@ public class PostSubmitTurnRoute implements Route{
         TurnController turnController = new TurnController(playerLobby);
         //TODO: implement what happens when an unfinished turn is submitted
         game.applyTurnMoves();
+        turnController.resetMoves();
         return turnController.MessageFromModeltoUI(new Message(SUCCESS_MESSAGE, MessageType.info));
 
   }

@@ -12,6 +12,7 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.booleanThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -36,6 +37,7 @@ public class GetGameRouteTester {
     private GetGameRoute CuT;
     private Player thisPlayer;
     private Player otherPlayer;
+    private Game game;
 
     //
     // Setup
@@ -66,6 +68,10 @@ public class GetGameRouteTester {
         // Set up player lobby
         playerLobby = mock(PlayerLobby.class);
         when(playerLobby.getPlayerBySessionID(SESSION_ID)).thenReturn(thisPlayer);
+
+        // Set up game
+        game = mock(Game.class);
+        when(game.getTurn()).thenReturn(Game.Turn.RED);
 
         // Set up the route component
         CuT = new GetGameRoute(playerLobby, templateEngine);
@@ -116,7 +122,6 @@ public class GetGameRouteTester {
         testHelper.assertViewModelAttribute(GetGameRoute.SIGNED_IN_PLAYERS, expectedSignedInPlayers);
         testHelper.assertViewModelAttribute(GetGameRoute.IS_SIGNED_IN, true);
         testHelper.assertViewModelAttribute(GetGameRoute.TITLE_ATTR, GetHomeRoute.TITLE);
-        testHelper.assertViewModelAttribute(GetGameRoute.MESSAGE_ATTR, GetGameRoute.PLAYER_IN_GAME_MSG);
         testHelper.assertViewModelAttributeIsAbsent(GetGameRoute.WHITE_PLAYER_ATTR);
         testHelper.assertViewModelAttributeIsAbsent(GetGameRoute.RED_PLAYER_ATTR);
         testHelper.assertViewModelAttributeIsAbsent(GetGameRoute.CURRENT_PLAYER_ATTR);
@@ -144,7 +149,11 @@ public class GetGameRouteTester {
         when(playerLobby.getGame(otherPlayer)).thenReturn(null);
 
         // Start the game
-        when(playerLobby.startGame(thisPlayer, otherPlayer)).thenReturn(mock(Game.class));
+        when(playerLobby.startGame(thisPlayer, otherPlayer)).thenReturn(game);
+
+        // Set correct player positions
+        when(game.getWhitePlayer()).thenReturn(otherPlayer);
+        when(game.getRedPlayer()).thenReturn(thisPlayer);
 
         // Set up template engine tester
         TemplateEngineTester testHelper = new TemplateEngineTester();
@@ -153,6 +162,7 @@ public class GetGameRouteTester {
         // Set up the expected board view
         BoardView expected = mock(BoardView.class);
         when(playerLobby.getBoardView(thisPlayer)).thenReturn(expected);
+        when(game.getBoardView(false)).thenReturn(expected);
 
         // Invoke test
         CuT.handle(request, response);
@@ -190,7 +200,11 @@ public class GetGameRouteTester {
         when(playerLobby.getGame(otherPlayer)).thenReturn(null);
 
         // Get the already-started game
-        when(playerLobby.getGame(thisPlayer)).thenReturn(mock(Game.class));
+        when(playerLobby.getGame(thisPlayer)).thenReturn(game);
+
+        // Set correct player positions
+        when(game.getWhitePlayer()).thenReturn(thisPlayer);
+        when(game.getRedPlayer()).thenReturn(otherPlayer);
 
         // Set up template engine tester
         TemplateEngineTester testHelper = new TemplateEngineTester();
@@ -199,6 +213,7 @@ public class GetGameRouteTester {
         // Set up the expected board view
         BoardView expected = mock(BoardView.class);
         when(playerLobby.getBoardView(thisPlayer)).thenReturn(expected);
+        when(game.getBoardView(true)).thenReturn(expected);
 
         // Invoke test
         CuT.handle(request, response);
