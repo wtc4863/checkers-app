@@ -23,9 +23,27 @@ public class Game {
     Board board;
     Turn turn;
     ArrayList<Move> queuedTurnMoves;
+    public State state;
 
     public enum Turn {
         WHITE, RED;
+    }
+
+    /**
+     * The current state of the game. This is used when the game is over to
+     * determine if the game should be deleted. Since both players must be able
+     * to perform a {@code GET /game} request so they can find out how the game
+     * ended, we can't remove the game until both players have performed that
+     * request.
+     *
+     * When the game is currently in play, it will be in the {@code ACTIVE}
+     * state. Once the game has ended and the first player makes a
+     * {@code GET /game} request, it will transition to the {@code ENDED}
+     * state. Then, once the second player makes a {@code GET /game} request,
+     * the game will be deleted.
+     */
+    public enum State {
+        ACTIVE, ENDED;
     }
 
     //
@@ -38,6 +56,7 @@ public class Game {
         this.turn = Turn.RED;
         this.board = new Board();
         this.queuedTurnMoves = new ArrayList<>();
+        this.state = State.ACTIVE;
     }
 
     // used for custom configuration
