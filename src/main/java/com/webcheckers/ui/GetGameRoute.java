@@ -2,6 +2,7 @@ package com.webcheckers.ui;
 
 import com.webcheckers.appl.PlayerLobby;
 import com.webcheckers.model.Game;
+import com.webcheckers.model.Piece;
 import com.webcheckers.model.Player;
 import java.util.ArrayList;
 import spark.*;
@@ -26,6 +27,7 @@ public class GetGameRoute implements Route{
     final static String TEMPLATE_NAME = "game.ftl";
     final static String TITLE_ATTR = "title";
     final static String TITLE = "Game";
+    final static String WINNER_ATTR = "winnerName";
 
     final static String SIGNED_IN_PLAYERS = "signedInPlayers";
     final static String IS_SIGNED_IN = "isUserSignedIn";
@@ -69,7 +71,15 @@ public class GetGameRoute implements Route{
          */
         boolean opposite = currentPlayer.equals(game.getWhitePlayer());
 
+        // Check if the game is over
+        String winner = game.winningPlayer();
+        if (winner == null) {
+            // When there's no winner, set the attribute correctly for the template
+            winner = "NO_WINNER";
+        }
+
         // Set attributes
+        vm.put(WINNER_ATTR, winner);
         vm.put(TITLE_ATTR, TITLE);
         vm.put(CURRENT_PLAYER_ATTR, currentPlayer);
         vm.put(VIEW_MODE_ATTR, View.PLAY);
