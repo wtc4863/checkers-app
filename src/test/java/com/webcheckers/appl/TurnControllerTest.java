@@ -3,6 +3,7 @@ package com.webcheckers.appl;
 import com.webcheckers.appl.TurnController;
 import com.webcheckers.model.Board;
 import com.webcheckers.model.Game;
+import com.webcheckers.model.JumpMove;
 import com.webcheckers.model.Move;
 import com.webcheckers.model.Player;
 import com.webcheckers.model.Position;
@@ -26,6 +27,7 @@ public class TurnControllerTest {
     private static final String MESSAGE_TYPE_STR = "info";
     private static final String SIMPLE_MOVE_JSON = "{\"start\":{\"row\":5,\"cell\":0},\"end\":{\"row\":4,\"cell\":1}}";
     private static final String JUMP_MOVE_JSON = "{\"start\":{\"row\":5,\"cell\":0},\"end\":{\"row\":3,\"cell\":2}}";
+    private static final String SIMPLE_MOVE_JSON_FAIL = "{\"start\":{\"row\":5,\"cell\":0},\"end\":{\"row\":4,\"cell\":3}}";
 
     private static final String TEST_RED_NAME = "red";
     private static final String TEST_WHITE_NAME = "white";
@@ -80,44 +82,40 @@ public class TurnControllerTest {
     }
 
     @Test
-    public void handleValidationShouldFail() {
-
-    }
-
-    private void setUpHandlevalidation() {
-
-    }
-
-
-    /*
-    @Test
-    public void handleValidationShouldPassSimpleMove() {
-        Player redPlayer = new Player(TEST_RED_NAME, TEST_RED_ID);
-        Player whitePlayer = new Player(TEST_WHITE_NAME, TEST_WHITE_ID);
-        playerLobby = new PlayerLobby();
-        playerLobby.signIn(redPlayer);
-        playerLobby.signIn(whitePlayer);
-        playerLobby.startGame(redPlayer, whitePlayer);
-
-        CuT = new TurnController(playerLobby);
-
-        Message message = CuT.handleValidation(JSON_MOVE_PASS, TEST_RED_ID);
-        Assertions.assertEquals(message.getText(), TurnController.VALID_MOVE);
+    public void handleValidationShouldPassWithNoMovesMade() {
+        setupHandleValidation(false);
+        Message actual = CuT.handleValidation(SIMPLE_MOVE_JSON, TEST_RED_ID);
+        Assertions.assertEquals(actual.getType(), MessageType.info);
     }
 
     @Test
-    public void handleValidationShouldFailSimpleMove() {
-        Player redPlayer = new Player(TEST_RED_NAME, TEST_RED_ID);
-        Player whitePlayer = new Player(TEST_WHITE_NAME, TEST_WHITE_ID);
-        playerLobby = new PlayerLobby();
-        playerLobby.signIn(redPlayer);
-        playerLobby.signIn(whitePlayer);
-        playerLobby.startGame(redPlayer, whitePlayer);
-
-        CuT = new TurnController(playerLobby);
-
-        Message message = CuT.handleValidation(JSON_MOVE_ERR, TEST_RED_ID);
-        Assertions.assertEquals(message.getText(), TurnController.SIMPLE_MOVE_ERROR_MSG);
+    public void handleValidationShouldFailWithNoMovesMade() {
+        setupHandleValidation(false);
+        Message actual = CuT.handleValidation(SIMPLE_MOVE_JSON_FAIL, TEST_RED_ID);
+        Assertions.assertEquals(actual.getType(), MessageType.error);
     }
-    */
+
+    @Test
+    public void handleValidationShouldFailMultipleSimpleMoves() {
+        setupHandleValidation(true);
+        Message actual = CuT.handleValidation(SIMPLE_MOVE_JSON, TEST_RED_ID);
+        Assertions.assertEquals(actual.getType(), MessageType.error);
+    }
+
+    private void setupHandleValidation(boolean hasMultipleMoves) {
+        Player red = new Player(TEST_RED_NAME, TEST_RED_ID);
+        Board testBoard = new Board();
+        Game testGame = mock(Game.class);
+        when(testGame.hasMovesInCurrentTurn()).thenReturn(false);
+        when(testGame.getBoard()).thenReturn(testBoard);
+        playerLobby = mock(PlayerLobby.class);
+        when(playerLobby.getPlayerBySessionID(TEST_RED_ID)).thenReturn(red);
+        when(playerLobby.getGame(red)).thenReturn(testGame);
+        CuT = new TurnController(playerLobby);
+        if (hasMultipleMoves) {
+            when(testGame.hasMovesInCurrentTurn()).thenReturn(true);
+            when(testGame.getLastMoveMade()).thenReturn(mock(SimpleMove.class));
+        }
+    }
+
 }
