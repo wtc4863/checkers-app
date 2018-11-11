@@ -24,8 +24,8 @@ public class TurnControllerTest {
 
     private static final String MESSAGE_BODY_STR = "testMessage";
     private static final String MESSAGE_TYPE_STR = "info";
-    private static final String JSON_MOVE_PASS = "{\"start\":{\"row\":5,\"cell\":0},\"end\":{\"row\":4,\"cell\":1}}";
-    private static final String JSON_MOVE_ERR = "{\"start\":{\"row\":5,\"cell\":0},\"end\":{\"row\":3,\"cell\":2}}";
+    private static final String SIMPLE_MOVE_JSON = "{\"start\":{\"row\":5,\"cell\":0},\"end\":{\"row\":4,\"cell\":1}}";
+    private static final String JUMP_MOVE_JSON = "{\"start\":{\"row\":5,\"cell\":0},\"end\":{\"row\":3,\"cell\":2}}";
 
     private static final String TEST_RED_NAME = "red";
     private static final String TEST_WHITE_NAME = "white";
@@ -52,8 +52,7 @@ public class TurnControllerTest {
         CuT = null;
     }
 
-    @Test
-    public void testConstructor() {
+    @Test public void testConstructor() {
         Assertions.assertNotNull(CuT.builder);
         Assertions.assertNotNull(CuT.playerLobby);
     }
@@ -65,6 +64,30 @@ public class TurnControllerTest {
         String expectedJson = String.format("{\"text\":\"%s\",\"type\":\"%s\"}", MESSAGE_BODY_STR, MESSAGE_TYPE_STR);
         Assertions.assertEquals(expectedJson, json);
     }
+
+    @Test
+    public void testMoveUItoModelSimpleMove() {
+        SimpleMove expected = new SimpleMove(new Position(5,0), new Position(4, 1));
+        Move actual = CuT.MovefromUItoModel(SIMPLE_MOVE_JSON);
+        Assertions.assertEquals(expected, actual);
+    }
+
+    @Test
+    public void testMoveUItoModelJumpMove() {
+        SimpleMove expected = new SimpleMove(new Position(5,0), new Position(3, 2));
+        Move actual = CuT.MovefromUItoModel(JUMP_MOVE_JSON);
+        Assertions.assertEquals(expected, actual);
+    }
+
+    @Test
+    public void handleValidationShouldFail() {
+
+    }
+
+    private void setUpHandlevalidation() {
+
+    }
+
 
     /*
     @Test
