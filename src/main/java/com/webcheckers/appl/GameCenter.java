@@ -88,8 +88,12 @@ public class GameCenter {
      * @param game the game to end
      */
     void endGame(Game game) {
-        this.opponents.remove(game.getRedPlayer().getName());
-        this.opponents.remove(game.getWhitePlayer().getName());
-        this.activeGames.remove(game);
+        if (game.state == Game.State.ACTIVE) {
+            game.state = Game.State.ENDED;
+        } else {
+            this.opponents.remove(game.getRedPlayer().getName());
+            this.opponents.remove(game.getWhitePlayer().getName());
+            this.activeGames.remove(game);
+        }
     }
 }
