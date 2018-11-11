@@ -169,6 +169,32 @@ public class Game {
         return false;
     }
 
+    public boolean playerHasLost(Piece.PColor color) {
+        // Check if the player has pieces remaining
+        ArrayList<Position> remainingPieces = board.getPieceLocations(color);
+        if (remainingPieces.size() == 0) {
+            return true;
+        }
+
+        // Check if the player has moves remaining
+        for (Position current : remainingPieces) {
+            if (!JumpMove.positionHasJumpMoveAvailable(current, this) && !SimpleMove.positionHasSimpleMoveAvailable(current, this)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public String winningPlayer() {
+        if (playerHasLost(Piece.PColor.white)) {
+            return redPlayer.getName();
+        } else if (playerHasLost(Piece.PColor.red)) {
+            return whitePlayer.getName();
+        } else {
+            return null;
+        }
+    }
+
     /**
      * Adds a move to the queue for the current turn
      * @param move move to be added
