@@ -80,4 +80,16 @@ public class GameCenter {
         return game;
         //TODO
     }
+
+    /**
+     * End a game by removing the game from the list of active games and
+     * deleting the opponent match-up.
+     *
+     * @param game the game to end
+     */
+    void endGame(Game game) {
+        this.opponents.remove(game.getRedPlayer().getName());
+        this.opponents.remove(game.getWhitePlayer().getName());
+        this.activeGames.remove(game);
+    }
 }

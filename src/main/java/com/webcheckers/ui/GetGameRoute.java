@@ -76,6 +76,9 @@ public class GetGameRoute implements Route{
         if (winner == null) {
             // When there's no winner, set the attribute correctly for the template
             winner = "NO_WINNER";
+        } else {
+            // Remove the game and match pairing
+            playerLobby.endGame(game);
         }
 
         // Set attributes
