@@ -239,6 +239,15 @@ public class Game {
     }
 
     /**
+     * Check if a move has been made so far this simple move.
+     *
+     * @return true if a simple move has been made, false otherwise
+     */
+    public boolean hasSimpleMove() {
+        return queuedTurnMoves.size() > 0 && queuedTurnMoves.get(0) instanceof SimpleMove;
+    }
+
+    /**
      * Removes the last move from the current turn queue
      * @return the removed move
      */
