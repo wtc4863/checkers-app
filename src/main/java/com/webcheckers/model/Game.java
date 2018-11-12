@@ -17,7 +17,6 @@ public class Game {
     //
     // Attributes
     //
-
     Player redPlayer;
     Player whitePlayer;
     Board board;
@@ -100,6 +99,19 @@ public class Game {
             return turn == Turn.RED;
         } else {
             return turn == Turn.WHITE;
+        }
+    }
+
+    /**
+     * this function gets the other player in the game
+     * @param player one of the players in the game
+     * @return the other player in the game
+     */
+    public Player getOpponentOf(Player player) {
+        if (player.equals(this.whitePlayer)) {
+            return getRedPlayer();
+        } else {
+            return getWhitePlayer();
         }
     }
 
