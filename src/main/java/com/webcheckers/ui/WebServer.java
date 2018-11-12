@@ -86,6 +86,11 @@ public class WebServer {
 
 
     public static final String BACKUP_MOVE_URL = "/backupMove";
+    /**
+     * The URL pattern to resign a game
+     */
+    public static final String RESIGN_GAME_URL = "/resignGame";
+
     //
     // Attributes
     //
@@ -196,6 +201,9 @@ public class WebServer {
 
         //Undoes a move
         post(BACKUP_MOVE_URL, new PostBackupMoveRoute(playerLobby));
+
+        // Handles Resignation
+        post(RESIGN_GAME_URL, new PostResignGameRoute(playerLobby));
 
         //
         LOG.config("WebServer is initialized.");
