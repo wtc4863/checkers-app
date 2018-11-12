@@ -95,5 +95,20 @@ public class GameCenter {
             this.opponents.remove(game.getWhitePlayer().getName());
             this.activeGames.remove(game);
         }
+
+    /*
+     * Removes game from the game center and removes the pairing from the hashmap. This will effectively
+     * delete the game from the server so it no longer exists.
+     * @param gameToResignFrom the game from which the player is resigning
+     * @param playerThatsResigning the player that is resigning
+     */
+    public synchronized void resignFromGame(Game gameToResignFrom, Player playerThatsResigning) {
+        Player otherPlayer = gameToResignFrom.getOpponentOf(playerThatsResigning);
+        // remove from the current active games
+        activeGames.remove(gameToResignFrom);
+        // this overloaded version only removes key with this value
+        // TODO: will have to add more checks once multiple games are added because you can play
+        // more than one game against the same player
+        opponents.remove(playerThatsResigning.getName(), otherPlayer);
     }
 }
