@@ -100,7 +100,12 @@ public class Board {
     }
 
     public boolean spaceIsValid(Position position) {
-        Space space = boardArray[position.getRow()][position.getCell()];
+        Space space;
+        try {
+            space = boardArray[position.getRow()][position.getCell()];
+        } catch (IndexOutOfBoundsException e) {
+            return false;
+        }
         return space.isValid();
     }
 
