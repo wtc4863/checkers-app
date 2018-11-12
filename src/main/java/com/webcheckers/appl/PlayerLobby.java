@@ -216,4 +216,14 @@ public class PlayerLobby {
     public void endGame(Game game) {
         gameCenter.endGame(game);
     }
+
+    /*
+     * A wrapper around the game center function that resigns a player from the game
+     * @param gameToResignFrom
+     * @param playerResigning
+     * @return
+     */
+    public void resignFromGame(Game gameToResignFrom, Player playerResigning) {
+        gameCenter.resignFromGame(gameToResignFrom, playerResigning);
+    }
 }
