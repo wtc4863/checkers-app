@@ -197,6 +197,7 @@ public class JumpMoveTest {
         // Add white piece at the start
         Space startSpace = makeWhiteSpace();
         when(board.getSpace(start)).thenReturn(startSpace);
+        when(game.getPieceColor(start)).thenReturn(Piece.PColor.white);
         // Add white piece in the middle
         Space middleSpace = makeWhiteSpace();
         when(board.getSpace(middle)).thenReturn(middleSpace);
@@ -238,6 +239,7 @@ public class JumpMoveTest {
         // Add a red space to the start
         Space startSpace = makeRedSpace();
         when(board.getSpace(start)).thenReturn(startSpace);
+        when(game.getPieceColor(start)).thenReturn(Piece.PColor.red);
 
         // Add a white space to the middle
         Space middleSpace = makeWhiteSpace();
@@ -319,12 +321,9 @@ public class JumpMoveTest {
      */
     @Test
     public void testDefaultBoardWhiteNoJumpMoves() {
-        Game mockGame = mock(Game.class);
-        Board realBoard = new Board();
-        when(mockGame.getBoard()).thenReturn(realBoard);
-        when(mockGame.getTurn()).thenReturn(Game.Turn.WHITE);
+        Game realGame = new Game(mock(Player.class), mock(Player.class));
 
-        assertFalse(JumpMove.jumpMoveAvailable(mockGame));
+        assertFalse(JumpMove.jumpMoveAvailable(game));
     }
 
     @Test
