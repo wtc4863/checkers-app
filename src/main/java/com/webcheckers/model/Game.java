@@ -197,11 +197,11 @@ public class Game {
 
         // Check if the player has moves remaining
         for (Position current : remainingPieces) {
-            if (!JumpMove.positionHasJumpMoveAvailable(current, this) && !SimpleMove.positionHasSimpleMoveAvailable(current, this)) {
-                return true;
+            if (JumpMove.positionHasJumpMoveAvailable(current, this) || SimpleMove.positionHasSimpleMoveAvailable(current, this)) {
+                return false;
             }
         }
-        return false;
+        return true;
     }
 
     public String winningPlayer() {
