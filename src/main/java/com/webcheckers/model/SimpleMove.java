@@ -51,7 +51,7 @@ public class SimpleMove extends Move {
         Board board = game.getBoard();
         if (board.spaceIsValid(end)) {
             // red is at the top of the board in the model and moving "forward" is going down
-            Piece.PColor currentColor = game.getBoard().getSpace(start).pieceInfo().pieceColor;
+            Piece.PColor currentColor = game.getPieceColor(this.start);
             boolean errorCheck;
             if (currentColor == Piece.PColor.white) {
                 // get the possible starting points given this ending space

@@ -223,6 +223,22 @@ public class Game {
     }
 
     /**
+     * Returns the color of the piece at a specific position on the board.
+     *
+     * @param position the position to get the piece color of
+     * @return the color of the piece on the specified space, or null if there
+     *      is no piece there
+     */
+    public Piece.PColor getPieceColor(Position position) {
+        Space space = this.board.getSpace(position);
+        if (space.doesHasPiece()) {
+            return space.pieceInfo().pieceColor;
+        } else {
+            return null;
+        }
+    }
+
+    /**
      * Removes the last move from the current turn queue
      * @return the removed move
      */
