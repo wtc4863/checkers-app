@@ -124,12 +124,12 @@ public class JumpMove extends Move {
         }
 
         // Make sure the middle position has an opponent piece
+        PColor currentColor = game.getBoard().getSpace(this.start).pieceInfo().pieceColor;
         if(board.getSpace(middle).doesHasPiece()) {
             LOG.fine("Middle: " + middle.toString());
             LOG.fine("Board has piece.");
             jumpedPiece = board.getSpace(middle).pieceInfo();
-            if((game.getTurn() == Turn.RED && jumpedPiece.pieceColor == PColor.red) ||
-                (game.getTurn() == Turn.WHITE && jumpedPiece.pieceColor == PColor.white)) {
+            if(currentColor == jumpedPiece.pieceColor) {
                 // Can only jump an opponent's piece
                 LOG.fine("Failed middle position same color");
                 this.currentMsg = MIDDLE_SAME_COLOR;
@@ -144,7 +144,7 @@ public class JumpMove extends Move {
         // TODO: skip this block if the piece is a king
         // Make sure the piece is going in the right direction
         boolean check;
-        if(game.getTurn() == Turn.RED) {
+        if(currentColor == PColor.red) {
             // Red pieces should travel in the "negative" direction
             check = start.getRow() > end.getRow();
         } else {
@@ -197,8 +197,8 @@ public class JumpMove extends Move {
          */
 
         // This is a big-time law of Demeter violation right here
-       // Piece.PColor currentColor = game.getBoard().getSpace(pos).pieceInfo().pieceColor;
-        if(game.getTurn() == Turn.RED) {
+        Piece.PColor currentColor = game.getBoard().getSpace(pos).pieceInfo().pieceColor;
+        if(currentColor == PColor.red) {
             // Lower-left
             possibleMoves.add(new JumpMove(pos, new Position(pos.getRow() - 2, pos.getCell() - 2)));
             // Lower-right

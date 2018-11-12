@@ -1,7 +1,5 @@
 package com.webcheckers.model;
 
-import com.webcheckers.model.Game.Turn;
-
 import java.util.ArrayList;
 import java.util.logging.Logger;
 
@@ -53,9 +51,9 @@ public class SimpleMove extends Move {
         Board board = game.getBoard();
         if (board.spaceIsValid(end)) {
             // red is at the top of the board in the model and moving "forward" is going down
-            //TODO: does the way we flip the board change this because the client will switch it?
+            Piece.PColor currentColor = game.getBoard().getSpace(start).pieceInfo().pieceColor;
             boolean errorCheck;
-            if (game.getTurn() == Turn.WHITE) {
+            if (currentColor == Piece.PColor.white) {
                 // get the possible starting points given this ending space
                 int left = end.getCell() - 1;
                 int right = end.getCell() + 1;
