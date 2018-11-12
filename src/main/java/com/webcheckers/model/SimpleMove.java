@@ -133,11 +133,11 @@ public class SimpleMove extends Move {
         // Create new SimpleMoves for easy comparison
         ArrayList<SimpleMove> possibleMoves = new ArrayList<>();
         if (piece.pieceColor == Piece.PColor.white || piece.isKing()) {
-            SimpleMove upperLeft = new SimpleMove(pos, new Position(top, left));
-            SimpleMove upperRight = new SimpleMove(pos, new Position(top, right));
+            possibleMoves.add(new SimpleMove(pos, new Position(top, left)));
+            possibleMoves.add(new SimpleMove(pos, new Position(top, right)));
         } else if (piece.pieceColor == Piece.PColor.red || piece.isKing()) {
-            SimpleMove bottomLeft = new SimpleMove(pos, new Position(bot, left));
-            SimpleMove bottomRight = new SimpleMove(pos, new Position(bot, right));
+            possibleMoves.add(new SimpleMove(pos, new Position(bot, left)));
+            possibleMoves.add(new SimpleMove(pos, new Position(bot, right)));
         }
 
         // Check possible moves
