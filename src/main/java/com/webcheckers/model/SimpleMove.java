@@ -2,6 +2,7 @@ package com.webcheckers.model;
 
 import com.webcheckers.model.Game.Turn;
 
+import java.util.ArrayList;
 import java.util.logging.Logger;
 
 public class SimpleMove extends Move {
@@ -107,6 +108,47 @@ public class SimpleMove extends Move {
         Position bottomLeft = new Position(bot, left);
         Position bottomRight = new Position(bot, right);
         return upperLeft.equals(start) || upperRight.equals(start) || bottomLeft.equals(start) || bottomRight.equals(start);
+    }
+
+    /**
+     * Checks if a given position in a game has any simple moves available.
+     *
+     * @param pos the position to check for possible moves
+     * @param game the game to check for possible moves
+     * @return true if there is at least one simple move possible from the
+     *      position, false otherwise
+     */
+    public static boolean positionHasSimpleMoveAvailable(Position pos, Game game) {
+        // Get the possible ending points given this starting space
+        int left = pos.getCell() - 1;
+        int right = pos.getCell() + 1;
+        int top = pos.getRow() + 1;
+        int bot = pos.getRow() - 1;
+
+        // Get piece at starting space
+        Piece piece = game.getBoard().getSpace(pos).pieceInfo();
+        if (piece == null) {
+            // There must be a piece on the starting space
+            return false;
+        }
+
+        // Create new SimpleMoves for easy comparison
+        ArrayList<SimpleMove> possibleMoves = new ArrayList<>();
+        if (piece.pieceColor == Piece.PColor.white || piece.isKing()) {
+            SimpleMove upperLeft = new SimpleMove(pos, new Position(top, left));
+            SimpleMove upperRight = new SimpleMove(pos, new Position(top, right));
+        } else if (piece.pieceColor == Piece.PColor.red || piece.isKing()) {
+            SimpleMove bottomLeft = new SimpleMove(pos, new Position(bot, left));
+            SimpleMove bottomRight = new SimpleMove(pos, new Position(bot, right));
+        }
+
+        // Check possible moves
+        for (SimpleMove current : possibleMoves) {
+            if (current.validateMove(game)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
