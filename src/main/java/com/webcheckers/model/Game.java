@@ -195,13 +195,21 @@ public class Game {
             return true;
         }
 
-        // Check if the player has moves remaining
-        for (Position current : remainingPieces) {
-            if (JumpMove.positionHasJumpMoveAvailable(current, this) || SimpleMove.positionHasSimpleMoveAvailable(current, this)) {
-                return false;
-            }
+        // Check if the player has moves remaining if it's their turn
+        Piece.PColor turnColor = Piece.PColor.red;
+        if (this.turn == Turn.WHITE) {
+            turnColor = Piece.PColor.white;
         }
-        return true;
+        if (turnColor == color) {
+            for (Position current : remainingPieces) {
+                if (JumpMove.positionHasJumpMoveAvailable(current, this) || SimpleMove.positionHasSimpleMoveAvailable(current, this)) {
+                    return false;
+                }
+            }
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public String winningPlayer() {
