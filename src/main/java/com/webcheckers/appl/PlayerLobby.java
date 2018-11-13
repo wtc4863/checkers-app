@@ -125,6 +125,10 @@ public class PlayerLobby {
         }
     }
 
+    /**
+     * Signs a given player out of the application
+     * @param playerName name of the player to be signed out
+     */
     public void signOut(String playerName) {
         players.get(playerName).signOut();
         players.remove(playerName);
