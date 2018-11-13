@@ -6,6 +6,7 @@ import spark.ModelAndView;
 import spark.Request;
 import spark.Response;
 import spark.Session;
+import spark.Spark;
 import spark.TemplateEngine;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
@@ -76,21 +77,15 @@ public class GetSignOutRouteTest {
     TemplateEngineTester testHelper = new TemplateEngineTester();
     when(templateEngine.render(any(ModelAndView.class))).thenAnswer(testHelper.makeAnswer());
 
-    CuT.handle(request, response);
+    // Make sure we redirect
+    assertThrows(spark.HaltException.class, () -> {
+          CuT.handle(request, response);
+        });
 
     //Check that the player has been properly removed from the application
     assertEquals(null, playerLobby.getPlayerBySessionID(SESSION_ID));
     assertEquals(1, playerLobby.getSignedInPlayers().size());
     assertNotNull(playerLobby.getPlayer(OTHER_USERNAME));
-
-    //Model is a non-null map
-    testHelper.assertViewModelExists();
-    testHelper.assertViewModelIsaMap();
-
-    //Model contains necessary attributes
-    testHelper.assertViewModelAttribute(GetHomeRoute.TITLE_ATTR, GetHomeRoute.TITLE);
-    testHelper.assertViewName(GetHomeRoute.TEMPLATE_NAME);
-
   }
 
 }
