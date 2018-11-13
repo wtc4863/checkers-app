@@ -21,17 +21,12 @@ import static org.junit.jupiter.api.Assertions.*;
 @Tag("UI-Tier")
 public class GetSignOutRouteTest {
 
-  //
-  // Constants
-  //
+
   private static final String SESSION_ID = "12345";
   private static final String OTHER_ID = "54321";
   private static final String MY_USERNAME = "jimmy";
   private static final String OTHER_USERNAME = "other";
 
-  //
-  // Attributes
-  //
   private Request request;
   private Response response;
   private Session session;
@@ -70,7 +65,7 @@ public class GetSignOutRouteTest {
 
 
     // Set up the route component
-    CuT = new GetSignOutRoute(playerLobby, templateEngine);
+    CuT = new GetSignOutRoute(playerLobby);
   }
 
   @Test
