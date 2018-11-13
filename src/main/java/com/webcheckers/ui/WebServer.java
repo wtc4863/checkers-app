@@ -2,9 +2,9 @@ package com.webcheckers.ui;
 
 import static spark.Spark.*;
 
+import com.webcheckers.appl.TurnController;
 import java.util.Objects;
 import java.util.logging.Logger;
-
 import com.google.gson.Gson;
 
 import com.webcheckers.appl.PlayerLobby;
@@ -78,6 +78,12 @@ public class WebServer {
      * The URL pattern to submit a turn
      */
     public static final String SUBMIT_TURN_URL = "/submitTurn";
+
+    /**
+     * The URL pattern to request the Game page.
+     */
+    public static final String CHECK_TURN_URL = "/checkTurn";
+
     //
     // Attributes
     //
@@ -85,6 +91,7 @@ public class WebServer {
     private final TemplateEngine templateEngine;
     private final Gson gson;
     private final PlayerLobby playerLobby;
+    private final TurnController turnController;
 
     //
     // Constructor
@@ -95,17 +102,20 @@ public class WebServer {
      *
      * @param templateEngine The default {@link TemplateEngine} to render page-level HTML views.
      * @param gson           The Google JSON parser object used to render Ajax responses.
+     * @param turnController The GRASP controller that will translate turns between model and ui tiers
      * @throws NullPointerException If any of the parameters are {@code null}.
      */
-    public WebServer(final TemplateEngine templateEngine, final Gson gson, final PlayerLobby playerLobby) {
+    public WebServer(final TemplateEngine templateEngine, final Gson gson, final PlayerLobby playerLobby, final TurnController turnController) {
         // validation
         Objects.requireNonNull(templateEngine, "templateEngine must not be null");
         Objects.requireNonNull(gson, "gson must not be null");
         Objects.requireNonNull(playerLobby, "playerLobby must not be null");
+        Objects.requireNonNull(turnController, "turnController must not be null");
         //
         this.templateEngine = templateEngine;
         this.gson = gson;
         this.playerLobby = playerLobby;
+        this.turnController = turnController;
     }
 
     //
@@ -172,10 +182,12 @@ public class WebServer {
         get(GAME_URL, new GetGameRoute(playerLobby, templateEngine));
 
         // Handles Move Validation
-        post(VALIDATE_MOVE_URL, new PostValidateMoveRoute(playerLobby));
+        post(VALIDATE_MOVE_URL, new PostValidateMoveRoute(playerLobby, turnController));
 
+        // Handles Turn Checking with  AJAX
+        post(CHECK_TURN_URL, new PostCheckTurnRoute(playerLobby, gson));
         //Handles Turn Validation
-        post(SUBMIT_TURN_URL, new PostSubmitTurnRoute(playerLobby, templateEngine));
+        post(SUBMIT_TURN_URL, new PostSubmitTurnRoute(playerLobby));
 
         //Handles signing out
         get(SIGN_OUT_URL, new GetSignOutRoute(playerLobby));

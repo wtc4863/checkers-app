@@ -31,6 +31,7 @@ public class GetGameRoute implements Route{
     final static String IS_SIGNED_IN = "isUserSignedIn";
 
     final static String PLAYER_IN_GAME_MSG = "Requested player is already in a game. Choose another player.";
+    final static String NO_USERNAME_SELECTED = "You are not in a game. You must first start a game with another player.";
 
     public enum View {
         PLAY, SPECTATOR, REPLAY;
@@ -58,6 +59,45 @@ public class GetGameRoute implements Route{
     // Methods
     //
 
+    private String renderGame(Game game, Player currentPlayer) {
+        // Template set-up
+        final Map<String, Object> vm = new HashMap<>();
+
+        /*
+        If the current player is the white player in the game, then flip the
+        board the other way around.
+         */
+        boolean opposite = currentPlayer.equals(game.getWhitePlayer());
+
+        // Set attributes
+        vm.put(TITLE_ATTR, TITLE);
+        vm.put(CURRENT_PLAYER_ATTR, currentPlayer);
+        vm.put(VIEW_MODE_ATTR, View.PLAY);
+        vm.put(RED_PLAYER_ATTR, game.getRedPlayer());
+        vm.put(WHITE_PLAYER_ATTR, game.getWhitePlayer());
+        vm.put(ACTIVE_COLOR_ATTR, game.getTurn());
+        vm.put(BOARD_VIEW_ATTR, game.getBoardView(opposite));
+
+        return templateEngine.render(new ModelAndView(vm, TEMPLATE_NAME));
+    }
+
+    private String redirectToHome(Player currentPlayer, String message) {
+        // Template set-up
+        Map<String, Object> vm = new HashMap<>();
+
+        // Set up list of signed-in players
+        ArrayList<String> onlinePlayers = playerLobby.getSignedInPlayers();
+        onlinePlayers.remove(currentPlayer.getName());
+
+        // Set attributes
+        vm.put(SIGNED_IN_PLAYERS, onlinePlayers);
+        vm.put(IS_SIGNED_IN, true);
+        vm.put(TITLE_ATTR, GetHomeRoute.TITLE);
+        vm.put(MESSAGE_ATTR, new Message(message, Message.MessageType.error));
+
+        return templateEngine.render(new ModelAndView(vm, GetHomeRoute.TEMPLATE_NAME));
+    }
+
   /**
    * Starts a new game and brings the red and white player to the game page
    * @param request the HTTP request
@@ -66,62 +106,41 @@ public class GetGameRoute implements Route{
    */
     @Override
     public Object handle(Request request, Response response) {
+        // Get the current player
         final Session httpSession = request.session();
-        final Map<String, Object> vm = new HashMap<>();
         Player thisPlayer = playerLobby.getPlayerBySessionID(httpSession.id());
-        Player opponentPlayer = null;
-        Player redPlayer = null;
-        Player whitePlayer = null;
-        Game game = null;
+
+        // If there is no player, redirect to the home page
+        if (thisPlayer == null) {
+            response.redirect(WebServer.HOME_URL);
+            halt();
+            return null;
+        }
+
+        // Get the other player
+        Player opponentPlayer = playerLobby.getOpponent(thisPlayer);
+
+        // Check if the players are already in a game with each other
+        if (opponentPlayer != null) {
+            return renderGame(playerLobby.getGame(thisPlayer), thisPlayer);
+        }
+        // Players are not in a game with each other, we are starting a new game
+
+        // Make sure they passed a username param
         String username = request.queryParams("username");
-
-        //if current player is being selected by someone else
-        if(username == null) {
-            opponentPlayer = playerLobby.getOpponent(thisPlayer);
-        }
-
-        //the current player is selecting another player, thus making them the red player
-        else {
+        if (username == null) {
+            return redirectToHome(thisPlayer, NO_USERNAME_SELECTED);
+        } else {
             opponentPlayer = playerLobby.getPlayer(username);
-            redPlayer = thisPlayer;
         }
 
-        //if the current player is not in a game but the opponent is, reject the request
-        //TODO will change when implementing multiple games
-        if (playerLobby.getGame(thisPlayer) == null && playerLobby.getGame(opponentPlayer) != null) {
-            Map<String, Object> vmRedirect = new HashMap<>();
-            String usersPlayer = thisPlayer.getName();
-            ArrayList<String> onlinePlayers = playerLobby.getSignedInPlayers();
-            onlinePlayers.remove(usersPlayer);
-            vmRedirect.put(SIGNED_IN_PLAYERS, onlinePlayers);
-            vmRedirect.put(IS_SIGNED_IN, true);
-            vmRedirect.put(TITLE_ATTR, GetHomeRoute.TITLE);
-            vmRedirect.put(MESSAGE_ATTR, PLAYER_IN_GAME_MSG);
-
-            return templateEngine.render(new ModelAndView(vmRedirect, GetHomeRoute.TEMPLATE_NAME));
+        // Check if the selected opponent is already in a game
+        if (playerLobby.getGame(opponentPlayer) == null) {
+            // Start new game
+            Game game = playerLobby.startGame(thisPlayer, opponentPlayer);
+            return renderGame(game, thisPlayer);
+        } else {
+            return redirectToHome(thisPlayer, PLAYER_IN_GAME_MSG);
         }
-
-        //if the current player is red, make the other player white and start the game
-        if (thisPlayer.equals(redPlayer)) {
-            whitePlayer = opponentPlayer;
-            game = playerLobby.startGame(redPlayer, whitePlayer);
-        }
-
-        //the current player is the white player and the other player is the red
-        else {
-            whitePlayer = thisPlayer;
-            redPlayer = opponentPlayer;
-            game = playerLobby.getGame(thisPlayer);
-        }
-
-        vm.put(TITLE_ATTR, TITLE);
-        vm.put(WHITE_PLAYER_ATTR, whitePlayer);
-        vm.put(RED_PLAYER_ATTR, redPlayer);
-        vm.put(CURRENT_PLAYER_ATTR, thisPlayer);
-        vm.put(ACTIVE_COLOR_ATTR, game.getTurn());
-        vm.put(BOARD_VIEW_ATTR, playerLobby.getBoardView(thisPlayer));
-        vm.put(VIEW_MODE_ATTR, View.PLAY);
-
-        return templateEngine.render(new ModelAndView(vm, TEMPLATE_NAME));
     }
 }

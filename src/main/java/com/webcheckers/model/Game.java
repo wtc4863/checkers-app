@@ -14,11 +14,12 @@ public class Game {
     //
     // Attributes
     //
-    private Player redPlayer;
-    private Player whitePlayer;
-    private Board board;
-    private Turn turn;
-    private ArrayList<Move> queuedTurnMoves;
+
+    Player redPlayer;
+    Player whitePlayer;
+    Board board;
+    Turn turn;
+    ArrayList<Move> queuedTurnMoves;
 
     public enum Turn {
         WHITE, RED;
@@ -64,9 +65,23 @@ public class Game {
     }
 
     /**
-     * Gets the board state of this Game
-     * @return board object of this Game
+     * Finds out of the supplied players is the player
+     * whos turn it is
+     * @return player object of white player
      */
+    public boolean isPlayersTurn(Player player) {
+        if(redPlayer.equals(player)) {
+            return turn == Turn.RED;
+        } else {
+            return turn == Turn.WHITE;
+        }
+    }
+
+
+        /**
+         * Gets the board state of this Game
+         * @return board object of this Game
+         */
     public Board getBoard() {
         return this.board;
     }
@@ -89,10 +104,14 @@ public class Game {
     }
 
     public void switchTurn() {
-        if(this.turn == Turn.RED)
-            this.turn = Turn.WHITE;
-        else
-            this.turn = Turn.RED;
+        switch(this.turn){
+            case RED:
+                this.turn = Turn.WHITE;
+                break;
+            case WHITE:
+                this.turn = Turn.RED;
+                break;
+        }
     }
 
     /**

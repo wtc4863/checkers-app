@@ -1,5 +1,6 @@
 package com.webcheckers;
 
+import com.webcheckers.appl.TurnController;
 import java.io.InputStream;
 import java.util.Objects;
 import java.util.logging.LogManager;
@@ -59,9 +60,13 @@ public final class Application {
         // Create the PlayerLobby to keep track of users
         final PlayerLobby playerLobby = new PlayerLobby();
 
+        // Create a turn controller so that we can handle turn translation
+        // between the model and ui tiers
+        final TurnController turnController = new TurnController(playerLobby);
+
         // inject the template engine, gson object, and player lobby into the
         // web server to assist with route view creation
-        final WebServer webServer = new WebServer(templateEngine, gson, playerLobby);
+        final WebServer webServer = new WebServer(templateEngine, gson, playerLobby, turnController);
 
         // inject web server into application
         final Application app = new Application(webServer);
