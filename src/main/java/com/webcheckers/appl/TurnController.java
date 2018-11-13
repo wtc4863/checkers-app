@@ -31,7 +31,7 @@ public class TurnController {
      * @param message the message to be translated
      * @return a string continaing a message
      */
-     public String MessageFromModeltoUI(Message message) {
+    public String MessageFromModeltoUI(Message message) {
         Gson gson = this.builder.create();
         return gson.toJson(message, Message.class);
     }
