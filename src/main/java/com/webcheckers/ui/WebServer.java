@@ -203,7 +203,7 @@ public class WebServer {
         post(BACKUP_MOVE_URL, new PostBackupMoveRoute(playerLobby));
 
         // Handles Resignation
-        post(RESIGN_GAME_URL, new PostResignGameRoute(playerLobby));
+        post(RESIGN_GAME_URL, new PostResignGameRoute(playerLobby, gson));
 
         //
         LOG.config("WebServer is initialized.");

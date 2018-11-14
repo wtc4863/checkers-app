@@ -1,8 +1,11 @@
 package com.webcheckers.ui;
 
+import com.google.gson.Gson;
 import com.webcheckers.appl.PlayerLobby;
+import com.webcheckers.appl.TurnController;
 import com.webcheckers.model.Game;
 import com.webcheckers.model.Player;
+import com.webcheckers.ui.Message.MessageType;
 import spark.Request;
 import spark.Response;
 import spark.Route;
@@ -10,13 +13,17 @@ import spark.Session;
 
 public class PostResignGameRoute implements Route {
 
+    static final String RESIGNATION_MESSAGE = "You have resigned and lost the game.";
+
     //
     // Attributes
     //
     private final PlayerLobby playerLobby;
+    private final Gson gson;
 
-    public PostResignGameRoute(PlayerLobby playerLobby) {
+    public PostResignGameRoute(PlayerLobby playerLobby, Gson gson) {
         this.playerLobby = playerLobby;
+        this.gson = gson;
     }
 
     @Override
@@ -30,9 +37,9 @@ public class PostResignGameRoute implements Route {
         playerLobby.resignFromGame(gameToResignFrom, resigningPlayer);
 
         // FIXME: make sure to tell the players that they have won or lost
-
-
-        return null;
+        Message resignation = new Message(RESIGNATION_MESSAGE, MessageType.info);
+        String jsonResignation = gson.toJson(resignation);
+        return jsonResignation;
     }
 
 }
