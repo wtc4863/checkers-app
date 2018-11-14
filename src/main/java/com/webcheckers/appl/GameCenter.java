@@ -110,5 +110,6 @@ public class GameCenter {
         // TODO: will have to add more checks once multiple games are added because you can play
         // more than one game against the same player
         opponents.remove(playerThatsResigning.getName(), otherPlayer);
+        opponents.remove(otherPlayer.getName(), playerThatsResigning);
     }
 }

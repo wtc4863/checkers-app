@@ -94,4 +94,14 @@ public class GameCenterTest {
 
     }
 
+    @Test
+    public void testResignFromGame() {
+        // start the game
+        Game game = CuT.startGame(redPlayer, whitePlayer);
+        CuT.resignFromGame(game, redPlayer);
+        assertEquals(0, CuT.activeGames.size());
+        assertNull(CuT.opponents.get(redPlayer.getName()));
+        assertNull(CuT.opponents.get(whitePlayer.getName()));
+    }
+
 }
