@@ -4,13 +4,16 @@ import com.webcheckers.ui.BoardView;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.ArrayList;
 import java.util.Queue;
+import java.util.logging.Logger;
 
 /**
  * Object that holds all of the data for a specific game
  */
 
 public class Game {
+    private static Logger LOG = Logger.getLogger(Game.class.getName());
     //
     // Attributes
     //
@@ -28,6 +31,7 @@ public class Game {
     // Constructor
     //
     public Game(Player redPlayer, Player whitePlayer) {
+        LOG.fine(String.format("Game created: (%s : %s", redPlayer, whitePlayer));
         this.redPlayer = redPlayer;
         this.whitePlayer = whitePlayer;
         this.turn = Turn.RED;
@@ -37,10 +41,12 @@ public class Game {
 
     // used for custom configuration
     public Game(Player redPlayer, Player whitePlayer, Turn turn, Board board) {
+        LOG.fine(String.format("Custom Game created: (%s : %s", redPlayer, whitePlayer));
         this.redPlayer = redPlayer;
         this.whitePlayer = whitePlayer;
         this.turn = turn;
         this.board = board;
+        this.queuedTurnMoves = new ArrayList<>();
     }
 
     //
@@ -74,6 +80,27 @@ public class Game {
         } else {
             return turn == Turn.WHITE;
         }
+    }
+
+    /**
+     * Returns the number of moves in the current turn
+     * @return true if there have been moves already made
+     */
+    public boolean hasMovesInCurrentTurn() {
+        return queuedTurnMoves.size() >= 1;
+    }
+
+    public Move getLastMoveMade() {
+        if(hasMovesInCurrentTurn()) {
+            int index = queuedTurnMoves.size() - 1;
+            return queuedTurnMoves.get(index);
+        }
+        return null;
+    }
+
+    public void addMoveToCurrentTurn(Move newest) {
+        queuedTurnMoves.add(newest);
+        LOG.fine(String.format("Move added to current turn: %d", queuedTurnMoves.size()));
     }
 
 
@@ -111,6 +138,7 @@ public class Game {
                 this.turn = Turn.RED;
                 break;
         }
+        LOG.fine(this.turn.toString() + "'s Turn");
     }
 
     /**
@@ -130,18 +158,13 @@ public class Game {
      */
     public boolean movesLeft() {
         //if there is a move left, the most recent move's end position is the next move's start position
-        Collections.reverse(queuedTurnMoves);
-        if(queuedTurnMoves.size() != 0) {
-          Move lastMove = queuedTurnMoves.get(0);
-          Collections.reverse(queuedTurnMoves);
-          Position newStart = lastMove.getEnd();
-          return JumpMove.positionHasJumpMoveAvailable(newStart, this);
+        if(queuedTurnMoves.size() > 0) {
+            Move lastMove = queuedTurnMoves.get(queuedTurnMoves.size() - 1);
+            // if a simple move is made it can be on only move
+            if(lastMove instanceof SimpleMove) return false;
+            Position newStart = lastMove.getEnd();
+            return JumpMove.positionHasJumpMoveAvailable(newStart, this);
         }
-        Collections.reverse(queuedTurnMoves);
         return false;
-    }
-
-    public void addMove(Move move) {
-        queuedTurnMoves.add(move);
     }
 }

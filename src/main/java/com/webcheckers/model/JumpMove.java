@@ -3,6 +3,7 @@ package com.webcheckers.model;
 import com.webcheckers.model.Game.Turn;
 import com.webcheckers.model.Piece.PColor;
 import java.util.ArrayList;
+import java.util.logging.Logger;
 
 /**
  * A representation of a capture move, where a player's piece jumps over an
@@ -10,6 +11,15 @@ import java.util.ArrayList;
  * vertically and two spaces horizontally.
  */
 public class JumpMove extends Move {
+    static Logger LOG = Logger.getLogger(JumpMove.class.getName());
+
+    static final String INVALID_JUMP_SPACING = "Jump does not jump the correct distance.";
+    static final String INVALID_JUMP_PIECE = "Please continue jumping with your current piece.";
+    static final String INVALID_START_PIECE = "This space does not contain a piece.";
+    static final String INVALID_LANDING_SPACE = "You cannot end a jump move on a space with a piece.";
+    static final String MIDDLE_SAME_COLOR = "You cannot jump your own piece.";
+    static final String MIDDLE_NO_PIECE = "You cannot jump an empty space.";
+
 
     Position middle;
 
@@ -51,6 +61,8 @@ public class JumpMove extends Move {
      * @return true if the spacing is valid for a jump move, false otherwise
      */
     private static boolean validSpacing(Position start, Position end) {
+        //TODO: fix the absolute value because it still checks if off the board
+        if (end.outOfBounds()) return false;
         return (Math.abs(start.getRow() - end.getRow()) == 2 &&
                 Math.abs(start.getCell() - end.getCell()) == 2);
     }
@@ -63,56 +75,87 @@ public class JumpMove extends Move {
      */
     @Override
     public boolean validateMove(Game game) {
+        LOG.fine("JumpMove validation invoked");
         // Init variables
         Piece movedPiece;
         Piece jumpedPiece;
 
         // Make sure the spacing is right
         if(!validSpacing(this.start, this.end)) {
+            LOG.fine("Failed valid spacing");
+            this.currentMsg = INVALID_JUMP_SPACING;
             return false;
         }
 
         // Make sure the starting position has a piece
         Board board = game.getBoard();
-//        if(board.getSpace(start).doesHasPiece()) {
-//            // We'll need this information later
-//            movedPiece = board.getSpace(start).pieceInfo();
-//        } else {
-//            return false;
-//        }
+        if(board.getSpace(start).doesHasPiece()) {
+            // We'll need this information later
+            movedPiece = board.getSpace(start).pieceInfo();
+        } else if (game.hasMovesInCurrentTurn()) {
+            // Check if last turn made
+            Move lastMove = game.getLastMoveMade();
+            Position end = lastMove.getEnd();
+            boolean endEqualsStart = this.start.equals(end);
+            if (endEqualsStart) {
+                this.currentMsg = MOVE_VALID;
+            } else {
+                this.currentMsg = INVALID_JUMP_PIECE;
+                return false;
+            }
+        } else {
+            LOG.fine("Failed starting space has piece");
+            this.currentMsg = INVALID_START_PIECE;
+            return false;
+        }
 
         // Make sure the ending position doesn't have a piece
         try {
             if(!board.spaceIsValid(end)) {
+                LOG.fine("Failed ending space");
+                this.currentMsg = INVALID_LANDING_SPACE;
                 return false;
             }
         } catch(IndexOutOfBoundsException except) {
             // This is a really lazy way of checking that the ending position
             // is out of the board's bounds, but whatever.
+            this.currentMsg = OUT_OF_BOUNDS;
             return false;
         }
 
         // Make sure the middle position has an opponent piece
         if(board.getSpace(middle).doesHasPiece()) {
+            LOG.fine("Middle: " + middle.toString());
+            LOG.fine("Board has piece.");
             jumpedPiece = board.getSpace(middle).pieceInfo();
             if((game.getTurn() == Turn.RED && jumpedPiece.pieceColor == PColor.red) ||
                 (game.getTurn() == Turn.WHITE && jumpedPiece.pieceColor == PColor.white)) {
                 // Can only jump an opponent's piece
+                LOG.fine("Failed middle position same color");
+                this.currentMsg = MIDDLE_SAME_COLOR;
                 return false;
             }
         } else {
+            LOG.fine("Failed space has middle piece");
+            this.currentMsg = MIDDLE_NO_PIECE;
             return false;
         }
 
         // TODO: skip this block if the piece is a king
         // Make sure the piece is going in the right direction
+        boolean check;
         if(game.getTurn() == Turn.RED) {
             // Red pieces should travel in the "negative" direction
-            return start.getRow() > end.getRow();
+            check = start.getRow() > end.getRow();
         } else {
             // White pieces should travel in the "positive" direction
-            return start.getRow() < end.getRow();
+            check = start.getRow() < end.getRow();
         }
+        if (check)
+            this.currentMsg = MOVE_VALID;
+        else
+            this.currentMsg = MOVE_PIECE_FORWARD;
+        return check;
     }
 
     /**
@@ -125,6 +168,7 @@ public class JumpMove extends Move {
     public boolean executeMove(Game game) {
         // Double-check that the move is valid
         if(validateMove(game)) {
+            LOG.fine("Executing Move " + toString());
             Board board = game.getBoard();
             // Move the piece
             board.move(start, end);
@@ -145,7 +189,7 @@ public class JumpMove extends Move {
      * @param game the game that is currently running
      * @return true if the position has jump moves available, false otherwise
      */
-    public static boolean positionHasJumpMoveAvailable(Position pos, Game game) {
+    static boolean positionHasJumpMoveAvailable(Position pos, Game game) {
         ArrayList<JumpMove> possibleMoves = new ArrayList<>();
         /* REFERENCE FOR THIS CODE BLOCK:
         "lower" refers to lower-numbered rows
@@ -169,6 +213,7 @@ public class JumpMove extends Move {
         // Check all the possible spaces to see if any one of them is valid
         for(JumpMove move : possibleMoves) {
             if(move.validateMove(game)) {
+                LOG.fine("jumpMove found to be true. Must make jump" + move.toString());
                 return true;
             }
         }
@@ -177,11 +222,12 @@ public class JumpMove extends Move {
 
     /**
      * Checks a game to see if the current player has a jump move available.
+     * Used for testing in simple move to check if the player has to make a jump
      *
      * @param game the game state to check for possible jump moves
      * @return true if a jump move is available, false otherwise
      */
-    public static boolean jumpMoveAvailable(Game game) {
+    static boolean jumpMoveAvailable(Game game) {
         // Convert the turn to a PColor
         Piece.PColor currentColor = Piece.PColor.red;
         if(game.getTurn() == Game.Turn.WHITE) {

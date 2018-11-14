@@ -326,4 +326,41 @@ public class JumpMoveTest {
 
         assertFalse(JumpMove.jumpMoveAvailable(mockGame));
     }
+
+    @Test
+    public void testValidateMoveWithMultiMoveTurn() {
+        when(board.spaceIsValid(validEnd)).thenReturn(true);
+
+        // Add a white space to the start
+        Space startSpace = makeWhiteSpace();
+        when(board.getSpace(start)).thenReturn(startSpace);
+        when(startSpace.doesHasPiece()).thenReturn(false);
+
+        // Add a red piece to the middle
+        Space middleSpace = makeRedSpace();
+        when(board.getSpace(middle)).thenReturn(middleSpace);
+
+        Move mockPreviousMove = mock(JumpMove.class);
+        when(mockPreviousMove.getEnd()).thenReturn(start);
+        when(game.hasMovesInCurrentTurn()).thenReturn(true);
+        when(game.getLastMoveMade()).thenReturn(mockPreviousMove);
+
+        JumpMove CuT = new JumpMove(start, middle, validEnd);
+        boolean actual = CuT.validateMove(game);
+        assertTrue(actual);
+    }
+
+    @Test
+    public void testValidateMoveWithMultiMoveTurnShouldFail() {
+        Game mockGame = mock(Game.class);
+        Board realBoard = new Board();
+        Move mockPreviousMove = mock(JumpMove.class);
+        when(mockPreviousMove.getEnd()).thenReturn(validEnd);
+        when(mockGame.getBoard()).thenReturn(realBoard);
+        when(mockGame.hasMovesInCurrentTurn()).thenReturn(true);
+        when(mockGame.getLastMoveMade()).thenReturn(mockPreviousMove);
+
+        JumpMove CuT = new JumpMove(start, validEnd);
+        assertFalse(CuT.validateMove(mockGame));
+    }
 }

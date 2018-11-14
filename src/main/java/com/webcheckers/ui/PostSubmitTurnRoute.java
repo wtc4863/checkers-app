@@ -6,6 +6,7 @@ import com.webcheckers.model.Board;
 import com.webcheckers.model.Game;
 import com.webcheckers.model.Player;
 import com.webcheckers.ui.Message.MessageType;
+import java.util.logging.Logger;
 import spark.*;
 
 import java.util.HashMap;
@@ -15,12 +16,13 @@ import java.util.Objects;
 import static spark.Spark.halt;
 
 public class PostSubmitTurnRoute implements Route{
+    public static final Logger LOG = Logger.getLogger(PostSubmitTurnRoute.class.getName());
 
     //
     // Constants
     //
-    private static final String ERROR_MESSAGE = "Submitted turn is incomplete";
-    private static final String SUCCESS_MESSAGE = "Turn submitted";
+    static final String ERROR_MESSAGE = "Submitted turn is incomplete";
+    static final String SUCCESS_MESSAGE = "Turn submitted";
 
     //
     // Attributes
@@ -42,6 +44,7 @@ public class PostSubmitTurnRoute implements Route{
     //
     @Override
     public Object handle(Request request, Response response) {
+        LOG.fine("PostSubmitTurnRoute invoked");
         final Session httpSession = request.session();
         final String sessionID = httpSession.id();
 
@@ -55,10 +58,12 @@ public class PostSubmitTurnRoute implements Route{
 
         Game game = playerLobby.getGame(thisPlayer);
         TurnController turnController = new TurnController(playerLobby);
-        //TODO: implement what happens when an unfinished turn is submitted
-        game.applyTurnMoves();
-        turnController.resetMoves();
-        return turnController.MessageFromModeltoUI(new Message(SUCCESS_MESSAGE, MessageType.info));
+        if(game.movesLeft()) {
+            return turnController.MessageFromModeltoUI(new Message(ERROR_MESSAGE, MessageType.error));
+        } else {
+            game.applyTurnMoves();
+            return turnController.MessageFromModeltoUI(new Message(SUCCESS_MESSAGE, MessageType.info));
+        }
 
   }
 }

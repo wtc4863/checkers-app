@@ -316,13 +316,13 @@ There have currently been five(5) user stories and two(2) spike stories complete
 5. Simple Move
 6. Turn Control
 7. Submit Turn
+8. Multi-Jump Move
 
 These stories have all passed their acceptance criteria. No other stories have 
 reached the end of development to be tested as of yet.
 
 The following stories are currently in development or ready for testing:
 1. Sign-out
-2. Multi-jump Move
 3. Win-Condition
 4. King Pieces
 5. Undo-Move

@@ -16,7 +16,6 @@ public class TurnController {
     static final String VALID_MOVE = "Valid move!";
     static final String GENERIC_MOVE_ERR = "GENERIC MOVE ERROR";
 
-    private boolean simpleMoveMade;
 
     // Private attributes
     GsonBuilder builder;
@@ -25,7 +24,6 @@ public class TurnController {
     public TurnController(PlayerLobby playerLobby) {
         builder = new GsonBuilder();
         this.playerLobby = playerLobby;
-        this.simpleMoveMade = false;
     }
 
     /**
@@ -67,40 +65,22 @@ public class TurnController {
         Player playerMakingMove = playerLobby.getPlayerBySessionID(sessionID);
         Game currentGame = playerLobby.getGame(playerMakingMove);
         Move currentMove = MovefromUItoModel(moveToBeValidated);
+        boolean movesMade = currentGame.hasMovesInCurrentTurn();
         boolean result = currentMove.validateMove(currentGame);
         // test if move is valid
         if(result) {
-            // only one simple move per turn
-            if (this.simpleMoveMade) {
-                return returnMessageAndResetMoves(TOO_MANY_SIMPLE_MOVES_ERROR_MSG, true);
-            } else if(currentMove instanceof SimpleMove){
-                this.simpleMoveMade = true;
+            if (movesMade) {
+                Move lastMove = currentGame.getLastMoveMade();
+                if (currentMove instanceof SimpleMove || lastMove instanceof SimpleMove) {
+                    return new Message(TOO_MANY_SIMPLE_MOVES_ERROR_MSG, MessageType.error);
+                }
             }
-            currentGame.addMove(currentMove);
-            return new Message(VALID_MOVE, MessageType.info);
+            currentGame.addMoveToCurrentTurn(currentMove);
+            return new Message(VALID_MOVE);
         } else {
             // differentiate between different errors move types
-            if(currentMove instanceof SimpleMove) {
-                return returnMessageAndResetMoves(SIMPLE_MOVE_ERROR_MSG, this.simpleMoveMade);
-            } else if(currentMove instanceof JumpMove) {
-                return returnMessageAndResetMoves(JUMP_MOVE_ERROR_MSG, this.simpleMoveMade);
-            } else {
-                // we should never get here
-                return returnMessageAndResetMoves(GENERIC_MOVE_ERR, this.simpleMoveMade);
-            }
+            String msg = currentMove.getCurrentMsg();
+            return new Message(msg, MessageType.error);
         }
-    }
-
-    private Message returnMessageAndResetMoves(String message, boolean simpleMoveMade) {
-        this.simpleMoveMade = simpleMoveMade;
-        return new Message(message, MessageType.error);
-    }
-
-    /**
-     * Reset the moves counter to zero, such as when the user has submitted
-     * their turn.
-     */
-    public void resetMoves() {
-        this.simpleMoveMade = false;
     }
 }

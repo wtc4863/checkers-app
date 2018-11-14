@@ -1,6 +1,8 @@
 package com.webcheckers.model;
 
 
+import com.webcheckers.model.Piece.PColor;
+import com.webcheckers.model.Piece.PType;
 import java.util.ArrayList;
 
 /**
@@ -25,7 +27,37 @@ public class Board {
     // Constructor
     //
     public Board() {
+        boardArray = initBoard();
 
+        //go back through all of the spaces and put pieces where they belong
+        for (int i = 0; i < ROWS; i++) {
+            for (int j = 0; j < COLUMNS; j++) {
+                if (i <= 2) {
+                    if (boardArray[i][j].isBlack()) {
+                        boardArray[i][j].addPiece(new Piece(Piece.PColor.white, Piece.PType.single));
+                    }
+                } else if(i >= 5) {
+                    if (boardArray[i][j].isBlack()) {
+                        boardArray[i][j].addPiece(new Piece(Piece.PColor.red, Piece.PType.single));
+                    }
+                }
+            }
+        }
+    }
+
+    /** Constructor used for testing*/
+    public Board(ArrayList<Position> redSpaces, ArrayList<Position> whiteSpaces) {
+        initBoard();
+        //start by creating all of the spaces on the board as empty spaces
+        for(Position space : redSpaces) {
+            boardArray[space.getRow()][space.getCell()].addPiece(new Piece(PColor.red, PType.single));
+        }
+        for(Position space : whiteSpaces) {
+            boardArray[space.getRow()][space.getCell()].addPiece(new Piece(PColor.white, PType.single));
+        }
+    }
+
+    private Space[][] initBoard() {
         boardArray = new Space[ROWS][COLUMNS];
         //start by creating all of the spaces on the board as empty spaces
         for (int i = 0; i < ROWS; i++) {
@@ -46,22 +78,7 @@ public class Board {
                 }
             }
         }
-        //go back through all of the spaces and put pieces where they belong
-        for (int i = 0; i < ROWS; i++) {
-            for (int j = 0; j < COLUMNS; j++) {
-                if (i <= 2) {
-                    if (boardArray[i][j].isBlack()) {
-                        boardArray[i][j].addPiece(new Piece(Piece.PColor.white, Piece.PType.single));
-                    }
-                } else if(i >= 5) {
-                    if (boardArray[i][j].isBlack()) {
-                        boardArray[i][j].addPiece(new Piece(Piece.PColor.red, Piece.PType.single));
-                    }
-                }
-            }
-        }
-
-
+        return boardArray;
     }
 
     //
@@ -124,5 +141,25 @@ public class Board {
             }
         }
         return pieces;
+    }
+
+    @Override
+    public String toString() {
+        String out = "\n";
+        for (int i = 0; i < ROWS; i++) {
+            for (int j = 0; j < COLUMNS; j++) {
+                if(boardArray[i][j].doesHasPiece()) {
+                    if(boardArray[i][j].pieceInfo().pieceColor == PColor.red) {
+                        out = out + "X";
+                    } else {
+                        out = out + "O";
+                    }
+                } else {
+                    out = out + "_";
+                }
+            }
+            out = out + "\n";
+        }
+        return out;
     }
 }

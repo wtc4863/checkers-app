@@ -7,6 +7,10 @@ import java.util.logging.Logger;
 public class SimpleMove extends Move {
     private static final Logger LOG = Logger.getLogger(SimpleMove.class.getName());
 
+    static final String INVALID_LANDING_SPACE = "You cannot end a simple move on a space with a piece on it.";
+    static final String JUMP_MOVE_AVAILABLE = "You must jump a piece";
+
+
     public SimpleMove(Position start, Position end) {
         super(start, end);
     }
@@ -41,6 +45,7 @@ public class SimpleMove extends Move {
     public boolean validateMove(Game game) {
         // First, make sure there aren't any JumpMoves available
         if(JumpMove.jumpMoveAvailable(game)) {
+            this.currentMsg = JUMP_MOVE_AVAILABLE;
             return false;
         }
         //check if there is a piece on it
@@ -48,6 +53,7 @@ public class SimpleMove extends Move {
         if (board.spaceIsValid(end)) {
             // red is at the top of the board in the model and moving "forward" is going down
             //TODO: does the way we flip the board change this because the client will switch it?
+            boolean errorCheck;
             if (game.getTurn() == Turn.WHITE) {
                 // get the possible starting points given this ending space
                 int left = end.getCell() - 1;
@@ -56,7 +62,7 @@ public class SimpleMove extends Move {
                 // create new positions for easy comparison
                 Position upperLeft = new Position(top, left);
                 Position upperRight = new Position(top, right);
-                return upperLeft.equals(start) || upperRight.equals(start);
+                errorCheck = upperLeft.equals(start) || upperRight.equals(start);
             } else {
                 // get the possible starting points given this ending space
                 int left = end.getCell() - 1;
@@ -65,9 +71,16 @@ public class SimpleMove extends Move {
                 // create new positions for easy comparison
                 Position bottomLeft = new Position(bot, left);
                 Position bottomRight = new Position(bot, right);
-                return bottomLeft.equals(start) || bottomRight.equals(start);
+                errorCheck = bottomLeft.equals(start) || bottomRight.equals(start);
             }
+            if (errorCheck)
+                this.currentMsg = MOVE_VALID;
+            else
+                this.currentMsg = MOVE_PIECE_FORWARD;
+
+            return errorCheck;
         } else {
+            this.currentMsg = INVALID_LANDING_SPACE;
             return false;
         }
     }

@@ -1,6 +1,9 @@
 package com.webcheckers.model;
 
 public class Position {
+
+    private static final int BOARD_DIM = 7;
+
     int row;
     int cell;
 
@@ -15,6 +18,10 @@ public class Position {
 
     public int getRow() {
         return row;
+    }
+
+    public boolean outOfBounds() {
+        return row < 0 || row > BOARD_DIM || cell < 0 || cell > BOARD_DIM;
     }
 
     @Override
