@@ -39,7 +39,7 @@ public class PostResignGameRoute implements Route {
 
         // FIXME: make sure to tell the players that they have won or lost
         Message resignation = new Message(RESIGNATION_MESSAGE, MessageType.info);
-        String jsonResignation = gson.toJson(resignation);
+        String jsonResignation = gson.toJson(resignation, Message.class);
         return jsonResignation;
     }
 

@@ -1,5 +1,8 @@
 package com.webcheckers.ui;
 
+import static com.webcheckers.ui.WebServer.HOME_URL;
+import static spark.Spark.halt;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.webcheckers.appl.PlayerLobby;
@@ -42,12 +45,21 @@ public class PostCheckTurnRoute implements Route {
             return gson.toJson(new Message("true", MessageType.info), Message.class);
         }
 
-        boolean checkTurnResult = currentGame.isPlayersTurn(currentPlayer);
-        LOG.finer("Player who's turn is being checked for:" + currentPlayer.toString());
-        LOG.finer("Result: " + Boolean.toString(checkTurnResult));
+        // Check turn is only called within a game, therefore we can check if game == null
+        // then we can assume that the other player has resigned
+        if (currentGame != null) {
+            boolean checkTurnResult = currentGame.isPlayersTurn(currentPlayer);
+            LOG.finer("Player who's turn is being checked for:" + currentPlayer.toString());
+            LOG.finer("Result: " + Boolean.toString(checkTurnResult));
 
-        String text = String.format("%s", Boolean.toString(checkTurnResult));
-        return gson.toJson(new Message(text, MessageType.info), Message.class);
+            String text = String.format("%s", Boolean.toString(checkTurnResult));
+            return gson.toJson(new Message(text, MessageType.info), Message.class);
+        } else {
+            // FIXME: the user isn't getting properly redirected, its immediately going back to get game route
+            response.redirect(HOME_URL);
+            halt();
+            return null;
+        }
     }
 
 }
