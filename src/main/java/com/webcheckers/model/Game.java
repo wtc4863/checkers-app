@@ -17,6 +17,7 @@ public class Game {
     //
     // Attributes
     //
+
     Player redPlayer;
     Player whitePlayer;
     Board board;

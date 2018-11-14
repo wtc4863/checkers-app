@@ -8,7 +8,6 @@ import java.util.logging.Logger;
 import com.google.gson.Gson;
 
 import com.webcheckers.appl.PlayerLobby;
-import com.webcheckers.model.Player;
 import spark.TemplateEngine;
 
 
@@ -62,6 +61,11 @@ public class WebServer {
     public static final String SIGN_IN_URL = "/signin";
 
     /**
+     * The URL pattern to request to be signed out.
+     */
+    public static final String SIGN_OUT_URL = "/signout";
+
+    /**
      * The URL pattern to request the Game page.
      */
     public static final String GAME_URL = "/game";
@@ -74,6 +78,7 @@ public class WebServer {
      * The URL pattern to submit a turn
      */
     public static final String SUBMIT_TURN_URL = "/submitTurn";
+
     /**
      * The URL pattern to request the Game page.
      */
@@ -183,6 +188,9 @@ public class WebServer {
         post(CHECK_TURN_URL, new PostCheckTurnRoute(playerLobby, gson));
         //Handles Turn Validation
         post(SUBMIT_TURN_URL, new PostSubmitTurnRoute(playerLobby));
+
+        //Handles signing out
+        get(SIGN_OUT_URL, new GetSignOutRoute(playerLobby));
 
         //
         LOG.config("WebServer is initialized.");
