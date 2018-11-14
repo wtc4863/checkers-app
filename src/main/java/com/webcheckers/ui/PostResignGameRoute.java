@@ -2,16 +2,17 @@ package com.webcheckers.ui;
 
 import com.google.gson.Gson;
 import com.webcheckers.appl.PlayerLobby;
-import com.webcheckers.appl.TurnController;
 import com.webcheckers.model.Game;
 import com.webcheckers.model.Player;
 import com.webcheckers.ui.Message.MessageType;
+import java.util.logging.Logger;
 import spark.Request;
 import spark.Response;
 import spark.Route;
 import spark.Session;
 
 public class PostResignGameRoute implements Route {
+    private static Logger LOG = Logger.getLogger(PostResignGameRoute.class.getName());
 
     static final String RESIGNATION_MESSAGE = "You have resigned and lost the game.";
 
@@ -33,8 +34,8 @@ public class PostResignGameRoute implements Route {
 
         Player resigningPlayer = playerLobby.getPlayerBySessionID(sessionID);
         Game gameToResignFrom = playerLobby.getGame(resigningPlayer);
-
         playerLobby.resignFromGame(gameToResignFrom, resigningPlayer);
+        LOG.fine(String.format("%s invoked PostResignRoute.", resigningPlayer.getName()));
 
         // FIXME: make sure to tell the players that they have won or lost
         Message resignation = new Message(RESIGNATION_MESSAGE, MessageType.info);
