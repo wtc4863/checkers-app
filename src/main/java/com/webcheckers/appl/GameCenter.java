@@ -112,4 +112,35 @@ public class GameCenter {
         opponents.remove(playerThatsResigning.getName(), otherPlayer);
         opponents.remove(otherPlayer.getName(), playerThatsResigning);
     }
+
+    /**
+     * start the resignation process by having the player leave the game
+     * this will set the opponent to null without removing the game from the game center
+     * this allows us to verify on the other player's end, which will end the resignation process
+     *
+     * NOTE: this method should start the resign process in PostResignGameRoute
+     *
+     * @param gameToResignFrom the game the player is resigning from
+     * @param playerThatsResigning the player that is resigning
+     */
+    public synchronized void initiateResignFromGame(Game gameToResignFrom, Player playerThatsResigning) {
+        gameToResignFrom.leaveFromGame(playerThatsResigning);
+    }
+
+    /**
+     * This method will finish the resignation process by removing the reminants of the game between
+     * the two players. We finish this in a separate method so that we can still access the data
+     * within the game to do checking and message displays before it is deleted. Then this method
+     * will finish deletion.
+     * @param game the game that has started the resignation process
+     * @param playerThatDidntResign the player who didnt resign
+     */
+    public synchronized void finishResignFromGame(Game game, Player playerThatDidntResign) {
+        // TODO: this will have to change when we do multiple moves. It will end up not pulling just the one name we want to leave
+        Player otherPlayer  = opponents.get(playerThatDidntResign.getName());
+        opponents.remove(otherPlayer.getName(), playerThatDidntResign);
+        opponents.remove(playerThatDidntResign, otherPlayer);
+        activeGames.remove(game);
+    }
+
 }

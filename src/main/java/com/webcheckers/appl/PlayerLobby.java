@@ -223,7 +223,16 @@ public class PlayerLobby {
      * @param playerResigning
      * @return
      */
-    public void resignFromGame(Game gameToResignFrom, Player playerResigning) {
-        gameCenter.resignFromGame(gameToResignFrom, playerResigning);
+    public void playerStartResignation(Game gameToResignFrom, Player playerResigning) {
+        gameCenter.initiateResignFromGame(gameToResignFrom, playerResigning);
+    }
+
+    /**
+     * A wrappper around the GameCenter function "finishResignFromGame"
+     * @param game the game that a player has already resigned from
+     * @param playerThatDidntResign the player that didnt resign
+     */
+    public void playerConfirmResignation(Game game, Player playerThatDidntResign) {
+        gameCenter.finishResignFromGame(game, playerThatDidntResign);
     }
 }
