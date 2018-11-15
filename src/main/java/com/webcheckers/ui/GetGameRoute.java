@@ -34,6 +34,7 @@ public class GetGameRoute implements Route{
 
     final static String PLAYER_IN_GAME_MSG = "Requested player is already in a game. Choose another player.";
     final static String NO_USERNAME_SELECTED = "You are not in a game. You must first start a game with another player.";
+    final static String PLAYER_RESIGNED_MSG = "The other player has left, you win! Please go back to home page.";
 
     public enum View {
         PLAY, SPECTATOR, REPLAY;
@@ -61,7 +62,7 @@ public class GetGameRoute implements Route{
     // Methods
     //
 
-    private String renderGame(Game game, Player currentPlayer) {
+    private String renderGame(Game game, Player currentPlayer, String message) {
         // Template set-up
         final Map<String, Object> vm = new HashMap<>();
 
@@ -87,6 +88,9 @@ public class GetGameRoute implements Route{
         vm.put(WHITE_PLAYER_ATTR, game.getWhitePlayer());
         vm.put(ACTIVE_COLOR_ATTR, game.getTurn());
         vm.put(BOARD_VIEW_ATTR, game.getBoardView(opposite));
+        if (message != null) {
+            vm.put(MESSAGE_ATTR, message);
+        }
 
         return templateEngine.render(new ModelAndView(vm, TEMPLATE_NAME));
     }
@@ -132,7 +136,15 @@ public class GetGameRoute implements Route{
 
         // Check if the players are already in a game with each other
         if (opponentPlayer != null) {
-            return renderGame(playerLobby.getGame(thisPlayer), thisPlayer);
+            // check if the opponent has left the game
+            Game currentGame = playerLobby.getGame(thisPlayer);
+            if (currentGame.didOpponentResign(thisPlayer)) {
+                // finish the resignation by deleting data in gamecenter
+                playerLobby.playerConfirmResignation(currentGame, thisPlayer);
+                return renderGame(playerLobby.getGame(thisPlayer), thisPlayer, PLAYER_RESIGNED_MSG);
+            } else {
+                return renderGame(playerLobby.getGame(thisPlayer), thisPlayer, null);
+            }
         }
         // Players are not in a game with each other, we are starting a new game
 
@@ -148,7 +160,7 @@ public class GetGameRoute implements Route{
         if (playerLobby.getGame(opponentPlayer) == null) {
             // Start new game
             Game game = playerLobby.startGame(thisPlayer, opponentPlayer);
-            return renderGame(game, thisPlayer);
+            return renderGame(game, thisPlayer, null);
         } else {
             return redirectToHome(thisPlayer, PLAYER_IN_GAME_MSG);
         }

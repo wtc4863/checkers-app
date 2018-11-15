@@ -34,7 +34,7 @@ public class PostResignGameRoute implements Route {
 
         Player resigningPlayer = playerLobby.getPlayerBySessionID(sessionID);
         Game gameToResignFrom = playerLobby.getGame(resigningPlayer);
-        playerLobby.resignFromGame(gameToResignFrom, resigningPlayer);
+        playerLobby.playerStartResignation(gameToResignFrom, resigningPlayer);
         LOG.fine(String.format("%s invoked PostResignRoute.", resigningPlayer.getName()));
 
         // FIXME: make sure to tell the players that they have won or lost
