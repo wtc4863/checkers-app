@@ -83,4 +83,8 @@ public class TurnController {
             return new Message(msg, MessageType.error);
         }
     }
+
+    public Move backupMove(Game game) {
+        return game.removeMove();
+    }
 }

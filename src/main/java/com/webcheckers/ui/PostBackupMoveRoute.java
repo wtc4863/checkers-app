@@ -59,7 +59,7 @@ public class PostBackupMoveRoute implements Route {
     Game game = playerLobby.getGame(thisPlayer);
     TurnController turnController = new TurnController(playerLobby);
 
-    Move move = game.removeMove();
+    Move move = turnController.backupMove(game);
 
     if(move == null) {
       return turnController.MessageFromModeltoUI(new Message(ERROR_MESSAGE, MessageType.error));
