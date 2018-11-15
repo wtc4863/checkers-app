@@ -5,7 +5,6 @@ import com.webcheckers.ui.BoardView;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.ArrayList;
-import java.util.Queue;
 import java.util.logging.Logger;
 
 /**
@@ -112,6 +111,33 @@ public class Game {
             return getRedPlayer();
         } else {
             return getWhitePlayer();
+        }
+    }
+
+    /**
+     * This method checks if the opponent player resigned
+     * @param player the player object who's opponent we're checking
+     * @return true if the player left
+     */
+    public boolean didOpponentResign(Player player) {
+        if (player.equals(this.whitePlayer)) {
+            return getRedPlayer() == null;
+        } else {
+            return getWhitePlayer() == null;
+        }
+    }
+
+    /**
+     * This function effectively lets a player leave a game but does not
+     * do any checking. It just removes them from the game by setting their attribute
+     * as null. This should be used by game center to let a player leave a game
+     * @param leavingPlayer the player object of the leaving player
+     */
+    public void leaveFromGame(Player leavingPlayer) {
+        if (leavingPlayer.equals(this.whitePlayer)) {
+            whitePlayer = null;
+        } else {
+            redPlayer = null;
         }
     }
 
