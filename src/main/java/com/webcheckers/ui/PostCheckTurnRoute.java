@@ -55,10 +55,8 @@ public class PostCheckTurnRoute implements Route {
             String text = String.format("%s", Boolean.toString(checkTurnResult));
             return gson.toJson(new Message(text, MessageType.info), Message.class);
         } else {
-            // FIXME: the user isn't getting properly redirected, its immediately going back to get game route
-            response.redirect(HOME_URL);
-            halt();
-            return null;
+            // Return true in json if the other player has resigned
+            return gson.toJson(new Message("true", MessageType.info));
         }
     }
 
