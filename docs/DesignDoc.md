@@ -194,6 +194,11 @@ server asking to check if it is the players move. This route handles this by
 querying the underlying model to see if it said players turn. If it is, the
 client will receive a JSON response saying so. 
 
+When a player tries to make a move, the **__PostValidateMoveRoute__** will check
+to see if the attempted move is valid. If the move is determined to be valid, the
+user can then choose to undo their move, if they would like. The **__PostBackupMoveRoute__**
+then takes the most recent move back, and the player can decide to make another move.
+
 When a valid move has been made, the player unlocks the option to submit their
 turn and let their opponent take theirs. Our **_PostSubmitTurnRoute_** handles
 this task. The client sends an AJAX request to the server to asking to complete the
@@ -317,6 +322,7 @@ There have currently been five(5) user stories and two(2) spike stories complete
 6. Turn Control
 7. Submit Turn
 8. Multi-Jump Move
+9. Undo Move
 
 These stories have all passed their acceptance criteria. No other stories have 
 reached the end of development to be tested as of yet.
@@ -325,7 +331,6 @@ The following stories are currently in development or ready for testing:
 1. Sign-out
 3. Win-Condition
 4. King Pieces
-5. Undo-Move
 
 ### Unit Testing and Code Coverage
 
