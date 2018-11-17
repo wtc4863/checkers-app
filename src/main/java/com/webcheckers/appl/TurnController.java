@@ -84,6 +84,11 @@ public class TurnController {
         }
     }
 
+    /**
+     * Removes the last move from the current turn in a given game
+     * @param game game that a move will be removed from
+     * @return the move that was removed
+     */
     public Move backupMove(Game game) {
         return game.removeMove();
     }

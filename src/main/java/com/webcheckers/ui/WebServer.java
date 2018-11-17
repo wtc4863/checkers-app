@@ -80,7 +80,6 @@ public class WebServer {
     public static final String SUBMIT_TURN_URL = "/submitTurn";
 
     /**
-<<<<<<< HEAD
      * The URL pattern to request the Game page.
      */
     public static final String CHECK_TURN_URL = "/checkTurn";

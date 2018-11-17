@@ -169,10 +169,18 @@ public class Game {
         return false;
     }
 
+    /**
+     * Adds a move to the queue for the current turn
+     * @param move move to be added
+     */
     public void addMove(Move move) {
         queuedTurnMoves.add(move);
     }
 
+    /**
+     * Removes the last move from the current turn queue
+     * @return the removed move
+     */
     public Move removeMove() {
         int size = queuedTurnMoves.size();
         if(size > 0) {
