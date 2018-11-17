@@ -84,6 +84,8 @@ public class WebServer {
      */
     public static final String CHECK_TURN_URL = "/checkTurn";
 
+
+    public static final String BACKUP_MOVE_URL = "/backupMove";
     //
     // Attributes
     //
@@ -191,6 +193,9 @@ public class WebServer {
 
         //Handles signing out
         get(SIGN_OUT_URL, new GetSignOutRoute(playerLobby));
+
+        //Undoes a move
+        post(BACKUP_MOVE_URL, new PostBackupMoveRoute(playerLobby));
 
         //
         LOG.config("WebServer is initialized.");
