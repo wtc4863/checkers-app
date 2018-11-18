@@ -18,6 +18,7 @@ public class Game {
     //
     Player redPlayer;
     Player whitePlayer;
+    Player resignedPlayer;
     Board board;
     Turn turn;
     ArrayList<Move> queuedTurnMoves;
@@ -51,6 +52,7 @@ public class Game {
         LOG.fine(String.format("Game created: (%s : %s", redPlayer, whitePlayer));
         this.redPlayer = redPlayer;
         this.whitePlayer = whitePlayer;
+        this.resignedPlayer = null;
         this.turn = Turn.RED;
         this.board = new Board();
         this.queuedTurnMoves = new ArrayList<>();
@@ -62,6 +64,7 @@ public class Game {
         LOG.fine(String.format("Custom Game created: (%s : %s", redPlayer, whitePlayer));
         this.redPlayer = redPlayer;
         this.whitePlayer = whitePlayer;
+        this.resignedPlayer = null;
         this.turn = turn;
         this.board = board;
         this.queuedTurnMoves = new ArrayList<>();
@@ -121,9 +124,9 @@ public class Game {
      */
     public boolean didOpponentResign(Player player) {
         if (player.equals(this.whitePlayer)) {
-            return getRedPlayer() == null;
+            return getRedPlayer().equals(resignedPlayer);
         } else {
-            return getWhitePlayer() == null;
+            return getWhitePlayer().equals(resignedPlayer);
         }
     }
 
@@ -134,11 +137,7 @@ public class Game {
      * @param leavingPlayer the player object of the leaving player
      */
     public void leaveFromGame(Player leavingPlayer) {
-        if (leavingPlayer.equals(this.whitePlayer)) {
-            whitePlayer = null;
-        } else {
-            redPlayer = null;
-        }
+        resignedPlayer = leavingPlayer;
     }
 
     /**

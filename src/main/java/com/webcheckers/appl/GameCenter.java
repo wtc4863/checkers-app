@@ -125,6 +125,8 @@ public class GameCenter {
      */
     public synchronized void initiateResignFromGame(Game gameToResignFrom, Player playerThatsResigning) {
         gameToResignFrom.leaveFromGame(playerThatsResigning);
+        Player other = gameToResignFrom.getOpponentOf(playerThatsResigning);
+        opponents.remove(playerThatsResigning.getName(), other);
     }
 
     /**
@@ -138,7 +140,6 @@ public class GameCenter {
     public synchronized void finishResignFromGame(Game game, Player playerThatDidntResign) {
         // TODO: this will have to change when we do multiple moves. It will end up not pulling just the one name we want to leave
         Player otherPlayer  = opponents.get(playerThatDidntResign.getName());
-        opponents.remove(otherPlayer.getName(), playerThatDidntResign);
         opponents.remove(playerThatDidntResign, otherPlayer);
         activeGames.remove(game);
     }

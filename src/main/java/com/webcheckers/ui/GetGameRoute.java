@@ -4,7 +4,9 @@ import com.webcheckers.appl.PlayerLobby;
 import com.webcheckers.model.Game;
 import com.webcheckers.model.Piece;
 import com.webcheckers.model.Player;
+import com.webcheckers.ui.Message.MessageType;
 import java.util.ArrayList;
+import java.util.logging.Logger;
 import spark.*;
 
 import java.util.HashMap;
@@ -14,6 +16,7 @@ import java.util.Objects;
 import static spark.Spark.halt;
 
 public class GetGameRoute implements Route{
+    private static final Logger LOG = Logger.getLogger(GetGameRoute.class.getName());
     //
     // Constants
     //
@@ -89,7 +92,7 @@ public class GetGameRoute implements Route{
         vm.put(ACTIVE_COLOR_ATTR, game.getTurn());
         vm.put(BOARD_VIEW_ATTR, game.getBoardView(opposite));
         if (message != null) {
-            vm.put(MESSAGE_ATTR, message);
+            vm.put(MESSAGE_ATTR, new Message(message, MessageType.info));
         }
 
         return templateEngine.render(new ModelAndView(vm, TEMPLATE_NAME));
@@ -141,7 +144,8 @@ public class GetGameRoute implements Route{
             if (currentGame.didOpponentResign(thisPlayer)) {
                 // finish the resignation by deleting data in gamecenter
                 playerLobby.playerConfirmResignation(currentGame, thisPlayer);
-                return renderGame(playerLobby.getGame(thisPlayer), thisPlayer, PLAYER_RESIGNED_MSG);
+                LOG.fine("Resigned Game found. Redirecting: " + thisPlayer.getName());
+                return renderGame(currentGame, thisPlayer, PLAYER_RESIGNED_MSG);
             } else {
                 return renderGame(playerLobby.getGame(thisPlayer), thisPlayer, null);
             }
