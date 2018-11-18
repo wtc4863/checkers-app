@@ -15,6 +15,7 @@
     "whitePlayer" : "${whitePlayer.name}",
     "activeColor" : "${activeColor}"
   };
+  var winner = "${winnerName}";
   window.addEventListener("load", function() {
     if(winner === "${currentPlayer.name}") {
       // This player has won

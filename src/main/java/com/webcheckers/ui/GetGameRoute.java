@@ -72,12 +72,9 @@ public class GetGameRoute implements Route{
         boolean opposite = currentPlayer.equals(game.getWhitePlayer());
 
         // Check if the game is over
-        String winner = game.winningPlayer();
-        if (winner == null) {
-            // When there's no winner, set the attribute correctly for the template
-            winner = "NO_WINNER";
-        } else {
-            // End the game
+        String winner = "NO_WINNER";
+        if (game.winningPlayer() != null) {
+            winner = game.winningPlayer();
             playerLobby.endGame(game);
         }
 
