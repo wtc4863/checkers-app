@@ -36,6 +36,7 @@ public class GameCenter {
     //
    ArrayList<Game> activeGames;
     HashMap<String, Player> opponents;
+    private int gameID = 0;
 
     //
     // Constructor
@@ -70,7 +71,7 @@ public class GameCenter {
      */
     public Game getGame(Player player) {
         for (Game game : activeGames) {
-            if (player.equals(game.getRedPlayer()) || player.equals(game.getWhitePlayer())) {
+            if (readGameID(player) == game.getGameID()) {
                 return game;
             }
         }
@@ -91,6 +92,14 @@ public class GameCenter {
         return game.getBoardView(false);
     }
 
+    public void changeGame(Player player, int gameID) {
+        player.changeGame(gameID);
+    }
+
+    public int readGameID(Player player) {
+        return player.getGameID();
+    }
+
     /**
      * Starts a new game with two players and matches them up in the opponents map
      * @param redPlayer
@@ -102,7 +111,7 @@ public class GameCenter {
         String whiteName = whitePlayer.getName();
         this.opponents.put(redName, whitePlayer);
         this.opponents.put(whiteName, redPlayer);
-        Game game = new Game(redPlayer, whitePlayer);
+        Game game = new Game(redPlayer, whitePlayer, this.gameID);
         if (customNames.contains(redName)) {
             switch (redName) {
                 case KING_PIECE:
@@ -128,6 +137,9 @@ public class GameCenter {
                     break;
             }
         }
+        changeGame(redPlayer, this.gameID);
+        changeGame(whitePlayer, this.gameID);
+        gameID++;
         activeGames.add(game);
         return game;
     }

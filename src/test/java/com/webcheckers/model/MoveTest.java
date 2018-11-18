@@ -29,7 +29,7 @@ public class MoveTest {
         testStart = new Position(START_ROW, START_COL);
         testEnd = new Position(END_ROW, END_COL);
         CuT = new Move(testStart, testEnd);
-        testGame = new Game(new Player(TEST_NAME_RED), new Player(TEST_NAME_WHITE));
+        testGame = new Game(new Player(TEST_NAME_RED), new Player(TEST_NAME_WHITE), 0);
     }
 
     @AfterEach

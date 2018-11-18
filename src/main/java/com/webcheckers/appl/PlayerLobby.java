@@ -188,6 +188,14 @@ public class PlayerLobby {
         }
     }
 
+    public void changeGame(Player player, int gameID) {
+        gameCenter.changeGame(player, gameID);
+    }
+
+    public int readGameID(Player player) {
+        return player.getGameID();
+    }
+
     /**
      * Tells the GameCenter to create a new game with two players
      * @param redPlayer player on the red team

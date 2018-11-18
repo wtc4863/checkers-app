@@ -8,6 +8,7 @@ import com.webcheckers.ui.PlayerView;
 public class Player {
     private String sessionID;
     private final String name;
+    private int gameID;
 
     /**
      * Create a new signed-out player
@@ -17,6 +18,7 @@ public class Player {
     public Player(String name) {
         this.name = name;
         this.sessionID = null;
+        this.gameID = -1;
     }
 
     /**
@@ -81,6 +83,14 @@ public class Player {
      */
     public PlayerView getPlayerView() {
         return new PlayerView(this.name);
+    }
+
+    public void changeGame(int gameID) {
+        this.gameID = gameID;
+    }
+
+    public int getGameID() {
+        return this.gameID;
     }
 
     @Override

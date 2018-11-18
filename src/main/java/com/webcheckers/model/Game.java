@@ -15,6 +15,8 @@ public class Game {
     //
     // Attributes
     //
+
+    private int gameID;
     Player redPlayer;
     Player whitePlayer;
     Player winningPlayer;
@@ -51,8 +53,9 @@ public class Game {
     //
     // Constructor
     //
-    public Game(Player redPlayer, Player whitePlayer) {
+    public Game(Player redPlayer, Player whitePlayer, int gameID) {
         LOG.fine(String.format("Game created: (%s : %s", redPlayer, whitePlayer));
+        this.gameID = gameID;
         this.redPlayer = redPlayer;
         this.whitePlayer = whitePlayer;
         this.resignedPlayer = null;
@@ -121,6 +124,10 @@ public class Game {
 
     public void setStateActive() {
         this.state = State.ACTIVE;
+    }
+
+    public int getGameID() {
+        return this.gameID;
     }
 
     /**

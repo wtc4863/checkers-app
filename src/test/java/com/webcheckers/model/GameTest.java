@@ -28,7 +28,7 @@ public class GameTest {
     public void setup() {
         redPlayer = new Player(RED_NAME);
         whitePlayer = new Player(WHITE_NAME);
-        CuT = new Game(redPlayer, whitePlayer);
+        CuT = new Game(redPlayer, whitePlayer, 0);
     }
 
     @AfterEach
