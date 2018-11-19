@@ -30,7 +30,6 @@ public class Board {
         boardArray = initBoard();
 
         //go back through all of the spaces and put pieces where they belong
-        /**
         for (int i = 0; i < ROWS; i++) {
             for (int j = 0; j < COLUMNS; j++) {
                 if (i <= 2) {
@@ -43,9 +42,7 @@ public class Board {
                     }
                 }
             }
-        } */
-        boardArray[2][3].addPiece(new Piece(Piece.PColor.white, Piece.PType.single));
-        boardArray[3][4].addPiece(new Piece(Piece.PColor.red, Piece.PType.single));
+        }
     }
 
     /** Constructor used for testing*/
