@@ -30,6 +30,7 @@ public class Player {
     public Player(String name, String sessionID) {
         this.name = name;
         this.sessionID = sessionID;
+        this.gameID = -1;
     }
 
     /**

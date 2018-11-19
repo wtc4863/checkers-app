@@ -2,6 +2,7 @@ package com.webcheckers.ui;
 
 import com.webcheckers.appl.PlayerLobby;
 
+import com.webcheckers.model.Player;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -77,6 +78,10 @@ public class GetHomeRoute implements Route {
         final Session httpSession = request.session();
         final String sessionID = httpSession.id();
 
+        Player thisPlayer = playerLobby.getPlayerBySessionID(sessionID);
+
+
+        /*
         Game game = playerLobby.getGame(playerLobby.getPlayerBySessionID(sessionID));
 
         if(game != null && game.state == Game.State.ACTIVE) {
@@ -84,6 +89,7 @@ public class GetHomeRoute implements Route {
             halt();
             return null;
         }
+        */
 
         // start building the view-model
         Map<String, Object> vm = new HashMap<>();
@@ -95,6 +101,8 @@ public class GetHomeRoute implements Route {
         String usersPlayer = playerLobby.getPlayerNameBySessionID(sessionID);
         if(usersPlayer != null) {
             LOG.finer("Player is returning: " + usersPlayer);
+            playerLobby.changeGame(thisPlayer, -1);
+
             // list of signed in players to render to the user (excluding user)
             ArrayList<String> onlinePlayers = playerLobby.getSignedInPlayers();
             onlinePlayers.remove(usersPlayer);

@@ -149,10 +149,10 @@ public class GetGameRoute implements Route{
         }
 
         // Get the other player
-        Player opponentPlayer = playerLobby.getOpponent(thisPlayer);
+        Player opponentPlayer;// = playerLobby.getOpponent(thisPlayer);
 
         // Check if the players are already in a game with each other
-        if (opponentPlayer != null) {
+        if (playerLobby.getGame(thisPlayer) != null) {
             return renderGame(playerLobby.getGame(thisPlayer), thisPlayer);
         }
         // Players are not in a game with each other, we are starting a new game
@@ -165,13 +165,10 @@ public class GetGameRoute implements Route{
             opponentPlayer = playerLobby.getPlayer(username);
         }
 
-        // Check if the selected opponent is already in a game
-        if (playerLobby.getGame(opponentPlayer) == null) {
-            // Start new game
-            Game game = playerLobby.startGame(thisPlayer, opponentPlayer);
-            return renderGame(game, thisPlayer);
-        } else {
-            return redirectToHome(thisPlayer, PLAYER_IN_GAME_MSG);
-        }
+
+        // Start new game
+        Game game = playerLobby.startGame(thisPlayer, opponentPlayer);
+        return renderGame(game, thisPlayer);
+
     }
 }

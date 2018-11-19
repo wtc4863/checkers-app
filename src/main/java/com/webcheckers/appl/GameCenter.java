@@ -71,6 +71,7 @@ public class GameCenter {
      */
     public Game getGame(Player player) {
         for (Game game : activeGames) {
+          System.out.println(readGameID(player));
             if (readGameID(player) == game.getGameID()) {
                 return game;
             }
@@ -138,7 +139,6 @@ public class GameCenter {
             }
         }
         changeGame(redPlayer, this.gameID);
-        changeGame(whitePlayer, this.gameID);
         gameID++;
         activeGames.add(game);
         return game;
