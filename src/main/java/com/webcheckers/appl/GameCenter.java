@@ -95,6 +95,7 @@ public class GameCenter {
             this.opponents.remove(game.getWhitePlayer().getName());
             this.activeGames.remove(game);
         }
+    }
 
     /*
      * Removes game from the game center and removes the pairing from the hashmap. This will effectively
