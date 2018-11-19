@@ -125,7 +125,7 @@ public class GameTest {
      */
     @Test
     public void testNoWinnerStartGame() {
-        Assertions.assertNull(CuT.winningPlayer());
+        Assertions.assertNull(CuT.getWinningPlayerName());
     }
 
     /*
