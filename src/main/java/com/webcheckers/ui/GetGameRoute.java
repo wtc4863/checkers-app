@@ -12,6 +12,7 @@ import spark.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import spark.utils.Assert;
 
 import static spark.Spark.halt;
 
@@ -65,7 +66,7 @@ public class GetGameRoute implements Route{
     // Methods
     //
 
-    private String renderGame(Game game, Player currentPlayer, String message) {
+    private String renderGame(Game game, Player currentPlayer) {
         // Template set-up
         final Map<String, Object> vm = new HashMap<>();
 
@@ -77,9 +78,14 @@ public class GetGameRoute implements Route{
 
         // Check if the game is over
         String winner = "NO_WINNER";
-        if (game.winningPlayer() != null) {
-            winner = game.winningPlayer();
+        game.calculateWinningPlayer();
+        if (game.getWinningPlayerName() != null) {
+            winner = game.getWinningPlayerName();
             playerLobby.endGame(game);
+        }
+
+        if (game.getResigningPlayer() != null) {
+            vm.put(MESSAGE_ATTR, new Message(PLAYER_RESIGNED_MSG, MessageType.info));
         }
 
         // Set attributes
@@ -91,9 +97,6 @@ public class GetGameRoute implements Route{
         vm.put(WHITE_PLAYER_ATTR, game.getWhitePlayer());
         vm.put(ACTIVE_COLOR_ATTR, game.getTurn());
         vm.put(BOARD_VIEW_ATTR, game.getBoardView(opposite));
-        if (message != null) {
-            vm.put(MESSAGE_ATTR, new Message(message, MessageType.info));
-        }
 
         return templateEngine.render(new ModelAndView(vm, TEMPLATE_NAME));
     }
@@ -139,16 +142,7 @@ public class GetGameRoute implements Route{
 
         // Check if the players are already in a game with each other
         if (opponentPlayer != null) {
-            // check if the opponent has left the game
-            Game currentGame = playerLobby.getGame(thisPlayer);
-            if (currentGame.didOpponentResign(thisPlayer)) {
-                // finish the resignation by deleting data in gamecenter
-                playerLobby.playerConfirmResignation(currentGame, thisPlayer);
-                LOG.fine("Resigned Game found. Redirecting: " + thisPlayer.getName());
-                return renderGame(currentGame, thisPlayer, PLAYER_RESIGNED_MSG);
-            } else {
-                return renderGame(playerLobby.getGame(thisPlayer), thisPlayer, null);
-            }
+            return renderGame(playerLobby.getGame(thisPlayer), thisPlayer);
         }
         // Players are not in a game with each other, we are starting a new game
 
@@ -164,7 +158,7 @@ public class GetGameRoute implements Route{
         if (playerLobby.getGame(opponentPlayer) == null) {
             // Start new game
             Game game = playerLobby.startGame(thisPlayer, opponentPlayer);
-            return renderGame(game, thisPlayer, null);
+            return renderGame(game, thisPlayer);
         } else {
             return redirectToHome(thisPlayer, PLAYER_IN_GAME_MSG);
         }
