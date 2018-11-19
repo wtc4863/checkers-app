@@ -205,25 +205,19 @@
           <execution>
             <id>ui</id>
             <configuration>
-              <properties>
-                <includeTags>UI-tier</includeTags>
-              </properties>
+                <groups>UI-tier</groups>
             </configuration>
           </execution>
           <execution>
             <id>appl</id>
             <configuration>
-              <properties>
-                <includeTags>Application-tier</includeTags>
-              </properties>
+                <groups>Application-tier</groups>
             </configuration>
           </execution>
           <execution>
             <id>model</id>
             <configuration>
-              <properties>
-                <includeTags>Model-tier</includeTags>
-              </properties>
+                <groups>Model-tier</groups>
             </configuration>
           </execution>
         </executions>
