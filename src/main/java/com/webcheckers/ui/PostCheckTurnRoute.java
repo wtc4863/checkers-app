@@ -7,6 +7,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.webcheckers.appl.PlayerLobby;
 import com.webcheckers.model.Game;
+import com.webcheckers.model.Game.State;
 import com.webcheckers.model.Player;
 import com.webcheckers.ui.Message.MessageType;
 import java.util.Objects;
@@ -47,17 +48,12 @@ public class PostCheckTurnRoute implements Route {
 
         // Check turn is only called within a game, therefore we can check if game == null
         // then we can assume that the other player has resigned
-        if (currentGame != null) {
-            boolean checkTurnResult = currentGame.isPlayersTurn(currentPlayer);
-            LOG.finer("Player who's turn is being checked for:" + currentPlayer.toString());
-            LOG.finer("Result: " + Boolean.toString(checkTurnResult));
+        boolean checkTurnResult = currentGame.isPlayersTurn(currentPlayer);
+        LOG.finer("Player who's turn is being checked for:" + currentPlayer.toString());
+        LOG.finer("Result: " + Boolean.toString(checkTurnResult));
 
-            String text = String.format("%s", Boolean.toString(checkTurnResult));
-            return gson.toJson(new Message(text, MessageType.info), Message.class);
-        } else {
-            // Return true in json if the other player has resigned
-            return gson.toJson(new Message("true", MessageType.info));
-        }
+        String text = String.format("%s", Boolean.toString(checkTurnResult));
+        return gson.toJson(new Message(text, MessageType.info), Message.class);
     }
 
 }
