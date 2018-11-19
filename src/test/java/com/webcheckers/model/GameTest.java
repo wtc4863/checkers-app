@@ -120,6 +120,15 @@ public class GameTest {
         Assertions.assertNotEquals(previous, CuT.getTurn());
     }
 
+    /**
+     * Make sure that there is no winner when the game starts.
+     */
+    @Test
+    public void testNoWinnerStartGame() {
+        Assertions.assertNull(CuT.winningPlayer());
+    }
+
+    /*
     @Test
     public void testApplyTurnMoves() {
         JumpMove mockJump = mock(JumpMove.class);
@@ -184,8 +193,5 @@ public class GameTest {
         CuT.addMoveToCurrentTurn(mockJump);
         Assertions.assertTrue(CuT.movesLeft());
     }
-
-
-
-
+    */
 }

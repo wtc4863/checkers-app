@@ -16,7 +16,6 @@ public class TurnController {
     static final String VALID_MOVE = "Valid move!";
     static final String GENERIC_MOVE_ERR = "GENERIC MOVE ERROR";
 
-
     // Private attributes
     GsonBuilder builder;
     PlayerLobby playerLobby;

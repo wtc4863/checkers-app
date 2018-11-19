@@ -56,6 +56,7 @@ public class SimpleMoveTest {
         testEnd = new Position(END_ROW_RED, END_COL_RED);
         testGame = new Game(new Player(TEST_NAME_RED), new Player(TEST_NAME_WHITE), Turn.RED, testBoard);
         when(testBoard.spaceIsValid(testEnd)).thenReturn(true);
+        when(testBoard.getSpace(testStart)).thenReturn(new Space(Space.SpColor.black, new Piece(Piece.PColor.red, Piece.PType.single)));
 
         // Initialize CuT and start testing
         CuT = new SimpleMove(testStart, testEnd);
@@ -100,6 +101,7 @@ public class SimpleMoveTest {
         when(testBoard.spaceIsValid(testEnd)).thenReturn(true);
         when(testGame.getBoard()).thenReturn(testBoard);
         when(testGame.getTurn()).thenReturn(Turn.WHITE);
+        when(testGame.getPieceColor(testStart)).thenReturn(Piece.PColor.white);
         // create a new move to update these values
         CuT = new SimpleMove(testStart, testEnd);
         Assertions.assertTrue(CuT.validateMove(testGame));
@@ -110,6 +112,7 @@ public class SimpleMoveTest {
         // setup
         testStart = new Position(START_ROW, START_COL);
         testEnd = new Position(END_ROW_RED, END_COL_RED);
+        when(testGame.getPieceColor(testStart)).thenReturn(Piece.PColor.white);
         when(testBoard.spaceIsValid(testEnd)).thenReturn(true);
         when(testGame.getBoard()).thenReturn(testBoard);
         when(testGame.getTurn()).thenReturn(Turn.WHITE);

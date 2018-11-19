@@ -37,6 +37,11 @@ public class PostCheckTurnRoute implements Route {
         Player currentPlayer = playerLobby.getPlayerBySessionID(sessionID);
         Game currentGame = playerLobby.getGame(currentPlayer);
 
+        // Check if the game is over
+        if (currentGame.state == Game.State.ENDED) {
+            return gson.toJson(new Message("true", MessageType.info), Message.class);
+        }
+
         boolean checkTurnResult = currentGame.isPlayersTurn(currentPlayer);
         LOG.finer("Player who's turn is being checked for:" + currentPlayer.toString());
         LOG.finer("Result: " + Boolean.toString(checkTurnResult));

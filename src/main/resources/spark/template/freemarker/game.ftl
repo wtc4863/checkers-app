@@ -15,6 +15,22 @@
     "whitePlayer" : "${whitePlayer.name}",
     "activeColor" : "${activeColor}"
   };
+  var winner = "${winnerName}";
+  window.addEventListener("load", function() {
+    if(winner === "${currentPlayer.name}") {
+      // This player has won
+      alert("Congratulations! You have won the game!");
+      window.location = "/";
+    } else if(winner === "NO_WINNER") {
+      // Nobody has won yet
+    } else {
+      // The other player has won
+      alert("Darn! You lost the game!");
+      window.setTimeout(function() {
+          window.location = "/";
+      }, 3000);
+    }
+  });
   </script>
 </head>
 <body>

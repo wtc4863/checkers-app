@@ -206,4 +206,14 @@ public class PlayerLobby {
     public BoardView getBoardView(Player player) {
         return gameCenter.getBoardView(player);
     }
+
+    /**
+     * End a game by removing the game from the list of active games and
+     * deleting the opponent match-up.
+     *
+     * @param game the game to end
+     */
+    public void endGame(Game game) {
+        gameCenter.endGame(game);
+    }
 }

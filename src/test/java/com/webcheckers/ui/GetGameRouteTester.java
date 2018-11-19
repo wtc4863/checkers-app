@@ -25,6 +25,7 @@ public class GetGameRouteTester {
     private static final String SESSION_ID = "12345";
     private static final String OPPONENT_USERNAME = "other";
     private static final String MY_USERNAME = "jimmy";
+    private static final String WINNER_ATTR_VAL_NO_WINNER = "NO_WINNER";
 
     //
     // Attributes
@@ -172,6 +173,7 @@ public class GetGameRouteTester {
         testHelper.assertViewModelExists();
         testHelper.assertViewModelIsaMap();
         // Model contains the correct View-Model data
+        testHelper.assertViewModelAttribute(GetGameRoute.WINNER_ATTR, WINNER_ATTR_VAL_NO_WINNER);
         testHelper.assertViewModelAttribute(GetGameRoute.TITLE_ATTR, GetGameRoute.TITLE);
         testHelper.assertViewModelAttribute(GetGameRoute.WHITE_PLAYER_ATTR, otherPlayer);
         testHelper.assertViewModelAttribute(GetGameRoute.RED_PLAYER_ATTR, thisPlayer);
@@ -223,6 +225,7 @@ public class GetGameRouteTester {
         testHelper.assertViewModelExists();
         testHelper.assertViewModelIsaMap();
         // Model contains the correct View-Model data
+        testHelper.assertViewModelAttribute(GetGameRoute.WINNER_ATTR, WINNER_ATTR_VAL_NO_WINNER);
         testHelper.assertViewModelAttribute(GetGameRoute.TITLE_ATTR, GetGameRoute.TITLE);
         testHelper.assertViewModelAttribute(GetGameRoute.WHITE_PLAYER_ATTR, thisPlayer);
         testHelper.assertViewModelAttribute(GetGameRoute.RED_PLAYER_ATTR, otherPlayer);

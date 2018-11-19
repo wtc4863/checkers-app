@@ -1,7 +1,6 @@
 package com.webcheckers.model;
 
-import com.webcheckers.model.Game.Turn;
-
+import java.util.ArrayList;
 import java.util.logging.Logger;
 
 public class SimpleMove extends Move {
@@ -52,9 +51,9 @@ public class SimpleMove extends Move {
         Board board = game.getBoard();
         if (board.spaceIsValid(end)) {
             // red is at the top of the board in the model and moving "forward" is going down
-            //TODO: does the way we flip the board change this because the client will switch it?
+            Piece.PColor currentColor = game.getPieceColor(this.start);
             boolean errorCheck;
-            if (game.getTurn() == Turn.WHITE) {
+            if (currentColor == Piece.PColor.white) {
                 // get the possible starting points given this ending space
                 int left = end.getCell() - 1;
                 int right = end.getCell() + 1;
@@ -107,6 +106,47 @@ public class SimpleMove extends Move {
         Position bottomLeft = new Position(bot, left);
         Position bottomRight = new Position(bot, right);
         return upperLeft.equals(start) || upperRight.equals(start) || bottomLeft.equals(start) || bottomRight.equals(start);
+    }
+
+    /**
+     * Checks if a given position in a game has any simple moves available.
+     *
+     * @param pos the position to check for possible moves
+     * @param game the game to check for possible moves
+     * @return true if there is at least one simple move possible from the
+     *      position, false otherwise
+     */
+    public static boolean positionHasSimpleMoveAvailable(Position pos, Game game) {
+        // Get the possible ending points given this starting space
+        int left = pos.getCell() - 1;
+        int right = pos.getCell() + 1;
+        int top = pos.getRow() + 1;
+        int bot = pos.getRow() - 1;
+
+        // Get piece at starting space
+        Piece piece = game.getBoard().getSpace(pos).pieceInfo();
+        if (piece == null) {
+            // There must be a piece on the starting space
+            return false;
+        }
+
+        // Create new SimpleMoves for easy comparison
+        ArrayList<SimpleMove> possibleMoves = new ArrayList<>();
+        if (piece.pieceColor == Piece.PColor.white || piece.isKing()) {
+            possibleMoves.add(new SimpleMove(pos, new Position(top, left)));
+            possibleMoves.add(new SimpleMove(pos, new Position(top, right)));
+        } else if (piece.pieceColor == Piece.PColor.red || piece.isKing()) {
+            possibleMoves.add(new SimpleMove(pos, new Position(bot, left)));
+            possibleMoves.add(new SimpleMove(pos, new Position(bot, right)));
+        }
+
+        // Check possible moves
+        for (SimpleMove current : possibleMoves) {
+            if (current.validateMove(game)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
