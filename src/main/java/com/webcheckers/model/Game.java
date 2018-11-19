@@ -18,6 +18,7 @@ public class Game {
     //
     Player redPlayer;
     Player whitePlayer;
+    Player winningPlayer;
     Player resignedPlayer;
     Board board;
     Turn turn;
@@ -92,6 +93,18 @@ public class Game {
     }
 
     /**
+     * gets the winning player name for this game
+     * @return a String representing a player's name
+     */
+    public String getWinningPlayerName() {
+        if (this.winningPlayer != null) {
+            return this.winningPlayer.getName();
+        }
+        return null;
+    }
+
+
+    /**
      * Finds out of the supplied players is the player
      * whos turn it is
      * @return player object of white player
@@ -119,15 +132,10 @@ public class Game {
 
     /**
      * This method checks if the opponent player resigned
-     * @param player the player object who's opponent we're checking
-     * @return true if the player left
+     * @return the player object representing the player that left
      */
-    public boolean didOpponentResign(Player player) {
-        if (player.equals(this.whitePlayer)) {
-            return getRedPlayer().equals(resignedPlayer);
-        } else {
-            return getWhitePlayer().equals(resignedPlayer);
-        }
+    public Player getResigningPlayer() {
+        return this.resignedPlayer;
     }
 
     /**
@@ -138,6 +146,15 @@ public class Game {
      */
     public void leaveFromGame(Player leavingPlayer) {
         resignedPlayer = leavingPlayer;
+        winningPlayer = getOpponentOf(leavingPlayer);
+    }
+
+    /**
+     * This function checks if the game is over
+     * @return true if game is in end state
+     */
+    public boolean isGameOver() {
+        return this.state == State.ENDED;
     }
 
     /**
@@ -250,13 +267,16 @@ public class Game {
         }
     }
 
-    public String winningPlayer() {
+    /**
+     * This function sets and then returns the winning player of the game
+     */
+    public void calculateWinningPlayer() {
         if (playerHasLost(Piece.PColor.white)) {
-            return redPlayer.getName();
+            this.winningPlayer = redPlayer;
         } else if (playerHasLost(Piece.PColor.red)) {
-            return whitePlayer.getName();
+            this.winningPlayer = whitePlayer;
         } else {
-            return null;
+            this.winningPlayer = null;
         }
     }
 
