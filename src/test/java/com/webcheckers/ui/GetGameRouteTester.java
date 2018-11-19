@@ -83,57 +83,6 @@ public class GetGameRouteTester {
     //
 
     /**
-     * Make sure that a user cannot start a game with someone else when the
-     * other user is already in a game.
-     */
-    @Test
-    public void testStartGameOpponentInGame() {
-        // Make it look like we're starting the game
-        when(request.queryParams("username")).thenReturn(OPPONENT_USERNAME);
-
-        // Return the other player when requested
-        when(playerLobby.getPlayer(OPPONENT_USERNAME)).thenReturn(otherPlayer);
-
-        // Make it look like we're not in a game but they are
-        when(playerLobby.getGame(thisPlayer)).thenReturn(null);
-        when(playerLobby.getGame(otherPlayer)).thenReturn(mock(Game.class));
-
-        // Return the list of signed in players
-        ArrayList<String> allPlayers = new ArrayList<>();
-        allPlayers.add(MY_USERNAME);
-        allPlayers.add(OPPONENT_USERNAME);
-        when(playerLobby.getSignedInPlayers()).thenReturn(allPlayers);
-
-        // Set up template engine tester
-        TemplateEngineTester testHelper = new TemplateEngineTester();
-        when(templateEngine.render(any(ModelAndView.class))).thenAnswer(testHelper.makeAnswer());
-
-        // Set up expected signed in ArrayList
-        ArrayList<String> expectedSignedInPlayers = new ArrayList<>();
-        expectedSignedInPlayers.add(OPPONENT_USERNAME);
-
-        // Invoke test
-        CuT.handle(request, response);
-
-        // Analyze results
-        // Model is a non-null map
-        testHelper.assertViewModelExists();
-        testHelper.assertViewModelIsaMap();
-        // Model contains the correct View-Model data
-        testHelper.assertViewModelAttribute(GetGameRoute.SIGNED_IN_PLAYERS, expectedSignedInPlayers);
-        testHelper.assertViewModelAttribute(GetGameRoute.IS_SIGNED_IN, true);
-        testHelper.assertViewModelAttribute(GetGameRoute.TITLE_ATTR, GetHomeRoute.TITLE);
-        testHelper.assertViewModelAttributeIsAbsent(GetGameRoute.WHITE_PLAYER_ATTR);
-        testHelper.assertViewModelAttributeIsAbsent(GetGameRoute.RED_PLAYER_ATTR);
-        testHelper.assertViewModelAttributeIsAbsent(GetGameRoute.CURRENT_PLAYER_ATTR);
-        testHelper.assertViewModelAttributeIsAbsent(GetGameRoute.ACTIVE_COLOR_ATTR);
-        testHelper.assertViewModelAttributeIsAbsent(GetGameRoute.BOARD_VIEW_ATTR);
-        testHelper.assertViewModelAttributeIsAbsent(GetGameRoute.VIEW_MODE_ATTR);
-        // Test view name
-        testHelper.assertViewName(GetHomeRoute.TEMPLATE_NAME);
-    }
-
-    /**
      * Make sure that a user can start a game with another logged-in user when
      * the other user is not currently in a game.
      */
