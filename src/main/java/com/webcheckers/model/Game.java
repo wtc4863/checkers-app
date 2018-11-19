@@ -271,12 +271,12 @@ public class Game {
      * This function sets and then returns the winning player of the game
      */
     public void calculateWinningPlayer() {
-        if (playerHasLost(Piece.PColor.white)) {
-            this.winningPlayer = redPlayer;
-        } else if (playerHasLost(Piece.PColor.red)) {
-            this.winningPlayer = whitePlayer;
-        } else {
-            this.winningPlayer = null;
+        if (this.state == State.ACTIVE) {
+            if (playerHasLost(Piece.PColor.white)) {
+                this.winningPlayer = redPlayer;
+            } else if (playerHasLost(Piece.PColor.red)) {
+                this.winningPlayer = whitePlayer;
+            }
         }
     }
 
