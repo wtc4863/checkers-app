@@ -53,6 +53,8 @@ public class GameCenterTest {
         // check if the list and hashmap updated with number of player and games
         assertEquals(prev_active_size, CuT.activeGames.size());
         assertEquals(prev_num_opp, CuT.opponents.size());
+        assertEquals(1, CuT.gameID);
+        assertEquals(0, CuT.readGameID(redPlayer));
         // check if game was returned
         assertNotNull(testGame);
     }

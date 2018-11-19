@@ -36,7 +36,7 @@ public class GameCenter {
     //
    ArrayList<Game> activeGames;
     HashMap<String, Player> opponents;
-    private int gameID = 0;
+    int gameID = 0;
 
     //
     // Constructor
