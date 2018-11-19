@@ -71,7 +71,6 @@ public class GameCenter {
      */
     public Game getGame(Player player) {
         for (Game game : activeGames) {
-          System.out.println(readGameID(player));
             if (readGameID(player) == game.getGameID()) {
                 return game;
             }
