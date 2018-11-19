@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.logging.Logger;
 
+import com.webcheckers.model.Game;
 import spark.ModelAndView;
 import spark.Request;
 import spark.Response;
@@ -76,7 +77,9 @@ public class GetHomeRoute implements Route {
         final Session httpSession = request.session();
         final String sessionID = httpSession.id();
 
-        if(playerLobby.getGame(playerLobby.getPlayerBySessionID(sessionID)) != null) {
+        Game game = playerLobby.getGame(playerLobby.getPlayerBySessionID(sessionID));
+
+        if(game != null && game.state == Game.State.ACTIVE) {
             response.redirect(GAME_URL);
             halt();
             return null;

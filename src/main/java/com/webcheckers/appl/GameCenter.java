@@ -87,7 +87,7 @@ public class GameCenter {
      *
      * @param game the game to end
      */
-    void endGame(Game game) {
+    synchronized void endGame(Game game) {
         if (game.state == Game.State.ACTIVE) {
             game.state = Game.State.ENDED;
         } else {

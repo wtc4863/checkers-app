@@ -26,7 +26,9 @@
     } else {
       // The other player has won
       alert("Darn! You lost the game!");
-      window.location = "/";
+      window.setTimeout(function() {
+          window.location = "/";
+      }, 3000);
     }
   });
   </script>
