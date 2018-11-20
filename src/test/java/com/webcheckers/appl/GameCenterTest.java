@@ -3,11 +3,18 @@ package com.webcheckers.appl;
 import static org.junit.jupiter.api.Assertions.*;
 
 import com.webcheckers.model.Game;
+import com.webcheckers.model.Game.State;
 import com.webcheckers.model.Player;
+import java.util.ArrayList;
+import java.util.HashMap;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Tag;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @Tag("Application-Tier")
 public class GameCenterTest {
@@ -91,17 +98,46 @@ public class GameCenterTest {
     public void testGetBoardViewWithExistingRedPlayer() {
         CuT.startGame(redPlayer, whitePlayer);
         assertNotNull(CuT.getBoardView(redPlayer));
-
     }
 
     @Test
-    public void testResignFromGame() {
-        // start the game
-        Game game = CuT.startGame(redPlayer, whitePlayer);
+    public void testResignFromGameWhenActive() {
+        // create datastructures to use within GameCenter
+        HashMap<String, Player> testHashMap = new HashMap<>();
+        testHashMap.put(redPlayer.getName(), whitePlayer);
+        testHashMap.put(whitePlayer.getName(), redPlayer);
+        ArrayList<Game> testGames = new ArrayList<>();
+        Game game = mock(Game.class);
+        when(game.getState()).thenReturn(State.ACTIVE);
+        testGames.add(game);
+
+        CuT = new GameCenter(testHashMap, testGames);
         CuT.resignFromGame(game, redPlayer);
-        assertEquals(0, CuT.activeGames.size());
-        assertNull(CuT.opponents.get(redPlayer.getName()));
-        assertNull(CuT.opponents.get(whitePlayer.getName()));
+        verify(game, times(1)).leaveFromGame(redPlayer);
+        // when in active game, it just sets state to null, next call it is wiped
+        assertEquals(1, testGames.size());
+        assertEquals(2, testHashMap.size());
+    }
+
+    @Test
+    public void testResignFromGameWhenEnded() {
+        // create datastructures to use within GameCenter
+        HashMap<String, Player> testHashMap = new HashMap<>();
+        testHashMap.put(redPlayer.getName(), whitePlayer);
+        testHashMap.put(whitePlayer.getName(), redPlayer);
+        ArrayList<Game> testGames = new ArrayList<>();
+        Game game = mock(Game.class);
+        when(game.getState()).thenReturn(State.ENDED);
+        when(game.getRedPlayer()).thenReturn(redPlayer);
+        when(game.getWhitePlayer()).thenReturn(whitePlayer);
+        testGames.add(game);
+
+        CuT = new GameCenter(testHashMap, testGames);
+        CuT.resignFromGame(game, redPlayer);
+        verify(game, times(1)).leaveFromGame(redPlayer);
+        // when in active game, it just sets state to null, next call it is wiped
+        assertEquals(0, testGames.size());
+        assertEquals(0, testHashMap.size());
     }
 
 }
