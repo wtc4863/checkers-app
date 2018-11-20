@@ -1,17 +1,13 @@
 package com.webcheckers.model;
 
+import com.webcheckers.model.Game.State;
 import com.webcheckers.model.Game.Turn;
-import java.util.ArrayList;
-import java.util.Arrays;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 @Tag("Model-tier")
 public class GameTest {
@@ -126,6 +122,74 @@ public class GameTest {
     @Test
     public void testNoWinnerStartGame() {
         Assertions.assertNull(CuT.getWinningPlayerName());
+    }
+
+    @Test
+    public void testLeaveGame() {
+        CuT.leaveFromGame(whitePlayer);
+        Assertions.assertEquals(whitePlayer, CuT.getResigningPlayer());
+        Assertions.assertEquals(redPlayer.getName(), CuT.getWinningPlayerName());
+    }
+
+    @Test
+    public void testGetLastMove() {
+        JumpMove mockJump = mock(JumpMove.class);
+        // no moves made cannot get last move
+        Assertions.assertNull(CuT.getLastMoveMade());
+        CuT.addMoveToCurrentTurn(mockJump);
+        Assertions.assertEquals(mockJump, CuT.getLastMoveMade());
+
+    }
+
+    @Test
+    public void testAddMoveToCurrentTurn() {
+        // no moves before add
+        Assertions.assertFalse(CuT.hasMovesInCurrentTurn());
+        CuT.addMoveToCurrentTurn(mock(JumpMove.class));
+        // moves after addition
+        Assertions.assertTrue(CuT.hasMovesInCurrentTurn());
+    }
+
+    @Test
+    public void testGetResigningPlayerNoResignation() {
+        Assertions.assertNull(CuT.getResigningPlayer());
+    }
+
+    @Test
+    public void testGetResigningPlayerWithResignation() {
+        CuT.leaveFromGame(whitePlayer);
+        Assertions.assertEquals(whitePlayer, whitePlayer);
+    }
+
+    @Test
+    public void testGetOpponent() {
+        Assertions.assertEquals(redPlayer, CuT.getOpponentOf(whitePlayer));
+        Assertions.assertEquals(whitePlayer, CuT.getOpponentOf(redPlayer));
+    }
+
+    @Test
+    public void testGetState() {
+        // should start out as active
+        Assertions.assertEquals(State.ACTIVE, CuT.getState());
+    }
+
+    @Test
+    public void testIsGameOverBeforeEnd() {
+        CuT.setStateEnded();
+        Assertions.assertTrue(CuT.isGameOver());
+    }
+
+    @Test
+    public void testIsGameOverAfterEnd() {
+        Assertions.assertFalse(CuT.isGameOver());
+    }
+
+    @Test
+    public void testSetActiveStateAndEnded() {
+        CuT.setStateEnded();
+        Assertions.assertEquals(State.ENDED, CuT.getState());
+        CuT.setStateActive();
+        Assertions.assertEquals(State.ACTIVE, CuT.getState());
     }
 
     /*
