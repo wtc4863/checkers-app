@@ -3,8 +3,6 @@ package com.webcheckers.model;
 import com.webcheckers.ui.BoardView;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.ArrayList;
 import java.util.logging.Logger;
 
 /**
@@ -103,6 +101,21 @@ public class Game {
         return null;
     }
 
+    /**
+     * Gets the state of the game
+     * @return the state of the game
+     */
+    public State getState() {
+        return this.state;
+    }
+
+    public void setStateEnded() {
+        this.state = State.ENDED;
+    }
+
+    public void setStateActive() {
+        this.state = State.ACTIVE;
+    }
 
     /**
      * Finds out of the supplied players is the player

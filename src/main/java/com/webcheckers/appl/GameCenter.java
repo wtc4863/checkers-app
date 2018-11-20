@@ -15,7 +15,7 @@ public class GameCenter {
     //
     // Attributes
     //
-    ArrayList<Game> activeGames;
+   ArrayList<Game> activeGames;
     HashMap<String, Player> opponents;
 
     //
@@ -24,6 +24,12 @@ public class GameCenter {
     public GameCenter() {
         this.activeGames = new ArrayList<>();
         this.opponents = new HashMap<>();
+    }
+
+    /** Constructor used for testing */
+    public GameCenter(HashMap<String, Player> opponents, ArrayList<Game> activeGames) {
+        this.opponents = opponents;
+        this.activeGames = activeGames;
     }
 
     //
@@ -88,8 +94,8 @@ public class GameCenter {
      * @param game the game to end
      */
     synchronized void endGame(Game game) {
-        if (game.state == Game.State.ACTIVE) {
-            game.state = Game.State.ENDED;
+        if (game.getState() == Game.State.ACTIVE) {
+            game.setStateEnded();
         } else {
             this.opponents.remove(game.getRedPlayer().getName());
             this.opponents.remove(game.getWhitePlayer().getName());
