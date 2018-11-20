@@ -83,6 +83,7 @@ public class GetHomeRouteTest {
 
         // Make sure the player lobby will return some sort of game
         Game mockGame = mock(Game.class);
+        mockGame.state = Game.State.ACTIVE;
         when(playerLobby.getGame(player)).thenReturn(mockGame);
 
         assertThrows(spark.HaltException.class, () -> {
