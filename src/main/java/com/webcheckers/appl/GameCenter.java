@@ -140,6 +140,10 @@ public class GameCenter {
         changeGame(redPlayer, this.gameID);
         gameID++;
         activeGames.add(game);
+        redPlayer.addCurrentGameID(game.getGameID());
+        redPlayer.addCurrentOpponentName(whitePlayer.getName());
+        whitePlayer.addCurrentGameID(game.getGameID());
+        whitePlayer.addCurrentOpponentName(redPlayer.getName());
         return game;
     }
 

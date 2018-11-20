@@ -1,6 +1,9 @@
 package com.webcheckers.model;
 
 import com.webcheckers.ui.PlayerView;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * TODO
@@ -9,6 +12,8 @@ public class Player {
     private String sessionID;
     private final String name;
     private int gameID;
+    private ArrayList<Integer> currentGameIDs = new ArrayList<>();
+    private ArrayList<String> currentOpponentNames = new ArrayList<>();
 
     /**
      * Create a new signed-out player
@@ -86,6 +91,10 @@ public class Player {
         return new PlayerView(this.name);
     }
 
+    /**
+     * Change the ID of the game that the player should be looking at
+     * @param gameID ID of the requested game
+     */
     public void changeGame(int gameID) {
         this.gameID = gameID;
     }
@@ -93,6 +102,44 @@ public class Player {
     public int getGameID() {
         return this.gameID;
     }
+
+    public ArrayList<Integer> getCurrentGameIDs() {
+        return this.currentGameIDs;
+    }
+
+    public ArrayList<String> getCurrentOpponentNames() {
+        return this.currentOpponentNames;
+    }
+
+    public void addCurrentGameID(int gameID) {
+        this.currentGameIDs.add(gameID);
+    }
+
+    public void addCurrentOpponentName(String name) {
+        this.currentOpponentNames.add(name);
+    }
+
+
+//    public void addGame(int gameID, String opponentName) {
+//        this.currentGames.put(gameID, opponentName);
+//    }
+
+//    public ArrayList<Integer> getCurrentGameIDs() {
+//        ArrayList<Integer> IDs = new ArrayList<>();
+//        for (Integer i : currentGames.keySet()) {
+//            IDs.add(i);
+//        }
+//        return IDs;
+//    }
+//
+//    public ArrayList<String> getCurrentGameOpponentNames() {
+//        ArrayList<String> names = new ArrayList<>();
+//        for (Integer key : currentGames.keySet()) {
+//            String name = currentGames.get(key);
+//            names.add(name);
+//        }
+//        return names;
+//    }
 
     @Override
     public boolean equals(Object obj) {

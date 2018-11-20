@@ -34,6 +34,8 @@ public class GetHomeRoute implements Route {
     static final String TITLE = "Welcome!";
     static final String TITLE_ATTR = "title";
     static final String SIGNED_IN_PLAYERS = "signedInPlayers";
+    static final String CURRENT_GAME_IDS = "currentGameIDs";
+    static final String CURRENT_GAME_OPPONENT_NAMES = "currentGameOpponentNames";
     static final String IS_SIGNED_IN = "isUserSignedIn";
     static final String NUM_SIGNED_IN = "numPlayersOnline" ;
     static final String TEMPLATE_NAME = "home.ftl";
@@ -107,6 +109,8 @@ public class GetHomeRoute implements Route {
             ArrayList<String> onlinePlayers = playerLobby.getSignedInPlayers();
             onlinePlayers.remove(usersPlayer);
             vm.put(SIGNED_IN_PLAYERS, onlinePlayers);
+            vm.put(CURRENT_GAME_IDS, thisPlayer.getCurrentGameIDs());
+            vm.put(CURRENT_GAME_OPPONENT_NAMES, thisPlayer.getCurrentOpponentNames());
             vm.put(IS_SIGNED_IN, true);
         } else {
             LOG.finer("New, non-registered player joined");

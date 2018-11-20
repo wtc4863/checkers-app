@@ -159,10 +159,20 @@ public class GetGameRoute implements Route{
 
         // Make sure they passed a username param
         String username = request.queryParams("username");
+        String id = request.queryParams("id");
         if (username == null) {
-            return redirectToHome(thisPlayer, NO_USERNAME_SELECTED);
+            if (id != null) {
+                playerLobby.changeGame(thisPlayer, Integer.parseInt(id));
+                Game game = playerLobby.getGame(thisPlayer);
+                return renderGame(game, thisPlayer);
+
+            } else {
+                return redirectToHome(thisPlayer, NO_USERNAME_SELECTED);
+            }
+
         } else {
             opponentPlayer = playerLobby.getPlayer(username);
+
         }
 
 
