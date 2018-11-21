@@ -4,16 +4,20 @@ import com.webcheckers.appl.PlayerLobby;
 import com.webcheckers.model.Game;
 import com.webcheckers.model.Piece;
 import com.webcheckers.model.Player;
+import com.webcheckers.ui.Message.MessageType;
 import java.util.ArrayList;
+import java.util.logging.Logger;
 import spark.*;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import spark.utils.Assert;
 
 import static spark.Spark.halt;
 
 public class GetGameRoute implements Route{
+    private static final Logger LOG = Logger.getLogger(GetGameRoute.class.getName());
     //
     // Constants
     //
@@ -34,6 +38,7 @@ public class GetGameRoute implements Route{
 
     final static String PLAYER_IN_GAME_MSG = "Requested player is already in a game. Choose another player.";
     final static String NO_USERNAME_SELECTED = "You are not in a game. You must first start a game with another player.";
+    final static String PLAYER_RESIGNED_MSG = "The other player has left, you win! Please go back to home page.";
 
     public enum View {
         PLAY, SPECTATOR, REPLAY;
@@ -73,8 +78,17 @@ public class GetGameRoute implements Route{
 
         // Check if the game is over
         String winner = "NO_WINNER";
-        if (game.winningPlayer() != null) {
-            winner = game.winningPlayer();
+        game.calculateWinningPlayer();
+        if (game.getWinningPlayerName() != null) {
+            LOG.fine("Inside get winning player");
+            winner = game.getWinningPlayerName();
+            playerLobby.endGame(game);
+        }
+
+        if (game.getResigningPlayer() != null) {
+            LOG.fine("Inside get resigning player winner: " + game.getWinningPlayerName() + ", ResigningPlayer: " + game.getResigningPlayer().getName());
+            winner = game.getWinningPlayerName();
+            vm.put(MESSAGE_ATTR, new Message(PLAYER_RESIGNED_MSG, MessageType.info));
             playerLobby.endGame(game);
         }
 

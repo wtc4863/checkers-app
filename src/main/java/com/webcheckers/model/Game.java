@@ -3,9 +3,6 @@ package com.webcheckers.model;
 import com.webcheckers.ui.BoardView;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.ArrayList;
-import java.util.Queue;
 import java.util.logging.Logger;
 
 /**
@@ -17,9 +14,10 @@ public class Game {
     //
     // Attributes
     //
-
     Player redPlayer;
     Player whitePlayer;
+    Player winningPlayer;
+    Player resignedPlayer;
     Board board;
     Turn turn;
     ArrayList<Move> queuedTurnMoves;
@@ -53,6 +51,7 @@ public class Game {
         LOG.fine(String.format("Game created: (%s : %s", redPlayer, whitePlayer));
         this.redPlayer = redPlayer;
         this.whitePlayer = whitePlayer;
+        this.resignedPlayer = null;
         this.turn = Turn.RED;
         this.board = new Board();
         this.queuedTurnMoves = new ArrayList<>();
@@ -64,6 +63,7 @@ public class Game {
         LOG.fine(String.format("Custom Game created: (%s : %s", redPlayer, whitePlayer));
         this.redPlayer = redPlayer;
         this.whitePlayer = whitePlayer;
+        this.resignedPlayer = null;
         this.turn = turn;
         this.board = board;
         this.queuedTurnMoves = new ArrayList<>();
@@ -91,6 +91,33 @@ public class Game {
     }
 
     /**
+     * gets the winning player name for this game
+     * @return a String representing a player's name
+     */
+    public String getWinningPlayerName() {
+        if (this.winningPlayer != null) {
+            return this.winningPlayer.getName();
+        }
+        return null;
+    }
+
+    /**
+     * Gets the state of the game
+     * @return the state of the game
+     */
+    public State getState() {
+        return this.state;
+    }
+
+    public void setStateEnded() {
+        this.state = State.ENDED;
+    }
+
+    public void setStateActive() {
+        this.state = State.ACTIVE;
+    }
+
+    /**
      * Finds out of the supplied players is the player
      * whos turn it is
      * @return player object of white player
@@ -101,6 +128,46 @@ public class Game {
         } else {
             return turn == Turn.WHITE;
         }
+    }
+
+    /**
+     * this function gets the other player in the game
+     * @param player one of the players in the game
+     * @return the other player in the game
+     */
+    public Player getOpponentOf(Player player) {
+        if (player.equals(this.whitePlayer)) {
+            return getRedPlayer();
+        } else {
+            return getWhitePlayer();
+        }
+    }
+
+    /**
+     * This method checks if the opponent player resigned
+     * @return the player object representing the player that left
+     */
+    public Player getResigningPlayer() {
+        return this.resignedPlayer;
+    }
+
+    /**
+     * This function effectively lets a player leave a game but does not
+     * do any checking. It just removes them from the game by setting their attribute
+     * as null. This should be used by game center to let a player leave a game
+     * @param leavingPlayer the player object of the leaving player
+     */
+    public void leaveFromGame(Player leavingPlayer) {
+        resignedPlayer = leavingPlayer;
+        winningPlayer = getOpponentOf(leavingPlayer);
+    }
+
+    /**
+     * This function checks if the game is over
+     * @return true if game is in end state
+     */
+    public boolean isGameOver() {
+        return this.state == State.ENDED;
     }
 
     /**
@@ -213,13 +280,16 @@ public class Game {
         }
     }
 
-    public String winningPlayer() {
-        if (playerHasLost(Piece.PColor.white)) {
-            return redPlayer.getName();
-        } else if (playerHasLost(Piece.PColor.red)) {
-            return whitePlayer.getName();
-        } else {
-            return null;
+    /**
+     * This function sets and then returns the winning player of the game
+     */
+    public void calculateWinningPlayer() {
+        if (this.state == State.ACTIVE) {
+            if (playerHasLost(Piece.PColor.white)) {
+                this.winningPlayer = redPlayer;
+            } else if (playerHasLost(Piece.PColor.red)) {
+                this.winningPlayer = whitePlayer;
+            }
         }
     }
 

@@ -213,6 +213,11 @@ representation of a row of the board. Several RowViews make up the entire
 board, which, in this case, is a new, fresh board, with the current player's
 pieces appearing at the bottom of the board.
 
+If a player chooses that they do not want to play with the current game anymore,
+they have the choice to resign the game. If they do, the **_PostResignGameRoute_**
+will update the current game to reflect that a player has resigned. After doing so, 
+it will redirect each of the players to the home page so that they may start another game
+
 Now that the BoardView is made, the game page can be rendered using the
 **_game.ftl_** file and the game can begin. The game page is reloaded
 consistently as the game progresses.
@@ -260,7 +265,7 @@ signing in that an instance of **_Player_** is created for the user. Players are
 the unique username that the user submits when signing in, but also the user's session ID.
 
 When players challenge one another, a new instance of **_Game_** is created. The game holds all of the data
-needed for a game to happen between two players. The players on each team, the current turn, and, most
+needed for a game to happen between two players. The players for each color, the current turn, and, most
 importantly, the _Board_.
 
 The **_Board_** class is the class in charge of keeping track of the data regarding the game board state.
@@ -323,6 +328,7 @@ There have currently been five(5) user stories and two(2) spike stories complete
 7. Submit Turn
 8. Multi-Jump Move
 9. Undo Move
+10. Resign
 
 These stories have all passed their acceptance criteria. No other stories have 
 reached the end of development to be tested as of yet.
