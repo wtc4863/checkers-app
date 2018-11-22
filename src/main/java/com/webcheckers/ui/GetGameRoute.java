@@ -15,6 +15,7 @@ import java.util.Objects;
 import spark.utils.Assert;
 
 import static spark.Spark.halt;
+import static spark.Spark.secure;
 
 public class GetGameRoute implements Route{
     private static final Logger LOG = Logger.getLogger(GetGameRoute.class.getName());
@@ -32,6 +33,8 @@ public class GetGameRoute implements Route{
     final static String TITLE_ATTR = "title";
     final static String TITLE = "Game";
     final static String WINNER_ATTR = "winnerName";
+    final static String ASYNC_REQUEST_ATTR = "asyncRequest";
+    final static String ASYNC_MODE_ATTR = "async";
 
     final static String SIGNED_IN_PLAYERS = "signedInPlayers";
     final static String IS_SIGNED_IN = "isUserSignedIn";
@@ -39,6 +42,7 @@ public class GetGameRoute implements Route{
     final static String PLAYER_IN_GAME_MSG = "Requested player is already in a game. Choose another player.";
     final static String NO_USERNAME_SELECTED = "You are not in a game. You must first start a game with another player.";
     final static String PLAYER_RESIGNED_MSG = "The other player has left, you win! Please go back to home page.";
+    final static String ASYNC_REQUEST = "Your opponent has requested to switch to asynchronous mode. Would you like to switch to asynchronous mode?";
 
     public enum View {
         PLAY, SPECTATOR, REPLAY;
@@ -69,6 +73,7 @@ public class GetGameRoute implements Route{
     private String renderGame(Game game, Player currentPlayer) {
         // Template set-up
         final Map<String, Object> vm = new HashMap<>();
+        String winner = "NO_WINNER";
 
         /*
         If the current player is the white player in the game, then flip the
@@ -76,26 +81,36 @@ public class GetGameRoute implements Route{
          */
         boolean opposite = currentPlayer.equals(game.getWhitePlayer());
 
-        // Check if the game is over
-        String winner = "NO_WINNER";
-        game.calculateWinningPlayer();
-        if (game.getWinningPlayerName() != null) {
-            LOG.fine("Inside get winning player");
-            winner = game.getWinningPlayerName();
-            currentPlayer.removeCurrentGame(game);
-            playerLobby.endGame(game);
-        }
+        switch(game.getState()) {
+            case ASYNC_START:
+                if (!game.isAsyncRequester(currentPlayer)) {
+                    vm.put(MESSAGE_ATTR, new Message(ASYNC_REQUEST, MessageType.info));
+                    vm.put(ASYNC_REQUEST_ATTR, true);
+                }
+                break;
+            case ENDED:
+                break;
+            case ASYNC_DENIED:
+                // TODO: check if all other games are out of ASYNC_START
+                break;
+            case ASYNC_ACCEPTED:
+                // TODO: check if all other games are out of ASYNC_START
+                break;
+            default:  // Either ASYNC_ACTIVE or ACTIVE
+                // Check if any players have won the game
+                game.calculateWinningPlayer();
+                if (game.getWinningPlayerName() != null) {
+                    LOG.fine("Inside get winning player");
+                    winner = game.getWinningPlayerName();
+                    currentPlayer.removeCurrentGame(game);
+                    playerLobby.endGame(game);
+                }
 
-        if (game.getResigningPlayer() != null) {
-            LOG.fine("Inside get resigning player winner: " + game.getWinningPlayerName() + ", ResigningPlayer: " + game.getResigningPlayer().getName());
-            vm.put(MESSAGE_ATTR, new Message(PLAYER_RESIGNED_MSG, MessageType.info));
-        }
-
-        if (game.getSignedoutPlayer() != null) {
-            LOG.fine("Inside get signing out player winner: " + game.getWinningPlayerName() + ", ResigningPlayer: " + game.getSignedoutPlayer().getName());
-            winner = game.getWinningPlayerName();
-            vm.put(MESSAGE_ATTR, new Message(PLAYER_RESIGNED_MSG, MessageType.info));
-            playerLobby.endGame(game);
+                // Check if the opponent resigned
+                if (game.getResigningPlayer() != null) {
+                    LOG.fine("Inside get resigning player winner: " + game.getWinningPlayerName() + ", ResigningPlayer: " + game.getResigningPlayer().getName());
+                    vm.put(MESSAGE_ATTR, new Message(PLAYER_RESIGNED_MSG, MessageType.info));
+                }
         }
 
         // Set attributes

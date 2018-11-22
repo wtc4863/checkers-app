@@ -524,7 +524,13 @@ public class Game {
         this.asyncRequester = null;
     }
 
-    public Player getAsyncRequester() {
-        return this.asyncRequester;
+    /**
+     * Check if a given player is the one who requested asynchronous play mode
+     * to start.
+     *
+     * @return True if the players are the same, false if they are different
+     */
+    public boolean isAsyncRequester(Player player) {
+        return this.asyncRequester.equals(player);
     }
 }
