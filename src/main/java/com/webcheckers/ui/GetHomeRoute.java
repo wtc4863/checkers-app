@@ -86,7 +86,7 @@ public class GetHomeRoute implements Route {
         /*
         Game game = playerLobby.getGame(playerLobby.getPlayerBySessionID(sessionID));
 
-        if(game != null && game.state == Game.State.ACTIVE) {
+        if(game != null && game.getState() == Game.State.ACTIVE) {
             response.redirect(GAME_URL);
             halt();
             return null;

@@ -42,7 +42,7 @@ public class PostCheckTurnRoute implements Route {
         Game currentGame = playerLobby.getGame(currentPlayer);
 
         // Check if the game is over
-        if (currentGame.state == Game.State.ENDED) {
+        if (currentGame.getState() == Game.State.ENDED) {
             return gson.toJson(new Message("true", MessageType.info), Message.class);
         }
 

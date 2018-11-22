@@ -25,6 +25,7 @@ public class Game {
 
     Board board;
     Turn turn;
+    Player asyncRequester;
     public ArrayList<Move> queuedTurnMoves;
     public State state;
     public boolean madeKing;
@@ -47,7 +48,7 @@ public class Game {
      * the game will be deleted.
      */
     public enum State {
-        ACTIVE, ENDED;
+        ACTIVE, ENDED, ASYNC_START, ASYNC_ACCEPTED, ASYNC_DENIED, ASYNC_ACTIVE;
     }
 
     //
@@ -64,6 +65,7 @@ public class Game {
         this.queuedTurnMoves = new ArrayList<>();
         this.state = State.ACTIVE;
         this.madeKing = false;
+        this.asyncRequester = null;
     }
 
     // used for custom configuration
@@ -76,6 +78,7 @@ public class Game {
         this.board = board;
         this.queuedTurnMoves = new ArrayList<>();
         this.state = State.ACTIVE;
+        this.asyncRequester = null;
         this.madeKing = false;
     }
 
@@ -468,4 +471,60 @@ public class Game {
         return new Game(redPlayer, whitePlayer, Turn.RED, new Board(redPieces, whitePieces));
     }
 
+
+    /**
+     * Request that the game transition to asynchronous mode.
+     *
+     * @param player The player requesting asynchronous mode
+     */
+    public void requestAsync(Player player) {
+        switch(this.state) {
+            case ACTIVE:
+                this.state = State.ASYNC_START;
+                this.asyncRequester = player;
+                break;
+        }
+    }
+
+    /**
+     * Accept the request to transition to asynchronous mode.
+     */
+    public void acceptAsync() {
+        switch(this.state) {
+            case ASYNC_START:
+                this.state = State.ASYNC_ACCEPTED;
+                break;
+        }
+    }
+
+    /**
+     * Reject the request to transition to asynchronous mode.
+     */
+    public void rejectAsync() {
+       switch(this.state) {
+           case ASYNC_START:
+               this.state = State.ASYNC_DENIED;
+               break;
+       }
+    }
+
+    /**
+     * Complete the asynchronous request after displaying the results message
+     * to the player.
+     */
+    public void asyncRequestCompleted() {
+        switch(this.state) {
+            case ASYNC_ACCEPTED:
+                this.state = State.ASYNC_ACTIVE;
+                break;
+            case ASYNC_DENIED:
+                this.state = State.ACTIVE;
+                break;
+        }
+        this.asyncRequester = null;
+    }
+
+    public Player getAsyncRequester() {
+        return this.asyncRequester;
+    }
 }
