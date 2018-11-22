@@ -41,9 +41,15 @@ public class PostCheckTurnRoute implements Route {
         Player currentPlayer = playerLobby.getPlayerBySessionID(sessionID);
         Game currentGame = playerLobby.getGame(currentPlayer);
 
-        // Check if the game is over
-        if (currentGame.getState() == Game.State.ENDED) {
-            return gson.toJson(new Message("true", MessageType.info), Message.class);
+        // Return true when in ASYNC_START, ASYNC_ACCEPTED, or ASYNC_DENIED
+        // states
+        switch(currentGame.getState()) {
+            case ACTIVE:
+                break;
+            case ASYNC_ACTIVE:
+                break;
+            default:
+                return gson.toJson(new Message("true", MessageType.info), Message.class);
         }
 
         // Check turn is only called within a game, therefore we can check if game == null
