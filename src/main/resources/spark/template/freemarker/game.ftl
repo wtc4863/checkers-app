@@ -51,7 +51,17 @@
     <div class="body">
       
       <p id="help_text"></p>
-      
+
+      <#if async??>
+      <p>This game is running in <em>asynchronous</em> mode.</p>
+      <#else>
+      <p>This game is running in <em>synchronous</em> mode.</p>
+      <form action="/startAsync" method="POST">
+        Click <input type="submit" value="here" /> to transition all your games
+        to asynchronous mode.
+      </form>
+      </#if>
+
       <div>
         <div id="game-controls">
         
@@ -69,13 +79,13 @@
             <div>
               <table data-color='RED'>
                 <tr>
-                  <td><img src="../img/single-pieceView-red.svg" /></td>
+                  <td><img src="../img/single-piece-red.svg" /></td>
                   <td class="name">Red</td>
                 </tr>
               </table>
               <table data-color='WHITE'>
                 <tr>
-                  <td><img src="../img/single-pieceView-white.svg" /></td>
+                  <td><img src="../img/single-piece-white.svg" /></td>
                   <td class="name">White</td>
                 </tr>
               </table>
