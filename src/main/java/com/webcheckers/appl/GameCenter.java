@@ -3,6 +3,7 @@ package com.webcheckers.appl;
 import com.webcheckers.model.*;
 import com.webcheckers.ui.BoardView;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -34,7 +35,7 @@ public class GameCenter {
     //
     // Attributes
     //
-   ArrayList<Game> activeGames;
+    ArrayList<Game> activeGames;
     HashMap<String, Player> opponents;
     int gameID = 0;
 
@@ -175,4 +176,25 @@ public class GameCenter {
         endGame(gameToResignFrom);
     }
 
+    /**
+     * Retrieve all of the game objects that represent the games the player is
+     * currently playing.
+     * @param player the player whose games will be retrieved
+     * @return all of the games the player is currently playing
+     */
+    public ArrayList<Game> getAllGames(Player player) {
+        ArrayList<Game> games = new ArrayList<>();
+
+        // Loop through all of the IDs in the player's game ID list
+        for(int id : player.getCurrentGameIDs()) {
+            // Loop through all of the games the GameCenter knows about
+            for(Game game : this.activeGames) {
+                // If the IDs match, add it to the results
+                if (game.getGameID() == id) {
+                    games.add(game);
+                }
+            }
+        }
+        return games;
+    }
 }
