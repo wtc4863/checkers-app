@@ -229,8 +229,8 @@ public class WebServer {
 
         // Handles asynchronous games
         post(START_ASYNC_URL, new PostStartAsyncRoute(asyncServices));
-        // post(CONFIRM_ASYNC_URL, new PostConfirmAsyncRoute(asyncServices));
-        // post(DENY_ASYNC_URL, new PostDenyAsyncRoute(asyncServices));
+        post(CONFIRM_ASYNC_URL, new PostConfirmAsyncRoute(asyncServices));
+        post(DENY_ASYNC_URL, new PostDenyAsyncRoute(asyncServices));
 
         //
         LOG.config("WebServer is initialized.");

@@ -59,4 +59,10 @@ public class AsyncServices {
             game.requestAsync(requestingPlayer);
         }
     }
+
+    public void confirmAsync(String sessionID) {
+    }
+
+    public void denyAsync(String sessionID) {
+    }
 }
