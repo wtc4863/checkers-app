@@ -2,7 +2,6 @@ package com.webcheckers.appl;
 
 import com.webcheckers.model.Game;
 import com.webcheckers.model.Player;
-import org.eclipse.jetty.util.SocketAddressResolver;
 
 import java.util.ArrayList;
 import java.util.Objects;
