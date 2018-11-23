@@ -61,8 +61,14 @@ public class AsyncServices {
     }
 
     public void confirmAsync(String sessionID) {
+        Player confirmingPlayer = playerLobby.getPlayerBySessionID(sessionID);
+        Game game = gameCenter.getGame(confirmingPlayer);
+        game.acceptAsync();
     }
 
     public void denyAsync(String sessionID) {
+        Player denyingPlayer = playerLobby.getPlayerBySessionID(sessionID);
+        Game game = gameCenter.getGame(denyingPlayer);
+        game.rejectAsync();
     }
 }
