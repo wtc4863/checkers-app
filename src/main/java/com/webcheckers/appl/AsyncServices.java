@@ -1,7 +1,10 @@
 package com.webcheckers.appl;
 
+import com.webcheckers.model.Game;
+import com.webcheckers.model.Player;
 import org.eclipse.jetty.util.SocketAddressResolver;
 
+import java.util.ArrayList;
 import java.util.Objects;
 
 /**
@@ -45,5 +48,15 @@ public class AsyncServices {
      *      asynchronous mode.
      */
     public void startAsync(String sessionID) {
+        // Get all of the player's games
+        Player requestingPlayer = playerLobby.getPlayerBySessionID(sessionID);
+        ArrayList<Game> games = gameCenter.getAllGames(requestingPlayer);
+
+        // Start the async confirmation process in each synchronous game
+        for(Game game : games) {
+            // We don't need to check the game's state, because this method
+            // does that for us.
+            game.requestAsync(requestingPlayer);
+        }
     }
 }

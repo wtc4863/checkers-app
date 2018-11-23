@@ -9,6 +9,8 @@ import spark.Route;
 import java.util.Objects;
 import java.util.logging.Logger;
 
+import static spark.Spark.halt;
+
 public class PostStartAsyncRoute implements Route {
 
     //
@@ -47,6 +49,10 @@ public class PostStartAsyncRoute implements Route {
      */
     @Override
     public Object handle(Request request, Response response) {
+        LOG.finer("PostStartAsyncRoute is invoked.");
+        this.asyncServices.startAsync(request.session().id());
+        response.redirect("/game");
+        halt();
         return null;
     }
 
