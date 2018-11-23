@@ -41,21 +41,21 @@ public class PlayerLobby {
     //
 
     /**
-     * Create a new PlayerLobby instance
+     * Create a new PlayerLobby instance with a brand-new GameCenter object.
+     * Currently only used for testing purposes.
      */
-    public PlayerLobby() {
+    PlayerLobby() {
         this(new GameCenter());
     }
 
     /**
      * Create a new PlayerLobby instance with a given GameCenter object.
-     * Currently used only for testing purposes.
      *
      * @param gameCenter
      *      the GameCenter object to use when creating the new
      *      PlayerLobby instance.
      */
-    PlayerLobby(GameCenter gameCenter) {
+    public PlayerLobby(GameCenter gameCenter) {
         this.players = new HashMap<>();
         this.gameCenter = gameCenter;
     }

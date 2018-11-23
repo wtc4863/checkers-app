@@ -1,5 +1,6 @@
 package com.webcheckers;
 
+import com.webcheckers.appl.GameCenter;
 import com.webcheckers.appl.TurnController;
 import java.io.InputStream;
 import java.util.Objects;
@@ -57,8 +58,11 @@ public final class Application {
         // response to Ajax requests.
         final Gson gson = new Gson();
 
-        // Create the PlayerLobby to keep track of users
-        final PlayerLobby playerLobby = new PlayerLobby();
+        // Create a GameCenter to keep track of the games going on
+        final GameCenter gameCenter = new GameCenter();
+
+        // Create the PlayerLobby with our GameCenter to keep track of users
+        final PlayerLobby playerLobby = new PlayerLobby(gameCenter);
 
         // Create a turn controller so that we can handle turn translation
         // between the model and ui tiers
@@ -66,7 +70,7 @@ public final class Application {
 
         // inject the template engine, gson object, and player lobby into the
         // web server to assist with route view creation
-        final WebServer webServer = new WebServer(templateEngine, gson, playerLobby, turnController);
+        final WebServer webServer = new WebServer(templateEngine, gson, playerLobby, turnController, gameCenter);
 
         // inject web server into application
         final Application app = new Application(webServer);

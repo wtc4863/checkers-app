@@ -1,9 +1,13 @@
 package com.webcheckers.ui;
 
+import com.webcheckers.appl.AsyncServices;
 import com.webcheckers.appl.PlayerLobby;
 import spark.Request;
 import spark.Response;
 import spark.Route;
+
+import java.util.Objects;
+import java.util.logging.Logger;
 
 public class PostStartAsyncRoute implements Route {
 
@@ -14,12 +18,20 @@ public class PostStartAsyncRoute implements Route {
     //
     // Attributes
     //
+    private static final Logger LOG = Logger.getLogger(PostStartAsyncRoute.class.getName());
+    private final AsyncServices asyncServices;
 
     //
     // Constructor
     //
 
-    public PostStartAsyncRoute() {
+    public PostStartAsyncRoute(final AsyncServices asyncServices) {
+        // validation
+        Objects.requireNonNull(asyncServices, "asyncServices must not be null");
+
+        this.asyncServices = asyncServices;
+
+        LOG.config("PostStartAsyncRoute is initialized.");
     }
 
     //
@@ -37,4 +49,5 @@ public class PostStartAsyncRoute implements Route {
     public Object handle(Request request, Response response) {
         return null;
     }
+
 }
