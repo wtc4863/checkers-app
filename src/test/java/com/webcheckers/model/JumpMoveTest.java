@@ -324,7 +324,7 @@ public class JumpMoveTest {
      */
     @Test
     public void testDefaultBoardWhiteNoJumpMoves() {
-        Game realGame = new Game(mock(Player.class), mock(Player.class));
+        Game realGame = new Game(mock(Player.class), mock(Player.class), 0);
 
         assertFalse(JumpMove.jumpMoveAvailable(game));
     }

@@ -101,7 +101,6 @@ public class GetHomeRouteTest {
     public void testPlayerNotInGameSignedInPlayers() {
         // Make it look like we aren't in a game
         when(playerLobby.getGame(player)).thenReturn(null);
-
         // Make it look like the player is signed in
         when(playerLobby.getPlayerNameBySessionID(SESSION_ID)).thenReturn(USERNAME);
 
@@ -119,6 +118,15 @@ public class GetHomeRouteTest {
         ArrayList<String> expectedSignedInPlayers = new ArrayList<>();
         expectedSignedInPlayers.add(OTHER_USERNAME);
 
+        ArrayList<String> expectedOpponentNames = new ArrayList<>();
+        expectedOpponentNames.add(OTHER_USERNAME);
+        player.addCurrentOpponentName(OTHER_USERNAME);
+        when(player.getCurrentOpponentNames()).thenReturn(expectedOpponentNames);
+
+        ArrayList<Integer> expectedGameIDs = new ArrayList<>();
+        expectedGameIDs.add(0);
+        when(player.getCurrentGameIDs()).thenReturn(expectedGameIDs);
+
         // Invoke test
         CuT.handle(request, response);
 
@@ -130,6 +138,8 @@ public class GetHomeRouteTest {
         testHelper.assertViewModelAttribute(GetHomeRoute.TITLE_ATTR, GetHomeRoute.TITLE);
         testHelper.assertViewModelAttribute(GetHomeRoute.MESSAGE_ATTR, "");
         testHelper.assertViewModelAttribute(GetHomeRoute.SIGNED_IN_PLAYERS, expectedSignedInPlayers);
+        testHelper.assertViewModelAttribute(GetHomeRoute.CURRENT_GAME_OPPONENT_NAMES, expectedOpponentNames);
+        testHelper.assertViewModelAttribute(GetHomeRoute.CURRENT_GAME_IDS, expectedGameIDs);
         testHelper.assertViewModelAttribute(GetHomeRoute.IS_SIGNED_IN, true);
         testHelper.assertViewModelAttributeIsAbsent(GetHomeRoute.NUM_SIGNED_IN);
         // Test view name

@@ -45,6 +45,7 @@ public class GameTest {
         Assertions.assertNotNull(CuT.whitePlayer);
         Assertions.assertEquals(whitePlayer, CuT.whitePlayer);
         Assertions.assertNotNull(CuT.board);
+        Assertions.assertEquals(0, CuT.getGameID());
     }
 
     @Test

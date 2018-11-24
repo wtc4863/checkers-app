@@ -22,6 +22,7 @@ public class GameCenterTest {
     private GameCenter CuT;
     private Player whitePlayer;
     private Player redPlayer;
+    private Player thirdPlayer;
 
     @BeforeEach
     public void setup() {
@@ -30,6 +31,7 @@ public class GameCenterTest {
         // create test players for the game
         whitePlayer = new Player("whitePlayerName", "1");
         redPlayer = new Player("redPlayerName", "2");
+        thirdPlayer = new Player("thirdPlayerName", "3");
     }
     @AfterEach
     public void destroy() {
@@ -58,6 +60,18 @@ public class GameCenterTest {
         // check if game was returned
         assertNotNull(testGame);
     }
+
+    @Test
+    public void testBuildPlayerLists() {
+      Game testGame = CuT.startGame(redPlayer, whitePlayer);
+      Game testGame2 = CuT.startGame(redPlayer, thirdPlayer);
+      ArrayList<String> redNames = redPlayer.getCurrentOpponentNames();
+      ArrayList<Integer> redIDs = redPlayer.getCurrentGameIDs();
+      assertEquals(redNames.get(0), whitePlayer.getName());
+      assertEquals(redNames.get(1), thirdPlayer.getName());
+      assertEquals(redIDs.get(0), (Integer)testGame.getGameID());
+      assertEquals(redIDs.get(1), (Integer)testGame2.getGameID());
+  }
 
     @Test
     public void testGetOpponentWithNonexistentPlayer() {
