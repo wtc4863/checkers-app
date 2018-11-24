@@ -106,15 +106,25 @@ public class GetGameRoute implements Route{
         // Check how many opponents still need to respond
         HashMap<String, Game.State> opponents = asyncServices.waitingForResponses(player);
 
-        if (opponents.containsValue(Game.State.ASYNC_START)) { // At least one person still has to respond
-            vm.put(MESSAGE_ATTR, new Message(WAIT_RESPONSE_MSG + opponentNames(opponents, Game.State.ASYNC_START), MessageType.info));
-        } else if (opponents.containsValue(Game.State.ASYNC_DENIED)) { // At least one person denied
-            vm.put(MESSAGE_ATTR, new Message(REJECTED_MSG + opponentNames(opponents, Game.State.ASYNC_START), MessageType.info));
+        // The string for the message
+        String message;
+
+        // Determine what message will be displayed
+        if (opponents.containsValue(Game.State.ASYNC_START)) {
+            // At least one person still has to respond
+            message = WAIT_RESPONSE_MSG + opponentNames(opponents, Game.State.ASYNC_START);
+        } else if (opponents.containsValue(Game.State.ASYNC_DENIED)) {
+            // At least one person denied
+            message = REJECTED_MSG + opponentNames(opponents, Game.State.ASYNC_DENIED);
             asyncServices.finishAsyncRequest(player);
-        } else { // Everyone accepted!
-            vm.put(MESSAGE_ATTR, new Message(APPROVED_MSG, MessageType.info));
+        } else {
+            // Everyone accepted!
+            message = APPROVED_MSG;
             asyncServices.finishAsyncRequest(player);
         }
+
+        // Add the message to the view model
+        vm.put(MESSAGE_ATTR, new Message(message, MessageType.info));
     }
 
     /**
@@ -140,18 +150,22 @@ public class GetGameRoute implements Route{
                 if (!game.isAsyncRequester(player)) {
                     vm.put(MESSAGE_ATTR, new Message(ASYNC_REQUEST, MessageType.info));
                     vm.put(ASYNC_REQUEST_ATTR, true);
+                } else {
+                    checkResponses(vm, player);
                 }
-                checkResponses(vm, player);
                 break;
             case ENDED:
                 break;
             case ASYNC_DENIED:
-                checkResponses(vm, player);
-                break;
             case ASYNC_ACCEPTED:
-                checkResponses(vm, player);
+                if (game.isAsyncRequester(player)) {
+                    checkResponses(vm, player);
+                }
                 break;
-            default:  // Either ASYNC_ACTIVE or ACTIVE
+            case ASYNC_ACTIVE:
+                vm.put(ASYNC_MODE_ATTR, true);
+                // Don't break so we fall through to the rest of the *ACTIVE logic
+            case ACTIVE:
                 // Check if any players have won the game
                 game.calculateWinningPlayer();
                 if (game.getWinningPlayerName() != null) {

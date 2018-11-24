@@ -73,17 +73,17 @@
             <#else>
             <div id="message" class="info" style="display:none">
               <!-- keep here for client-side messages -->
-              <#if asyncRequest??>
+            </div>
+            </#if>
+            <#if asyncRequest??>
               <form action="/confirmAsync" method="POST">
                 <input type="submit" value="Yes" />
               </form>
               <form action="/denyAsync" method="POST">
                 <input type="submit" value="No" />
               </form>
-              </#if>
-            </div>
             </#if>
-            
+
             <div>
               <table data-color='RED'>
                 <tr>
