@@ -516,12 +516,13 @@ public class Game {
         switch(this.state) {
             case ASYNC_ACCEPTED:
                 this.state = State.ASYNC_ACTIVE;
+                this.asyncRequester = null;
                 break;
             case ASYNC_DENIED:
                 this.state = State.ACTIVE;
+                this.asyncRequester = null;
                 break;
         }
-        this.asyncRequester = null;
     }
 
     /**
