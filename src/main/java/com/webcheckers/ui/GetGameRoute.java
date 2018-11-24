@@ -1,5 +1,6 @@
 package com.webcheckers.ui;
 
+import com.webcheckers.appl.AsyncServices;
 import com.webcheckers.appl.PlayerLobby;
 import com.webcheckers.model.Game;
 import com.webcheckers.model.Piece;
@@ -43,6 +44,9 @@ public class GetGameRoute implements Route{
     final static String NO_USERNAME_SELECTED = "You are not in a game. You must first start a game with another player.";
     final static String PLAYER_RESIGNED_MSG = "The other player has left, you win! Please go back to home page.";
     final static String ASYNC_REQUEST = "Your opponent has requested to switch to asynchronous mode. Would you like to switch to asynchronous mode?";
+    final static String WAIT_RESPONSE_MSG = "Waiting on the following opponents to respond: ";
+    final static String REJECTED_MSG = "At least one of your opponents has rejected your request to switch to asynchronous mode. If you sign out, you will be automatically resigned from those games. The following opponents rejected your request: ";
+    final static String APPROVED_MSG = "All of your opponents have approved your request to switch to asynchronous mode!";
 
     public enum View {
         PLAY, SPECTATOR, REPLAY;
@@ -53,24 +57,74 @@ public class GetGameRoute implements Route{
     //
     private final TemplateEngine templateEngine;
     private final PlayerLobby playerLobby;
+    private final AsyncServices asyncServices;
 
     //
     // Constructor
     //
-    GetGameRoute(final PlayerLobby playerLobby, final TemplateEngine templateEngine) {
+    GetGameRoute(final PlayerLobby playerLobby, final TemplateEngine templateEngine, final AsyncServices asyncServices) {
         //validate
         Objects.requireNonNull(templateEngine, "templateEngine must not be null");
         Objects.requireNonNull(playerLobby, "playerLobby cannot be null");
+        Objects.requireNonNull(asyncServices, "asyncServices cannot be null");
         //
         this.templateEngine = templateEngine;
         this.playerLobby = playerLobby;
+        this.asyncServices = asyncServices;
     }
 
     //
     // Methods
     //
 
-    private String renderGame(Game game, Player currentPlayer) {
+    /**
+     * Helper method to return a list string (like "Joe, Bob, Chuck") of the
+     * names of opponents in games of a specified state.
+     *
+     * @param opponents the hashmap of opponent names to game states
+     * @param state the game state to filter by
+     * @return the rendered list string
+     */
+    private String opponentNames(HashMap<String, Game.State> opponents, Game.State state) {
+        ArrayList<String> opponentNames = new ArrayList<>();
+        for(Map.Entry<String, Game.State> entry : opponents.entrySet()) {
+            if (entry.getValue() == state) {
+                opponentNames.add(entry.getKey());
+            }
+        }
+        return String.join(", ", opponentNames);
+    }
+
+    /**
+     * Helper method to check the responses to an asynchronous request across
+     * all a player's games.
+     *
+     * @param vm the view model used to render the game page
+     * @param player the current player
+     */
+    private void checkResponses(Map<String, Object> vm, Player player) {
+        // Check how many opponents still need to respond
+        HashMap<String, Game.State> opponents = asyncServices.waitingForResponses(player);
+
+        if (opponents.containsValue(Game.State.ASYNC_START)) { // At least one person still has to respond
+            vm.put(MESSAGE_ATTR, new Message(WAIT_RESPONSE_MSG + opponentNames(opponents, Game.State.ASYNC_START), MessageType.info));
+        } else if (opponents.containsValue(Game.State.ASYNC_DENIED)) { // At least one person denied
+            vm.put(MESSAGE_ATTR, new Message(REJECTED_MSG + opponentNames(opponents, Game.State.ASYNC_START), MessageType.info));
+            asyncServices.finishAsyncRequest(player);
+        } else { // Everyone accepted!
+            vm.put(MESSAGE_ATTR, new Message(APPROVED_MSG, MessageType.info));
+            asyncServices.finishAsyncRequest(player);
+        }
+    }
+
+    /**
+     * Helper method to render the game page.
+     *
+     * @param game the game being rendered
+     * @param player the player viewing the game
+     * @return the rendered game template
+     */
+    private String renderGame(Game game, Player player) {
         // Template set-up
         final Map<String, Object> vm = new HashMap<>();
         String winner = "NO_WINNER";
@@ -79,22 +133,23 @@ public class GetGameRoute implements Route{
         If the current player is the white player in the game, then flip the
         board the other way around.
          */
-        boolean opposite = currentPlayer.equals(game.getWhitePlayer());
+        boolean opposite = player.equals(game.getWhitePlayer());
 
         switch(game.getState()) {
             case ASYNC_START:
-                if (!game.isAsyncRequester(currentPlayer)) {
+                if (!game.isAsyncRequester(player)) {
                     vm.put(MESSAGE_ATTR, new Message(ASYNC_REQUEST, MessageType.info));
                     vm.put(ASYNC_REQUEST_ATTR, true);
                 }
+                checkResponses(vm, player);
                 break;
             case ENDED:
                 break;
             case ASYNC_DENIED:
-                // TODO: check if all other games are out of ASYNC_START
+                checkResponses(vm, player);
                 break;
             case ASYNC_ACCEPTED:
-                // TODO: check if all other games are out of ASYNC_START
+                checkResponses(vm, player);
                 break;
             default:  // Either ASYNC_ACTIVE or ACTIVE
                 // Check if any players have won the game
@@ -116,7 +171,7 @@ public class GetGameRoute implements Route{
         // Set attributes
         vm.put(WINNER_ATTR, winner);
         vm.put(TITLE_ATTR, TITLE);
-        vm.put(CURRENT_PLAYER_ATTR, currentPlayer);
+        vm.put(CURRENT_PLAYER_ATTR, player);
         vm.put(VIEW_MODE_ATTR, View.PLAY);
         vm.put(RED_PLAYER_ATTR, game.getRedPlayer());
         vm.put(WHITE_PLAYER_ATTR, game.getWhitePlayer());

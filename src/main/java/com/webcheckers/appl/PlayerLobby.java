@@ -44,7 +44,7 @@ public class PlayerLobby {
      * Create a new PlayerLobby instance with a brand-new GameCenter object.
      * Currently only used for testing purposes.
      */
-    PlayerLobby() {
+    public PlayerLobby() {
         this(new GameCenter());
     }
 

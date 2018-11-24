@@ -208,7 +208,7 @@ public class WebServer {
         post(SIGN_IN_URL, new PostSignInRoute(playerLobby, templateEngine));
 
         //Shows the Checkers game page
-        get(GAME_URL, new GetGameRoute(playerLobby, templateEngine));
+        get(GAME_URL, new GetGameRoute(playerLobby, templateEngine, asyncServices));
 
         // Handles Move Validation
         post(VALIDATE_MOVE_URL, new PostValidateMoveRoute(playerLobby, turnController));
