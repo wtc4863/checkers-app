@@ -116,10 +116,17 @@ public class PlayerLobby {
      */
     public synchronized boolean signIn(Player player) {
         if(!validName(player.getName())) {
+            // Make sure the name is valid
             return false;
         } else if (getSignedInPlayers().contains(player.getName())) {
+            // Make sure the name isn't already in use
             return false;
+        } else if (players.containsKey(player.getName())) {
+            // If the player already exists, sign them in
+            this.getPlayer(player.getName()).signIn(player.getSessionID());
+            return true;
         } else {
+            // The player does not exist, sign in the new player
             players.put(player.getName(), player);
             return true;
         }

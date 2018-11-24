@@ -121,6 +121,10 @@ public class Player {
         this.currentOpponentNames.add(name);
     }
 
+    public String getSessionID() {
+        return this.sessionID;
+    }
+
     public void removeCurrentGame(Game game) {
         int id = game.getGameID();
         int index = currentGameIDs.indexOf(id);

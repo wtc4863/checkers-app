@@ -1,5 +1,6 @@
 package com.webcheckers.ui;
 
+import com.webcheckers.appl.AsyncServices;
 import com.webcheckers.appl.PlayerLobby;
 import com.webcheckers.model.Game;
 import com.webcheckers.model.Player;
@@ -39,6 +40,7 @@ public class GetGameRouteTester {
     private Player thisPlayer;
     private Player otherPlayer;
     private Game game;
+    private AsyncServices asyncServices;
 
     //
     // Setup
@@ -74,8 +76,11 @@ public class GetGameRouteTester {
         game = mock(Game.class);
         when(game.getTurn()).thenReturn(Game.Turn.RED);
 
+        // Set up async services
+        asyncServices = mock(AsyncServices.class);
+
         // Set up the route component
-        CuT = new GetGameRoute(playerLobby, templateEngine);
+        CuT = new GetGameRoute(playerLobby, templateEngine, asyncServices);
     }
 
     //
