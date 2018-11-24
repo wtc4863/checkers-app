@@ -58,10 +58,8 @@ public class GetSignOutRoute implements Route {
       if (playerLobby.getGame(playerSO) != null) {
         playerLobby.resignPlayerFromGame(playerLobby.getGame(playerSO), playerSO);
       }
-      playerLobby.signOut(playerName);
       playerLobby.changeGame(playerLobby.getPlayerBySessionID(sessionID), -1);
       playerLobby.signOut(playerName);
-
     }
     response.redirect("/");
     halt();

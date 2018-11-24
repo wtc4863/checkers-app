@@ -131,7 +131,8 @@ public class PlayerLobby {
      */
     public void signOut(String playerName) {
         players.get(playerName).signOut();
-        players.remove(playerName);
+        // We don't want the player to be removed from the list of players!!
+        // players.remove(playerName);
     }
 
     /**

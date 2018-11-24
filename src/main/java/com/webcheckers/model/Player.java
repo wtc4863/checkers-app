@@ -50,10 +50,12 @@ public class Player {
     /**
      * Checks if a player is signed in with a given session id
      * @param sessionID the sessionID to check against
-     * @return true if the sessinonID matches this players sessionID
+     * @return true if the sessionID matches this players sessionID
      */
     public boolean isSignedIn(String sessionID) {
-        return this.sessionID.equals(sessionID);
+        // Make sure a NullPointerException isn't thrown if the player is
+        // signed out
+        return this.sessionID != null && this.sessionID.equals(sessionID);
     }
 
     /**
