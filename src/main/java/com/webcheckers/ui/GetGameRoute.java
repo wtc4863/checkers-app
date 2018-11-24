@@ -121,6 +121,9 @@ public class GetGameRoute implements Route{
             // Everyone accepted!
             message = APPROVED_MSG;
             asyncServices.finishAsyncRequest(player);
+
+            // Make sure the game says that you're in async mode
+            vm.put(ASYNC_MODE_ATTR, true);
         }
 
         // Add the message to the view model
@@ -145,8 +148,14 @@ public class GetGameRoute implements Route{
          */
         boolean opposite = player.equals(game.getWhitePlayer());
 
+        // Check whose turn it is
+        Game.Turn currentTurn = game.getTurn();
+
+        // Perform the correct checking depending on the game state
         switch(game.getState()) {
             case ASYNC_START:
+                // Disable the game controls for everyone
+                currentTurn = game.getOpponentTurnColor(player);
                 if (!game.isAsyncRequester(player)) {
                     vm.put(MESSAGE_ATTR, new Message(ASYNC_REQUEST, MessageType.info));
                     vm.put(ASYNC_REQUEST_ATTR, true);
@@ -156,8 +165,11 @@ public class GetGameRoute implements Route{
                 break;
             case ENDED:
                 break;
+            // These two do the same thing
             case ASYNC_DENIED:
             case ASYNC_ACCEPTED:
+                // Disable the game controls for everyone
+                currentTurn = game.getOpponentTurnColor(player);
                 if (game.isAsyncRequester(player)) {
                     checkResponses(vm, player);
                 }
@@ -189,7 +201,7 @@ public class GetGameRoute implements Route{
         vm.put(VIEW_MODE_ATTR, View.PLAY);
         vm.put(RED_PLAYER_ATTR, game.getRedPlayer());
         vm.put(WHITE_PLAYER_ATTR, game.getWhitePlayer());
-        vm.put(ACTIVE_COLOR_ATTR, game.getTurn());
+        vm.put(ACTIVE_COLOR_ATTR, currentTurn);
         vm.put(BOARD_VIEW_ATTR, game.getBoardView(opposite));
 
         return templateEngine.render(new ModelAndView(vm, TEMPLATE_NAME));

@@ -534,4 +534,15 @@ public class Game {
     public boolean isAsyncRequester(Player player) {
         return this.asyncRequester.equals(player);
     }
+
+    /**
+     * Get the turn color of a player's opponent
+     */
+    public Turn getOpponentTurnColor(Player player) {
+        if (redPlayer.equals(player)) {
+            return Turn.WHITE;
+        } else {
+            return Turn.RED;
+        }
+    }
 }
