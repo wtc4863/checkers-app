@@ -75,6 +75,7 @@ public class GetGameRouteTester {
         // Set up game
         game = mock(Game.class);
         when(game.getTurn()).thenReturn(Game.Turn.RED);
+        when(game.getState()).thenReturn(Game.State.ACTIVE);
 
         // Set up async services
         asyncServices = mock(AsyncServices.class);

@@ -52,6 +52,7 @@ public class PostCheckTurnRouteTest {
         when(session.id()).thenReturn(TEST_ID);
         when(playerLobby.getPlayerBySessionID(TEST_ID)).thenReturn(player);
         when(playerLobby.getGame(player)).thenReturn(game);
+        when(game.getState()).thenReturn(Game.State.ACTIVE);
         CuT = new PostCheckTurnRoute(playerLobby, gson);
     }
 
@@ -83,8 +84,4 @@ public class PostCheckTurnRouteTest {
         String JSONResult = (String)result;
         Assertions.assertEquals(NOT_PLAYERS_TURN_JSON, JSONResult);
     }
-
-
-
-
 }

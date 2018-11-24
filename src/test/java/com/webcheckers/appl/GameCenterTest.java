@@ -93,9 +93,22 @@ public class GameCenterTest {
     @Test
     public void testGetGameWithExistingWhitePlayer() {
         Game expected = CuT.startGame(redPlayer, whitePlayer);
+
+        // Switch the white player's view to the game
         whitePlayer.changeGame(0);
+
         Game actual = CuT.getGame(whitePlayer);
         assertSame(expected, actual);
+    }
+
+    /**
+     * Make sure that the getGame method will return null when a player is
+     * viewing the home page.
+     */
+    @Test
+    public void testGetGameOnHomePage() {
+        CuT.startGame(redPlayer, whitePlayer);
+        assertNull(CuT.getGame(whitePlayer));
     }
 
     @Test
@@ -103,6 +116,17 @@ public class GameCenterTest {
         Game expected = CuT.startGame(redPlayer, whitePlayer);
         Game actual = CuT.getGame(redPlayer);
         assertSame(expected, actual);
+    }
+
+    @Test
+    public void testGetBoardViewWithExistingWhitePlayer() {
+        // Start game
+        CuT.startGame(redPlayer, whitePlayer);
+
+        // Switch the white player to the game
+        whitePlayer.changeGame(0); // 0 is the first game ID assigned
+
+        assertNotNull(CuT.getBoardView(whitePlayer));
     }
 
     @Test
