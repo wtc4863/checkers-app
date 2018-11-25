@@ -175,4 +175,40 @@ public class GameCenterTest {
         assertEquals(0, testHashMap.size());
     }
 
+    /**
+     * Helper method to create a mock game with a specific game ID.
+     */
+    private Game makeGame(int id) {
+        Game game = mock(Game.class);
+        when(game.getGameID()).thenReturn(id);
+        return game;
+    }
+
+    /**
+     * Make sure all game objects a player is in are properly retrieved.
+     */
+    @Test
+    public void testGetAllGames() {
+        // Set up the fake games
+        ArrayList<Game> testGames = new ArrayList<>();
+        ArrayList<Integer> gameIDs = new ArrayList<>();
+        testGames.add(makeGame(1));
+        gameIDs.add(1);
+        testGames.add(makeGame(2));
+        gameIDs.add(2);
+        testGames.add(makeGame(3));
+        gameIDs.add(3);
+
+        // Set up the fake player
+        Player player = mock(Player.class);
+        when(player.getCurrentGameIDs()).thenReturn(gameIDs);
+
+        // Set up Component under Test
+        CuT = new GameCenter(new HashMap<>(), testGames);
+
+        // Invoke test
+        ArrayList<Game> results = CuT.getAllGames(player);
+
+        assertIterableEquals(testGames, results);
+    }
 }

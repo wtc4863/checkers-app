@@ -85,7 +85,7 @@ public class GetGameRoute implements Route{
      * @param state the game state to filter by
      * @return the rendered list string
      */
-    private String opponentNames(HashMap<String, Game.State> opponents, Game.State state) {
+    static String opponentNames(HashMap<String, Game.State> opponents, Game.State state) {
         ArrayList<String> opponentNames = new ArrayList<>();
         for(Map.Entry<String, Game.State> entry : opponents.entrySet()) {
             if (entry.getValue() == state) {
