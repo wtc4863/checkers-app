@@ -93,6 +93,7 @@ public class GameCenterTest {
     @Test
     public void testGetGameWithExistingWhitePlayer() {
         Game expected = CuT.startGame(redPlayer, whitePlayer);
+        whitePlayer.changeGame(0);
         Game actual = CuT.getGame(whitePlayer);
         assertSame(expected, actual);
     }
@@ -102,12 +103,6 @@ public class GameCenterTest {
         Game expected = CuT.startGame(redPlayer, whitePlayer);
         Game actual = CuT.getGame(redPlayer);
         assertSame(expected, actual);
-    }
-
-    @Test
-    public void testGetBoardViewWithExistingWhitePlayer() {
-        CuT.startGame(redPlayer, whitePlayer);
-        assertNotNull(CuT.getBoardView(whitePlayer));
     }
 
     @Test

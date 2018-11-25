@@ -73,26 +73,6 @@ public class GetHomeRouteTest {
     //
 
     /**
-     * Make sure that if a player is in a game, they will be redirected to the
-     * game page.
-     */
-    @Test
-    public void testPlayerInGameRedirect() {
-        // Make the player lobby return a player
-        when(playerLobby.getPlayerBySessionID(SESSION_ID)).thenReturn(player);
-
-        // Make sure the player lobby will return some sort of game
-        Game mockGame = mock(Game.class);
-        mockGame.state = Game.State.ACTIVE;
-        when(playerLobby.getGame(player)).thenReturn(mockGame);
-
-        assertThrows(spark.HaltException.class, () -> {
-            CuT.handle(request, response);
-        });
-        verify(response).redirect(GAME_URL);
-    }
-
-    /**
      * Make sure that, when a user is logged in and there is another user
      * logged in, then the other user's username will appear in a button on the
      * homepage.
