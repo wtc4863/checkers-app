@@ -79,7 +79,7 @@ public class GetSignOutRouteTest {
 
     // Make sure we redirect
     assertThrows(spark.HaltException.class, () -> {
-          CuT.handle(request, response);
+         CuT.handle(request, response);
         });
 
     //Check that the player has been properly removed from the application

@@ -92,6 +92,13 @@ public class GetGameRoute implements Route{
             playerLobby.endGame(game);
         }
 
+        if (game.getSignedoutPlayer() != null) {
+            LOG.fine("Inside get signing out player winner: " + game.getWinningPlayerName() + ", ResigningPlayer: " + game.getSignedoutPlayer().getName());
+            winner = game.getWinningPlayerName();
+            vm.put(MESSAGE_ATTR, new Message(PLAYER_RESIGNED_MSG, MessageType.info));
+            playerLobby.endGame(game);
+        }
+
         // Set attributes
         vm.put(WINNER_ATTR, winner);
         vm.put(TITLE_ATTR, TITLE);

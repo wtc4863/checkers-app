@@ -18,6 +18,8 @@ public class Game {
     Player whitePlayer;
     Player winningPlayer;
     Player resignedPlayer;
+    Player signedoutPlayer;
+
     Board board;
     Turn turn;
     ArrayList<Move> queuedTurnMoves;
@@ -141,6 +143,23 @@ public class Game {
         } else {
             return getWhitePlayer();
         }
+    }
+
+
+    /**
+     * This method checks if the opponent player signed out
+     * @return the player object representing the player that signed out
+     */
+    public  Player getSignedoutPlayer() {
+        return this.signedoutPlayer;
+    }
+
+    /**
+     * This method sets a signed out player
+     * @pram the player that is to be signed out
+     */
+    public  void setSignedoutPlayer(Player soPlayer){
+        signedoutPlayer = soPlayer;
     }
 
     /**
