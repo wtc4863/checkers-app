@@ -19,7 +19,7 @@ public class JumpMove extends Move {
     static final String INVALID_LANDING_SPACE = "You cannot end a jump move on a space with a piece.";
     static final String MIDDLE_SAME_COLOR = "You cannot jump your own piece.";
     static final String MIDDLE_NO_PIECE = "You cannot jump an empty space.";
-
+    static final String ALREADY_JUMPED = "That piece has already been jumped!";
 
     Position middle;
 
@@ -79,6 +79,18 @@ public class JumpMove extends Move {
         // Init variables
         Piece movedPiece;
         Piece jumpedPiece;
+
+        // Make sure we haven't jumped the same piece twice
+        for(Move move : game.getQueuedTurnMoves()) {
+            if (move instanceof JumpMove) {
+                // Only perform this check on jump moves, duh
+                Position theirMiddle = ((JumpMove) move).middle;
+                if (theirMiddle.equals(this.middle)) {
+                    this.currentMsg = ALREADY_JUMPED;
+                    return false;
+                }
+            }
+        }
 
         // Make sure the spacing is right
         if(!validSpacing(this.start, this.end)) {

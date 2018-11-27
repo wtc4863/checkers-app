@@ -545,4 +545,8 @@ public class Game {
             return Turn.RED;
         }
     }
+
+    public ArrayList<Move> getQueuedTurnMoves() {
+        return this.queuedTurnMoves;
+    }
 }
