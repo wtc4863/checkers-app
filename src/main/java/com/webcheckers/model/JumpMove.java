@@ -189,7 +189,7 @@ public class JumpMove extends Move {
     @Override
     public boolean executeMove(Game game) {
         // Double-check that the move is valid
-        if(validateMove(game)) {
+        //if(validateMove(game)) {
             LOG.fine("Executing Move " + toString());
             Board board = game.getBoard();
             // Move the piece
@@ -198,9 +198,9 @@ public class JumpMove extends Move {
             // Remove the jumped piece
             board.getSpace(middle).removePiece();
             return true;
-        } else {
+        /*} else {
             return false;
-        }
+        }*/
     }
 
     /**
