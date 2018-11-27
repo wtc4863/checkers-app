@@ -157,6 +157,7 @@ public class GameCenter {
         if (game.getState() == Game.State.ACTIVE) {
             game.setStateEnded();
         } else {
+            game.unmatchPlayers();
             this.opponents.remove(game.getRedPlayer().getName());
             this.opponents.remove(game.getWhitePlayer().getName());
             this.activeGames.remove(game);

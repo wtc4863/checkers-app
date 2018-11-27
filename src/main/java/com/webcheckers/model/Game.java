@@ -377,11 +377,9 @@ public class Game {
         return null;
     }
 
-    public Move getFirstMove() {
-        if (hasMovesInCurrentTurn()) {
-            return queuedTurnMoves.get(0);
-        }
-        return null;
+    public void unmatchPlayers() {
+        redPlayer.removeCurrentGame(this);
+        whitePlayer.removeCurrentGame(this);
     }
 
     //

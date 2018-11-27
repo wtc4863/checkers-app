@@ -119,6 +119,13 @@ public class Player {
         this.currentOpponentNames.add(name);
     }
 
+    public void removeCurrentGame(Game game) {
+        int id = game.getGameID();
+        int index = currentGameIDs.indexOf(id);
+        currentGameIDs.remove(index);
+        currentOpponentNames.remove(index);
+    }
+
 
 //    public void addGame(int gameID, String opponentName) {
 //        this.currentGames.put(gameID, opponentName);
