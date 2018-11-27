@@ -241,6 +241,29 @@ public class PlayerLobby {
      */
     public void resignPlayerFromGame(Game gameToResignFrom, Player playerResigning) {
         gameCenter.resignFromGame(gameToResignFrom, playerResigning);
+        playerResigning.removeCurrentGame(gameToResignFrom);
     }
 
+    /**
+     * Sign out a player and automatically resign them from any games that are
+     * in synchronous mode.
+     *
+     * @param player the player to sign out
+     */
+    public void signOutFromAllGames(Player player) {
+        for(Game game : gameCenter.getAllGames(player)) {
+            switch(game.getState()) {
+                case ASYNC_ACTIVE:
+                    // Just do nothing when they're in an asynchronous game
+                    break;
+                case ENDED:
+                    // This is handled by other functions, such as GetGameRoute
+                    break;
+                default:
+                    // ALL OTHER STATES are in asynchronous mode
+                    this.resignPlayerFromGame(game, player);
+            }
+        }
+        this.signOut(player.getName());
+    }
 }

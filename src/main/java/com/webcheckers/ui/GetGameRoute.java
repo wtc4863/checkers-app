@@ -163,8 +163,6 @@ public class GetGameRoute implements Route{
                     checkResponses(vm, player);
                 }
                 break;
-            case ENDED:
-                break;
             // These two do the same thing
             case ASYNC_DENIED:
             case ASYNC_ACCEPTED:
@@ -177,6 +175,7 @@ public class GetGameRoute implements Route{
             case ASYNC_ACTIVE:
                 vm.put(ASYNC_MODE_ATTR, true);
                 // Don't break so we fall through to the rest of the *ACTIVE logic
+            case ENDED:
             case ACTIVE:
                 // Check if any players have won the game
                 game.calculateWinningPlayer();
@@ -190,6 +189,12 @@ public class GetGameRoute implements Route{
                 // Check if the opponent resigned
                 if (game.getResigningPlayer() != null) {
                     LOG.fine("Inside get resigning player winner: " + game.getWinningPlayerName() + ", ResigningPlayer: " + game.getResigningPlayer().getName());
+                    vm.put(MESSAGE_ATTR, new Message(PLAYER_RESIGNED_MSG, MessageType.info));
+                }
+
+                // Check if the opponent signed out
+                if (game.getSignedoutPlayer() != null) {
+                    LOG.fine("Inside get signed out player winner: " + game.getWinningPlayerName() + ", SignedOutPlayer: " + game.getSignedoutPlayer().getName());
                     vm.put(MESSAGE_ATTR, new Message(PLAYER_RESIGNED_MSG, MessageType.info));
                 }
         }
