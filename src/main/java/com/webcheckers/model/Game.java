@@ -397,14 +397,12 @@ public class Game {
 
     public static Game testDoubleJumpKing(Player redPlayer, Player whitePlayer) {
         ArrayList<Position> redPieces = new ArrayList<>(Arrays.asList(
-            new Position(3, 6),
-            new Position(1, 4),
-            new Position(3, 2)
+            new Position(1, 0)
         ));
         ArrayList<Position> whitePieces = new ArrayList<>(Arrays.asList(
-            new Position(0, 5),
-            new Position(6, 3),
-            new Position(4, 5)
+            new Position(1, 2),
+            new Position(1, 4),
+            new Position(0,7)
         ));
         return new Game(redPlayer, whitePlayer, Turn.RED, new Board(redPieces, whitePieces));
     }
@@ -439,6 +437,21 @@ public class Game {
         ));
         ArrayList<Position> whitePieces = new ArrayList<>(Arrays.asList(
             new Position(1, 2)
+        ));
+        return new Game(redPlayer, whitePlayer, Turn.RED, new Board(redPieces, whitePieces));
+    }
+
+    public static Game testInvalidMoves(Player redPlayer, Player whitePlayer) {
+        ArrayList<Position> redPieces = new ArrayList<>(Arrays.asList(
+            new Position(6,3),
+            new Position(5, 2),
+            new Position(4, 1)
+        ));
+        ArrayList<Position> whitePieces = new ArrayList<>(Arrays.asList(
+            new Position(5, 4),
+            new Position(4, 3),
+            new Position(2, 3),
+            new Position(3, 6)
         ));
         return new Game(redPlayer, whitePlayer, Turn.RED, new Board(redPieces, whitePieces));
     }

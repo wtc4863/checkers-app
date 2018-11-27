@@ -20,11 +20,15 @@ public class GameCenter {
     private static final String NO_MOVES_AVAILABLE = "test no moves";
     private static final String KING_MID_TURN = "test king middle";
     private static final String EASY_WIN = "test easy win";
+    private static final String ABS_TEST = "i dont care";
     private static final ArrayList<String> customNames = new ArrayList<>(Arrays.asList(
         KING_PIECE,
         DOUBLE_JUMP,
         DOUBLE_JUMP_KING,
-        NO_MOVES_AVAILABLE
+        NO_MOVES_AVAILABLE,
+        KING_MID_TURN,
+        EASY_WIN,
+        ABS_TEST
     ));
 
     //
@@ -118,6 +122,9 @@ public class GameCenter {
                     break;
                 case EASY_WIN:
                     game = Game.testCaptureToEnd(redPlayer, whitePlayer);
+                    break;
+                case ABS_TEST:
+                    game = Game.testInvalidMoves(redPlayer, whitePlayer);
                     break;
             }
         }
