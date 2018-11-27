@@ -54,7 +54,7 @@ public class SimpleMoveTest {
         // setup
         testStart = new Position(START_ROW, START_COL);
         testEnd = new Position(END_ROW_RED, END_COL_RED);
-        testGame = new Game(new Player(TEST_NAME_RED), new Player(TEST_NAME_WHITE), Turn.RED, testBoard);
+        testGame = new Game(new Player(TEST_NAME_RED), new Player(TEST_NAME_WHITE), Turn.RED, testBoard, 1);
         when(testBoard.spaceIsValid(testEnd)).thenReturn(true);
         when(testBoard.getSpace(testStart)).thenReturn(new Space(Space.SpColor.black, new Piece(Piece.PColor.red, Piece.PType.single)));
 

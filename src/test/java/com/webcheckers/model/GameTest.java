@@ -51,7 +51,7 @@ public class GameTest {
     @Test
     public void testCustomConfigConstructor() {
         board = new Board();
-        CuT = new Game(redPlayer, whitePlayer, CUSTOM_GAME_TURN, board);
+        CuT = new Game(redPlayer, whitePlayer, CUSTOM_GAME_TURN, board, 1);
 
         Assertions.assertNotNull(CuT.redPlayer);
         Assertions.assertEquals(redPlayer, CuT.redPlayer);
@@ -89,7 +89,7 @@ public class GameTest {
     @Test
     public void testGetBoard() {
         board = new Board();
-        CuT = new Game(redPlayer, whitePlayer, Turn.RED, board);
+        CuT = new Game(redPlayer, whitePlayer, Turn.RED, board, 1);
         Assertions.assertEquals(board, CuT.getBoard());
     }
 
@@ -101,14 +101,14 @@ public class GameTest {
     @Test
     public void testGetTurn() {
         board = new Board();
-        CuT = new Game(redPlayer, whitePlayer, CUSTOM_GAME_TURN, board);
+        CuT = new Game(redPlayer, whitePlayer, CUSTOM_GAME_TURN, board, 1);
         Assertions.assertEquals(CUSTOM_GAME_TURN, CuT.getTurn());
     }
 
     @Test
     public void testSwitchTurn() {
         board = new Board();
-        CuT = new Game(redPlayer, whitePlayer, CUSTOM_GAME_TURN, board);
+        CuT = new Game(redPlayer, whitePlayer, CUSTOM_GAME_TURN, board, 1);
         Turn previous = CuT.getTurn();
         CuT.switchTurn();
         Assertions.assertNotEquals(previous, CuT.getTurn());
