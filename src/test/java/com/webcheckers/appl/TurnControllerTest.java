@@ -95,12 +95,14 @@ public class TurnControllerTest {
         Assertions.assertEquals(actual.getType(), MessageType.error);
     }
 
+    /*
     @Test
     public void handleValidationShouldFailMultipleSimpleMoves() {
         setupHandleValidation(true);
         Message actual = CuT.handleValidation(SIMPLE_MOVE_JSON, TEST_RED_ID);
         Assertions.assertEquals(actual.getType(), MessageType.error);
     }
+    */
 
     private void setupHandleValidation(boolean hasMultipleMoves) {
         Player red = new Player(TEST_RED_NAME, TEST_RED_ID);

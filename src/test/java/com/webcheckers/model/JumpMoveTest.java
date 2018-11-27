@@ -306,6 +306,8 @@ public class JumpMoveTest {
      * Make sure that a default starting board does not have any valid jump
      * moves for the red player.
      */
+
+    /*
     @Test
     public void testDefaultBoardRedNoJumpMoves() {
         Game mockGame = mock(Game.class);
@@ -314,6 +316,7 @@ public class JumpMoveTest {
 
         assertFalse(JumpMove.jumpMoveAvailable(mockGame));
     }
+    */
 
     /**
      * Make sure that a default starting board does not have any valid jump
