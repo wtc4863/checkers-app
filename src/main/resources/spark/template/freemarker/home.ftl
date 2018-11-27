@@ -12,7 +12,11 @@
     <h1>Web Checkers</h1>
     
     <div class="navigation">
+      <#if isUserSignedIn == true>
+      <a href="/signout">sign out</a>
+      <#else>
       <a href="/signin">sign in</a>
+      </#if>
       <a href="/">my home</a>
     </div>
     
