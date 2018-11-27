@@ -15,7 +15,7 @@ import java.util.Objects;
 
 import static spark.Spark.halt;
 
-public class PostSubmitTurnRoute implements Route{
+public class PostSubmitTurnRoute implements Route {
     public static final Logger LOG = Logger.getLogger(PostSubmitTurnRoute.class.getName());
 
     //
@@ -51,7 +51,7 @@ public class PostSubmitTurnRoute implements Route{
 
         Player thisPlayer = playerLobby.getPlayerBySessionID(sessionID);
 
-        if(thisPlayer == null) {
+        if (thisPlayer == null) {
             response.redirect("/");
             halt();
             return null;
@@ -64,12 +64,11 @@ public class PostSubmitTurnRoute implements Route{
             game.applyTurnMoves();
             return turnController.MessageFromModeltoUI(new Message(SUCCESS_MESSAGE, MessageType.info));
         }
-        if(game.movesLeft()) {
+        if (game.movesLeft()) {
             return turnController.MessageFromModeltoUI(new Message(ERROR_MESSAGE, MessageType.error));
         } else {
             game.applyTurnMoves();
             return turnController.MessageFromModeltoUI(new Message(SUCCESS_MESSAGE, MessageType.info));
         }
-
-  }
+    }
 }
