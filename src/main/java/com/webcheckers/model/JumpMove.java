@@ -145,7 +145,7 @@ public class JumpMove extends Move {
         }
 
         // Make sure the piece is going in the right direction
-        if (movedPiece.isKing()) {
+        if (!movedPiece.isKing()) {
             boolean check;
             if (currentColor == PColor.red) {
                 // Red pieces should travel in the "negative" direction

@@ -114,7 +114,7 @@ public class TurnController {
             if (movedPiece.isRed() && end.getRow() == 0) {
                 movedPiece.makeKing();
                 return true;
-            } else if (!movedPiece.isRed() || end.getRow() == 7) {
+            } else if (!movedPiece.isRed() && end.getRow() == 7) {
                 movedPiece.makeKing();
                 return true;
             }
