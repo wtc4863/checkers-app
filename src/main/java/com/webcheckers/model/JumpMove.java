@@ -190,6 +190,8 @@ public class JumpMove extends Move {
      * available.
      *
      * @param pos the position to check for moves
+     * @param pieceLocation the location of the piece that is being moved this
+     *                      turn
      * @param game the game that is currently running
      * @return true if the position has jump moves available, false otherwise
      */
