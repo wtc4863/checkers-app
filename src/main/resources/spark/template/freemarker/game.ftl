@@ -20,7 +20,9 @@
     if(winner === "${currentPlayer.name}") {
       // This player has won
       alert("Congratulations! You have won the game!");
-      window.location = "/";
+      window.setTimeout(function() {
+        window.location = "/";
+      }, 3000);
     } else if(winner === "NO_WINNER") {
       // Nobody has won yet
     } else {
