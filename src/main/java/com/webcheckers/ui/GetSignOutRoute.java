@@ -15,55 +15,53 @@ import spark.Route;
 import spark.Session;
 import spark.TemplateEngine;
 
-/**
- * UI Controller to GET the home page upon signing out
- */
+/** UI Controller to GET the home page upon signing out */
 public class GetSignOutRoute implements Route {
-  //
-  // Attributes
-  //
-  private PlayerLobby playerLobby;
+    //
+    // Attributes
+    //
+    private PlayerLobby playerLobby;
 
-  //
-  // Constructor
-  //
-  public GetSignOutRoute(PlayerLobby playerLobby) {
-    Objects.requireNonNull(playerLobby, "playerLobby cannot be null");
+    //
+    // Constructor
+    //
+    public GetSignOutRoute(PlayerLobby playerLobby) {
+        Objects.requireNonNull(playerLobby, "playerLobby cannot be null");
 
-    this.playerLobby = playerLobby;
-  }
-
-  //
-  // Methods
-  //
-
-  /**
-   * Renders the Home page and signs the user out
-   * @param request the HTTP request
-   * @param response the HTTP response
-   * @return rendered HTML for the Home page
-   */
-  public Object handle(Request request, Response response) {
-    final Session httpSession = request.session();
-    final String sessionID = httpSession.id();
-
-    final String playerName = playerLobby.getPlayerNameBySessionID(sessionID);
-    final Player playerSO = playerLobby.getPlayer(playerName);
-
-    //if this player is currently signed in, sign them out
-    if(playerName != null) {
-
-      // playerLobby.getGame(playerLobby.getPlayer(playerName)).setSignedoutPlayer(playerLobby.getPlayer(playerName));
-      // If the player is in a game, resign them from it
-      if (playerLobby.getGame(playerSO) != null) {
-        playerLobby.resignPlayerFromGame(playerLobby.getGame(playerSO), playerSO);
-      }
-      playerLobby.changeGame(playerLobby.getPlayerBySessionID(sessionID), -1);
-      playerLobby.signOut(playerName);
+        this.playerLobby = playerLobby;
     }
-    response.redirect("/");
-    halt();
-    return null;
-  }
 
+    //
+    // Methods
+    //
+
+    /**
+     * Renders the Home page and signs the user out
+     *
+     * @param request the HTTP request
+     * @param response the HTTP response
+     * @return rendered HTML for the Home page
+     */
+    public Object handle(Request request, Response response) {
+        final Session httpSession = request.session();
+        final String sessionID = httpSession.id();
+
+        final String playerName = playerLobby.getPlayerNameBySessionID(sessionID);
+        final Player playerSO = playerLobby.getPlayer(playerName);
+
+        // if this player is currently signed in, sign them out
+        if (playerName != null) {
+
+            // playerLobby.getGame(playerLobby.getPlayer(playerName)).setSignedoutPlayer(playerLobby.getPlayer(playerName));
+            // If the player is in a game, resign them from it
+            if (playerLobby.getGame(playerSO) != null) {
+                playerLobby.resignPlayerFromGame(playerLobby.getGame(playerSO), playerSO);
+            }
+            playerLobby.changeGame(playerLobby.getPlayerBySessionID(sessionID), -1);
+            playerLobby.signOut(playerName);
+        }
+        response.redirect("/");
+        halt();
+        return null;
+    }
 }
