@@ -63,7 +63,7 @@ public class GetSignOutRouteTest {
     otherPlayer = new Player(OTHER_USERNAME, OTHER_ID);
 
     playerLobby = new PlayerLobby();
-
+    playerLobby.signIn(thisPlayer);
 
     // Set up the route component
     CuT = new GetSignOutRoute(playerLobby);
@@ -79,8 +79,8 @@ public class GetSignOutRouteTest {
 
     // Make sure we redirect
     assertThrows(spark.HaltException.class, () -> {
-         CuT.handle(request, response);
-        });
+          CuT.handle(request, response);
+    });
 
     //Check that the player has been properly removed from the application
     assertEquals(null, playerLobby.getPlayerBySessionID(SESSION_ID));

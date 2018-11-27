@@ -73,26 +73,6 @@ public class GetHomeRouteTest {
     //
 
     /**
-     * Make sure that if a player is in a game, they will be redirected to the
-     * game page.
-     */
-    @Test
-    public void testPlayerInGameRedirect() {
-        // Make the player lobby return a player
-        when(playerLobby.getPlayerBySessionID(SESSION_ID)).thenReturn(player);
-
-        // Make sure the player lobby will return some sort of game
-        Game mockGame = mock(Game.class);
-        mockGame.state = Game.State.ACTIVE;
-        when(playerLobby.getGame(player)).thenReturn(mockGame);
-
-        assertThrows(spark.HaltException.class, () -> {
-            CuT.handle(request, response);
-        });
-        verify(response).redirect(GAME_URL);
-    }
-
-    /**
      * Make sure that, when a user is logged in and there is another user
      * logged in, then the other user's username will appear in a button on the
      * homepage.
@@ -101,7 +81,6 @@ public class GetHomeRouteTest {
     public void testPlayerNotInGameSignedInPlayers() {
         // Make it look like we aren't in a game
         when(playerLobby.getGame(player)).thenReturn(null);
-
         // Make it look like the player is signed in
         when(playerLobby.getPlayerNameBySessionID(SESSION_ID)).thenReturn(USERNAME);
 
@@ -119,6 +98,15 @@ public class GetHomeRouteTest {
         ArrayList<String> expectedSignedInPlayers = new ArrayList<>();
         expectedSignedInPlayers.add(OTHER_USERNAME);
 
+        ArrayList<String> expectedOpponentNames = new ArrayList<>();
+        expectedOpponentNames.add(OTHER_USERNAME);
+        player.addCurrentOpponentName(OTHER_USERNAME);
+        when(player.getCurrentOpponentNames()).thenReturn(expectedOpponentNames);
+
+        ArrayList<Integer> expectedGameIDs = new ArrayList<>();
+        expectedGameIDs.add(0);
+        when(player.getCurrentGameIDs()).thenReturn(expectedGameIDs);
+
         // Invoke test
         CuT.handle(request, response);
 
@@ -130,6 +118,8 @@ public class GetHomeRouteTest {
         testHelper.assertViewModelAttribute(GetHomeRoute.TITLE_ATTR, GetHomeRoute.TITLE);
         testHelper.assertViewModelAttribute(GetHomeRoute.MESSAGE_ATTR, "");
         testHelper.assertViewModelAttribute(GetHomeRoute.SIGNED_IN_PLAYERS, expectedSignedInPlayers);
+        testHelper.assertViewModelAttribute(GetHomeRoute.CURRENT_GAME_OPPONENT_NAMES, expectedOpponentNames);
+        testHelper.assertViewModelAttribute(GetHomeRoute.CURRENT_GAME_IDS, expectedGameIDs);
         testHelper.assertViewModelAttribute(GetHomeRoute.IS_SIGNED_IN, true);
         testHelper.assertViewModelAttributeIsAbsent(GetHomeRoute.NUM_SIGNED_IN);
         // Test view name

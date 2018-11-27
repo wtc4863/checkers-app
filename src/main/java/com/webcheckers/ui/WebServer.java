@@ -2,6 +2,8 @@ package com.webcheckers.ui;
 
 import static spark.Spark.*;
 
+import com.webcheckers.appl.AsyncServices;
+import com.webcheckers.appl.GameCenter;
 import com.webcheckers.appl.TurnController;
 import java.util.Objects;
 import java.util.logging.Logger;
@@ -91,6 +93,23 @@ public class WebServer {
      */
     public static final String RESIGN_GAME_URL = "/resignGame";
 
+    /**
+     * The URL pattern to request all active games switch to asynchronous mode.
+     */
+    public static final String START_ASYNC_URL = "/startAsync";
+
+    /**
+     * The URL pattern to accept an opponent's request to transition to
+     * asynchronous mode for the current game.
+     */
+    public static final String CONFIRM_ASYNC_URL = "/confirmAsync";
+
+    /**
+     * The URL pattern to deny an opponent's request to transition to
+     * asynchronous mode for the current game.
+     */
+    public static final String DENY_ASYNC_URL = "/denyAsync";
+
     //
     // Attributes
     //
@@ -99,6 +118,7 @@ public class WebServer {
     private final Gson gson;
     private final PlayerLobby playerLobby;
     private final TurnController turnController;
+    private final AsyncServices asyncServices;
 
     //
     // Constructor
@@ -112,17 +132,19 @@ public class WebServer {
      * @param turnController The GRASP controller that will translate turns between model and ui tiers
      * @throws NullPointerException If any of the parameters are {@code null}.
      */
-    public WebServer(final TemplateEngine templateEngine, final Gson gson, final PlayerLobby playerLobby, final TurnController turnController) {
+    public WebServer(final TemplateEngine templateEngine, final Gson gson, final PlayerLobby playerLobby, final TurnController turnController, final GameCenter gameCenter) {
         // validation
         Objects.requireNonNull(templateEngine, "templateEngine must not be null");
         Objects.requireNonNull(gson, "gson must not be null");
         Objects.requireNonNull(playerLobby, "playerLobby must not be null");
         Objects.requireNonNull(turnController, "turnController must not be null");
+        Objects.requireNonNull(gameCenter, "gameCenter must not be null");
         //
         this.templateEngine = templateEngine;
         this.gson = gson;
         this.playerLobby = playerLobby;
         this.turnController = turnController;
+        this.asyncServices = new AsyncServices(playerLobby, gameCenter);
     }
 
     //
@@ -186,7 +208,7 @@ public class WebServer {
         post(SIGN_IN_URL, new PostSignInRoute(playerLobby, templateEngine));
 
         //Shows the Checkers game page
-        get(GAME_URL, new GetGameRoute(playerLobby, templateEngine));
+        get(GAME_URL, new GetGameRoute(playerLobby, templateEngine, asyncServices));
 
         // Handles Move Validation
         post(VALIDATE_MOVE_URL, new PostValidateMoveRoute(playerLobby, turnController));
@@ -204,6 +226,11 @@ public class WebServer {
 
         // Handles Resignation
         post(RESIGN_GAME_URL, new PostResignGameRoute(playerLobby, gson));
+
+        // Handles asynchronous games
+        post(START_ASYNC_URL, new PostStartAsyncRoute(asyncServices));
+        post(CONFIRM_ASYNC_URL, new PostConfirmAsyncRoute(asyncServices));
+        post(DENY_ASYNC_URL, new PostDenyAsyncRoute(asyncServices));
 
         //
         LOG.config("WebServer is initialized.");

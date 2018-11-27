@@ -3,6 +3,7 @@ package com.webcheckers.appl;
 import com.webcheckers.model.*;
 import com.webcheckers.ui.BoardView;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -34,8 +35,9 @@ public class GameCenter {
     //
     // Attributes
     //
-   ArrayList<Game> activeGames;
+    ArrayList<Game> activeGames;
     HashMap<String, Player> opponents;
+    int gameID = 0;
 
     //
     // Constructor
@@ -70,7 +72,8 @@ public class GameCenter {
      */
     public Game getGame(Player player) {
         for (Game game : activeGames) {
-            if (player.equals(game.getRedPlayer()) || player.equals(game.getWhitePlayer())) {
+            // System.out.println(readGameID(player));
+            if (readGameID(player) == game.getGameID()) {
                 return game;
             }
         }
@@ -91,6 +94,14 @@ public class GameCenter {
         return game.getBoardView(false);
     }
 
+    public void changeGame(Player player, int gameID) {
+        player.changeGame(gameID);
+    }
+
+    public int readGameID(Player player) {
+        return player.getGameID();
+    }
+
     /**
      * Starts a new game with two players and matches them up in the opponents map
      * @param redPlayer
@@ -102,7 +113,7 @@ public class GameCenter {
         String whiteName = whitePlayer.getName();
         this.opponents.put(redName, whitePlayer);
         this.opponents.put(whiteName, redPlayer);
-        Game game = new Game(redPlayer, whitePlayer);
+        Game game = new Game(redPlayer, whitePlayer, this.gameID);
         if (customNames.contains(redName)) {
             switch (redName) {
                 case KING_PIECE:
@@ -128,7 +139,13 @@ public class GameCenter {
                     break;
             }
         }
+        changeGame(redPlayer, this.gameID);
+        gameID++;
         activeGames.add(game);
+        redPlayer.addCurrentGameID(game.getGameID());
+        redPlayer.addCurrentOpponentName(whitePlayer.getName());
+        whitePlayer.addCurrentGameID(game.getGameID());
+        whitePlayer.addCurrentOpponentName(redPlayer.getName());
         return game;
     }
 
@@ -159,4 +176,25 @@ public class GameCenter {
         endGame(gameToResignFrom);
     }
 
+    /**
+     * Retrieve all of the game objects that represent the games the player is
+     * currently playing.
+     * @param player the player whose games will be retrieved
+     * @return all of the games the player is currently playing
+     */
+    public ArrayList<Game> getAllGames(Player player) {
+        ArrayList<Game> games = new ArrayList<>();
+
+        // Loop through all of the IDs in the player's game ID list
+        for(int id : player.getCurrentGameIDs()) {
+            // Loop through all of the games the GameCenter knows about
+            for(Game game : this.activeGames) {
+                // If the IDs match, add it to the results
+                if (game.getGameID() == id) {
+                    games.add(game);
+                }
+            }
+        }
+        return games;
+    }
 }

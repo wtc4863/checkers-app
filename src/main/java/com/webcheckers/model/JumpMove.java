@@ -19,7 +19,7 @@ public class JumpMove extends Move {
     static final String INVALID_LANDING_SPACE = "You cannot end a jump move on a space with a piece.";
     static final String MIDDLE_SAME_COLOR = "You cannot jump your own piece.";
     static final String MIDDLE_NO_PIECE = "You cannot jump an empty space.";
-
+    static final String ALREADY_JUMPED = "That piece has already been jumped!";
 
     Position middle;
 
@@ -80,6 +80,18 @@ public class JumpMove extends Move {
         Piece movedPiece;
         Piece jumpedPiece;
 
+        // Make sure we haven't jumped the same piece twice
+        for(Move move : game.getQueuedTurnMoves()) {
+            if (move instanceof JumpMove) {
+                // Only perform this check on jump moves, duh
+                Position theirMiddle = ((JumpMove) move).middle;
+                if (theirMiddle.equals(this.middle)) {
+                    this.currentMsg = ALREADY_JUMPED;
+                    return false;
+                }
+            }
+        }
+
         // Make sure the spacing is right
         if(!validSpacing(this.start, this.end)) {
             LOG.fine("Failed valid spacing");
@@ -128,7 +140,7 @@ public class JumpMove extends Move {
 
         // Make sure the middle position has an opponent piece
         Position realStart;
-        if(game.queuedTurnMoves.size() > 0) {
+        if(game.hasMovesInCurrentTurn()) {
             realStart = game.getMove(0).start;
         } else {
             realStart = this.start;
@@ -177,7 +189,7 @@ public class JumpMove extends Move {
     @Override
     public boolean executeMove(Game game) {
         // Double-check that the move is valid
-        if(validateMove(game)) {
+        //if(validateMove(game)) {
             LOG.fine("Executing Move " + toString());
             Board board = game.getBoard();
             // Move the piece
@@ -186,9 +198,9 @@ public class JumpMove extends Move {
             // Remove the jumped piece
             board.getSpace(middle).removePiece();
             return true;
-        } else {
+        /*} else {
             return false;
-        }
+        }*/
     }
 
     /**

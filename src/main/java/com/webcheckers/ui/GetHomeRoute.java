@@ -2,6 +2,7 @@ package com.webcheckers.ui;
 
 import com.webcheckers.appl.PlayerLobby;
 
+import com.webcheckers.model.Player;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -33,6 +34,8 @@ public class GetHomeRoute implements Route {
     static final String TITLE = "Welcome!";
     static final String TITLE_ATTR = "title";
     static final String SIGNED_IN_PLAYERS = "signedInPlayers";
+    static final String CURRENT_GAME_IDS = "currentGameIDs";
+    static final String CURRENT_GAME_OPPONENT_NAMES = "currentGameOpponentNames";
     static final String IS_SIGNED_IN = "isUserSignedIn";
     static final String NUM_SIGNED_IN = "numPlayersOnline" ;
     static final String TEMPLATE_NAME = "home.ftl";
@@ -77,13 +80,18 @@ public class GetHomeRoute implements Route {
         final Session httpSession = request.session();
         final String sessionID = httpSession.id();
 
+        Player thisPlayer = playerLobby.getPlayerBySessionID(sessionID);
+
+
+        /*
         Game game = playerLobby.getGame(playerLobby.getPlayerBySessionID(sessionID));
 
-        if(game != null && game.state == Game.State.ACTIVE) {
+        if(game != null && game.getState() == Game.State.ACTIVE) {
             response.redirect(GAME_URL);
             halt();
             return null;
         }
+        */
 
         // start building the view-model
         Map<String, Object> vm = new HashMap<>();
@@ -95,10 +103,14 @@ public class GetHomeRoute implements Route {
         String usersPlayer = playerLobby.getPlayerNameBySessionID(sessionID);
         if(usersPlayer != null) {
             LOG.finer("Player is returning: " + usersPlayer);
+            playerLobby.changeGame(thisPlayer, -1);
+
             // list of signed in players to render to the user (excluding user)
             ArrayList<String> onlinePlayers = playerLobby.getSignedInPlayers();
             onlinePlayers.remove(usersPlayer);
             vm.put(SIGNED_IN_PLAYERS, onlinePlayers);
+            vm.put(CURRENT_GAME_IDS, thisPlayer.getCurrentGameIDs());
+            vm.put(CURRENT_GAME_OPPONENT_NAMES, thisPlayer.getCurrentOpponentNames());
             vm.put(IS_SIGNED_IN, true);
         } else {
             LOG.finer("New, non-registered player joined");

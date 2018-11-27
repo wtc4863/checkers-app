@@ -15,6 +15,8 @@ public class Game {
     //
     // Attributes
     //
+
+    private int gameID;
     Player redPlayer;
     Player whitePlayer;
     Player winningPlayer;
@@ -23,7 +25,8 @@ public class Game {
 
     Board board;
     Turn turn;
-    public ArrayList<Move> queuedTurnMoves;
+    Player asyncRequester;
+    ArrayList<Move> queuedTurnMoves;
     public State state;
     public boolean madeKing;
 
@@ -45,14 +48,15 @@ public class Game {
      * the game will be deleted.
      */
     public enum State {
-        ACTIVE, ENDED;
+        ACTIVE, ENDED, ASYNC_START, ASYNC_ACCEPTED, ASYNC_DENIED, ASYNC_ACTIVE;
     }
 
     //
     // Constructor
     //
-    public Game(Player redPlayer, Player whitePlayer) {
+    public Game(Player redPlayer, Player whitePlayer, int gameID) {
         LOG.fine(String.format("Game created: (%s : %s", redPlayer, whitePlayer));
+        this.gameID = gameID;
         this.redPlayer = redPlayer;
         this.whitePlayer = whitePlayer;
         this.resignedPlayer = null;
@@ -61,6 +65,7 @@ public class Game {
         this.queuedTurnMoves = new ArrayList<>();
         this.state = State.ACTIVE;
         this.madeKing = false;
+        this.asyncRequester = null;
     }
 
     // used for custom configuration
@@ -73,6 +78,7 @@ public class Game {
         this.board = board;
         this.queuedTurnMoves = new ArrayList<>();
         this.state = State.ACTIVE;
+        this.asyncRequester = null;
         this.madeKing = false;
     }
 
@@ -121,6 +127,10 @@ public class Game {
 
     public void setStateActive() {
         this.state = State.ACTIVE;
+    }
+
+    public int getGameID() {
+        return this.gameID;
     }
 
     /**
@@ -370,11 +380,9 @@ public class Game {
         return null;
     }
 
-    public Move getFirstMove() {
-        if (hasMovesInCurrentTurn()) {
-            return queuedTurnMoves.get(0);
-        }
-        return null;
+    public void unmatchPlayers() {
+        redPlayer.removeCurrentGame(this);
+        whitePlayer.removeCurrentGame(this);
     }
 
     //
@@ -463,4 +471,82 @@ public class Game {
         return new Game(redPlayer, whitePlayer, Turn.RED, new Board(redPieces, whitePieces));
     }
 
+
+    /**
+     * Request that the game transition to asynchronous mode.
+     *
+     * @param player The player requesting asynchronous mode
+     */
+    public void requestAsync(Player player) {
+        switch(this.state) {
+            case ACTIVE:
+                this.state = State.ASYNC_START;
+                this.asyncRequester = player;
+                break;
+        }
+    }
+
+    /**
+     * Accept the request to transition to asynchronous mode.
+     */
+    public void acceptAsync() {
+        switch(this.state) {
+            case ASYNC_START:
+                this.state = State.ASYNC_ACCEPTED;
+                break;
+        }
+    }
+
+    /**
+     * Reject the request to transition to asynchronous mode.
+     */
+    public void rejectAsync() {
+       switch(this.state) {
+           case ASYNC_START:
+               this.state = State.ASYNC_DENIED;
+               break;
+       }
+    }
+
+    /**
+     * Complete the asynchronous request after displaying the results message
+     * to the player.
+     */
+    public void asyncRequestCompleted() {
+        switch(this.state) {
+            case ASYNC_ACCEPTED:
+                this.state = State.ASYNC_ACTIVE;
+                this.asyncRequester = null;
+                break;
+            case ASYNC_DENIED:
+                this.state = State.ACTIVE;
+                this.asyncRequester = null;
+                break;
+        }
+    }
+
+    /**
+     * Check if a given player is the one who requested asynchronous play mode
+     * to start.
+     *
+     * @return True if the players are the same, false if they are different
+     */
+    public boolean isAsyncRequester(Player player) {
+        return this.asyncRequester.equals(player);
+    }
+
+    /**
+     * Get the turn color of a player's opponent
+     */
+    public Turn getOpponentTurnColor(Player player) {
+        if (redPlayer.equals(player)) {
+            return Turn.WHITE;
+        } else {
+            return Turn.RED;
+        }
+    }
+
+    public ArrayList<Move> getQueuedTurnMoves() {
+        return this.queuedTurnMoves;
+    }
 }

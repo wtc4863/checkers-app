@@ -33,6 +33,17 @@
             </li>
         </#list>
         </ul>
+        <p>Current games:</p>
+        <ul style="list-style-type:none">
+            <#list currentGameOpponentNames as player>
+              <li>
+              <form method = "get" action = "/game">
+              <input type="hidden" name="id" value="${currentGameIDs[player?index]}">
+              <input type="submit" value="${player}">
+              </form>
+              </li>
+        </#list>
+        </ul>
       <#else>
         <p> Number of Players online: ${numPlayersOnline}</p>
       </#if>

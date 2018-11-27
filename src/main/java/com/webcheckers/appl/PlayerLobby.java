@@ -41,7 +41,8 @@ public class PlayerLobby {
     //
 
     /**
-     * Create a new PlayerLobby instance
+     * Create a new PlayerLobby instance with a brand-new GameCenter object.
+     * Currently only used for testing purposes.
      */
     public PlayerLobby() {
         this(new GameCenter());
@@ -49,13 +50,12 @@ public class PlayerLobby {
 
     /**
      * Create a new PlayerLobby instance with a given GameCenter object.
-     * Currently used only for testing purposes.
      *
      * @param gameCenter
      *      the GameCenter object to use when creating the new
      *      PlayerLobby instance.
      */
-    PlayerLobby(GameCenter gameCenter) {
+    public PlayerLobby(GameCenter gameCenter) {
         this.players = new HashMap<>();
         this.gameCenter = gameCenter;
     }
@@ -116,10 +116,17 @@ public class PlayerLobby {
      */
     public synchronized boolean signIn(Player player) {
         if(!validName(player.getName())) {
+            // Make sure the name is valid
             return false;
         } else if (getSignedInPlayers().contains(player.getName())) {
+            // Make sure the name isn't already in use
             return false;
+        } else if (players.containsKey(player.getName())) {
+            // If the player already exists, sign them in
+            this.getPlayer(player.getName()).signIn(player.getSessionID());
+            return true;
         } else {
+            // The player does not exist, sign in the new player
             players.put(player.getName(), player);
             return true;
         }
@@ -131,7 +138,8 @@ public class PlayerLobby {
      */
     public void signOut(String playerName) {
         players.get(playerName).signOut();
-        players.remove(playerName);
+        // We don't want the player to be removed from the list of players!!
+        // players.remove(playerName);
     }
 
     /**
@@ -188,6 +196,14 @@ public class PlayerLobby {
         }
     }
 
+    public void changeGame(Player player, int gameID) {
+        gameCenter.changeGame(player, gameID);
+    }
+
+    public int readGameID(Player player) {
+        return player.getGameID();
+    }
+
     /**
      * Tells the GameCenter to create a new game with two players
      * @param redPlayer player on the red team
@@ -225,6 +241,29 @@ public class PlayerLobby {
      */
     public void resignPlayerFromGame(Game gameToResignFrom, Player playerResigning) {
         gameCenter.resignFromGame(gameToResignFrom, playerResigning);
+        playerResigning.removeCurrentGame(gameToResignFrom);
     }
 
+    /**
+     * Sign out a player and automatically resign them from any games that are
+     * in synchronous mode.
+     *
+     * @param player the player to sign out
+     */
+    public void signOutFromAllGames(Player player) {
+        for(Game game : gameCenter.getAllGames(player)) {
+            switch(game.getState()) {
+                case ASYNC_ACTIVE:
+                    // Just do nothing when they're in an asynchronous game
+                    break;
+                case ENDED:
+                    // This is handled by other functions, such as GetGameRoute
+                    break;
+                default:
+                    // ALL OTHER STATES are in asynchronous mode
+                    this.resignPlayerFromGame(game, player);
+            }
+        }
+        this.signOut(player.getName());
+    }
 }

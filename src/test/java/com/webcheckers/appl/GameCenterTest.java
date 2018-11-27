@@ -22,6 +22,7 @@ public class GameCenterTest {
     private GameCenter CuT;
     private Player whitePlayer;
     private Player redPlayer;
+    private Player thirdPlayer;
 
     @BeforeEach
     public void setup() {
@@ -30,6 +31,7 @@ public class GameCenterTest {
         // create test players for the game
         whitePlayer = new Player("whitePlayerName", "1");
         redPlayer = new Player("redPlayerName", "2");
+        thirdPlayer = new Player("thirdPlayerName", "3");
     }
     @AfterEach
     public void destroy() {
@@ -53,9 +55,23 @@ public class GameCenterTest {
         // check if the list and hashmap updated with number of player and games
         assertEquals(prev_active_size, CuT.activeGames.size());
         assertEquals(prev_num_opp, CuT.opponents.size());
+        assertEquals(1, CuT.gameID);
+        assertEquals(0, CuT.readGameID(redPlayer));
         // check if game was returned
         assertNotNull(testGame);
     }
+
+    @Test
+    public void testBuildPlayerLists() {
+      Game testGame = CuT.startGame(redPlayer, whitePlayer);
+      Game testGame2 = CuT.startGame(redPlayer, thirdPlayer);
+      ArrayList<String> redNames = redPlayer.getCurrentOpponentNames();
+      ArrayList<Integer> redIDs = redPlayer.getCurrentGameIDs();
+      assertEquals(redNames.get(0), whitePlayer.getName());
+      assertEquals(redNames.get(1), thirdPlayer.getName());
+      assertEquals(redIDs.get(0), (Integer)testGame.getGameID());
+      assertEquals(redIDs.get(1), (Integer)testGame2.getGameID());
+  }
 
     @Test
     public void testGetOpponentWithNonexistentPlayer() {
@@ -77,8 +93,22 @@ public class GameCenterTest {
     @Test
     public void testGetGameWithExistingWhitePlayer() {
         Game expected = CuT.startGame(redPlayer, whitePlayer);
+
+        // Switch the white player's view to the game
+        whitePlayer.changeGame(0);
+
         Game actual = CuT.getGame(whitePlayer);
         assertSame(expected, actual);
+    }
+
+    /**
+     * Make sure that the getGame method will return null when a player is
+     * viewing the home page.
+     */
+    @Test
+    public void testGetGameOnHomePage() {
+        CuT.startGame(redPlayer, whitePlayer);
+        assertNull(CuT.getGame(whitePlayer));
     }
 
     @Test
@@ -90,7 +120,12 @@ public class GameCenterTest {
 
     @Test
     public void testGetBoardViewWithExistingWhitePlayer() {
+        // Start game
         CuT.startGame(redPlayer, whitePlayer);
+
+        // Switch the white player to the game
+        whitePlayer.changeGame(0); // 0 is the first game ID assigned
+
         assertNotNull(CuT.getBoardView(whitePlayer));
     }
 
@@ -140,4 +175,40 @@ public class GameCenterTest {
         assertEquals(0, testHashMap.size());
     }
 
+    /**
+     * Helper method to create a mock game with a specific game ID.
+     */
+    private Game makeGame(int id) {
+        Game game = mock(Game.class);
+        when(game.getGameID()).thenReturn(id);
+        return game;
+    }
+
+    /**
+     * Make sure all game objects a player is in are properly retrieved.
+     */
+    @Test
+    public void testGetAllGames() {
+        // Set up the fake games
+        ArrayList<Game> testGames = new ArrayList<>();
+        ArrayList<Integer> gameIDs = new ArrayList<>();
+        testGames.add(makeGame(1));
+        gameIDs.add(1);
+        testGames.add(makeGame(2));
+        gameIDs.add(2);
+        testGames.add(makeGame(3));
+        gameIDs.add(3);
+
+        // Set up the fake player
+        Player player = mock(Player.class);
+        when(player.getCurrentGameIDs()).thenReturn(gameIDs);
+
+        // Set up Component under Test
+        CuT = new GameCenter(new HashMap<>(), testGames);
+
+        // Invoke test
+        ArrayList<Game> results = CuT.getAllGames(player);
+
+        assertIterableEquals(testGames, results);
+    }
 }

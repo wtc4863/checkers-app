@@ -1,6 +1,9 @@
 package com.webcheckers.model;
 
 import com.webcheckers.ui.PlayerView;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * TODO
@@ -8,6 +11,9 @@ import com.webcheckers.ui.PlayerView;
 public class Player {
     private String sessionID;
     private final String name;
+    private int gameID;
+    private ArrayList<Integer> currentGameIDs = new ArrayList<>();
+    private ArrayList<String> currentOpponentNames = new ArrayList<>();
 
     /**
      * Create a new signed-out player
@@ -17,6 +23,7 @@ public class Player {
     public Player(String name) {
         this.name = name;
         this.sessionID = null;
+        this.gameID = -1;
     }
 
     /**
@@ -28,6 +35,7 @@ public class Player {
     public Player(String name, String sessionID) {
         this.name = name;
         this.sessionID = sessionID;
+        this.gameID = -1;
     }
 
     /**
@@ -42,10 +50,12 @@ public class Player {
     /**
      * Checks if a player is signed in with a given session id
      * @param sessionID the sessionID to check against
-     * @return true if the sessinonID matches this players sessionID
+     * @return true if the sessionID matches this players sessionID
      */
     public boolean isSignedIn(String sessionID) {
-        return this.sessionID.equals(sessionID);
+        // Make sure a NullPointerException isn't thrown if the player is
+        // signed out
+        return this.sessionID != null && this.sessionID.equals(sessionID);
     }
 
     /**
@@ -82,6 +92,67 @@ public class Player {
     public PlayerView getPlayerView() {
         return new PlayerView(this.name);
     }
+
+    /**
+     * Change the ID of the game that the player should be looking at
+     * @param gameID ID of the requested game
+     */
+    public void changeGame(int gameID) {
+        this.gameID = gameID;
+    }
+
+    public int getGameID() {
+        return this.gameID;
+    }
+
+    public ArrayList<Integer> getCurrentGameIDs() {
+        return this.currentGameIDs;
+    }
+
+    public ArrayList<String> getCurrentOpponentNames() {
+        return this.currentOpponentNames;
+    }
+
+    public void addCurrentGameID(int gameID) {
+        this.currentGameIDs.add(gameID);
+    }
+
+    public void addCurrentOpponentName(String name) {
+        this.currentOpponentNames.add(name);
+    }
+
+    public String getSessionID() {
+        return this.sessionID;
+    }
+
+    public void removeCurrentGame(Game game) {
+        int id = game.getGameID();
+        int index = currentGameIDs.indexOf(id);
+        currentGameIDs.remove(index);
+        currentOpponentNames.remove(index);
+    }
+
+
+//    public void addGame(int gameID, String opponentName) {
+//        this.currentGames.put(gameID, opponentName);
+//    }
+
+//    public ArrayList<Integer> getCurrentGameIDs() {
+//        ArrayList<Integer> IDs = new ArrayList<>();
+//        for (Integer i : currentGames.keySet()) {
+//            IDs.add(i);
+//        }
+//        return IDs;
+//    }
+//
+//    public ArrayList<String> getCurrentGameOpponentNames() {
+//        ArrayList<String> names = new ArrayList<>();
+//        for (Integer key : currentGames.keySet()) {
+//            String name = currentGames.get(key);
+//            names.add(name);
+//        }
+//        return names;
+//    }
 
     @Override
     public boolean equals(Object obj) {
