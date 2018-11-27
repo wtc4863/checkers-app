@@ -47,14 +47,21 @@ public class SimpleMove extends Move {
             this.currentMsg = JUMP_MOVE_AVAILABLE;
             return false;
         }
+        // Get the real start position with the piece
+        Position realStart;
+        try {
+            realStart = game.getMove(0).start;
+        } catch (NullPointerException e) {
+            realStart = this.start;
+        }
         //check if there is a piece on it
         Board board = game.getBoard();
         if (board.spaceIsValid(end)) {
             // red is at the top of the board in the model and moving "forward" is going down
-            Piece.PColor currentColor = game.getPieceColor(this.start);
+            Piece.PColor currentColor = game.getPieceColor(realStart);
             boolean whiteErrorCheck = false;
             boolean redErrorCheck = false;
-            boolean isKing = game.getBoard().getSpace(this.start).pieceInfo().isKing();
+            boolean isKing = game.getBoard().getSpace(realStart).pieceInfo().isKing();
             // get the possible starting points given this ending space
             int left = end.getCell() - 1;
             int right = end.getCell() + 1;
