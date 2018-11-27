@@ -18,6 +18,7 @@ public class GameCenter {
     private static final String DOUBLE_JUMP = "test double";
     private static final String DOUBLE_JUMP_KING = "test double king";
     private static final String NO_MOVES_AVAILABLE = "test no moves";
+    private static final String KING_MID_TURN = "test king middle";
     private static final ArrayList<String> customNames = new ArrayList<>(Arrays.asList(
         KING_PIECE,
         DOUBLE_JUMP,
@@ -111,6 +112,8 @@ public class GameCenter {
                 case NO_MOVES_AVAILABLE:
                     game = Game.testNoMoves(redPlayer, whitePlayer);
                     break;
+                case KING_MID_TURN:
+                    game = Game.testKingMidTurn(redPlayer, whitePlayer);
             }
         }
         activeGames.add(game);

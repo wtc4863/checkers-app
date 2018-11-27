@@ -421,4 +421,15 @@ public class Game {
         return new Game(redPlayer, whitePlayer, Turn.RED, new Board(redPieces, whitePieces));
     }
 
+    public static Game testKingMidTurn(Player redPlayer, Player whitePlayer) {
+        ArrayList<Position> redPieces = new ArrayList<>(Arrays.asList(
+            new Position(2,1)
+        ));
+        ArrayList<Position> whitePieces = new ArrayList<>(Arrays.asList(
+            new Position(1, 4),
+            new Position(1, 2)
+        ));
+        return new Game(redPlayer, whitePlayer, Turn.RED, new Board(redPieces, whitePieces));
+    }
+
 }
