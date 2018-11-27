@@ -24,7 +24,9 @@ public class GameCenter {
         KING_PIECE,
         DOUBLE_JUMP,
         DOUBLE_JUMP_KING,
-        NO_MOVES_AVAILABLE
+        NO_MOVES_AVAILABLE,
+        KING_MID_TURN,
+        EASY_WIN
     ));
 
     //
