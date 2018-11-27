@@ -6,6 +6,8 @@ import com.webcheckers.appl.PlayerLobby;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+
+import com.webcheckers.model.Player;
 import spark.ModelAndView;
 import spark.Request;
 import spark.Response;
@@ -46,9 +48,13 @@ public class GetSignOutRoute implements Route {
     final String sessionID = httpSession.id();
 
     final String playerName = playerLobby.getPlayerNameBySessionID(sessionID);
+    final Player playerSO = playerLobby.getPlayer(playerName);
 
     //if this player is currently signed in, sign them out
     if(playerName != null) {
+
+      //playerLobby.getGame(playerLobby.getPlayer(playerName)).setSignedoutPlayer(playerLobby.getPlayer(playerName));
+      playerLobby.resignPlayerFromGame(playerLobby.getGame(playerSO),playerSO);
       playerLobby.signOut(playerName);
 
     }
