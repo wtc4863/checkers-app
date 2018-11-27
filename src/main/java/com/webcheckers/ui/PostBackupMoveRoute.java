@@ -61,11 +61,6 @@ public class PostBackupMoveRoute implements Route {
 
     Move move = turnController.backupMove(game);
 
-    // Undo king piece creation
-    if (game.madeKing) {
-      game.madeKing = false;
-    }
-
     if(move == null) {
       return turnController.MessageFromModeltoUI(new Message(ERROR_MESSAGE, MessageType.error));
     }
