@@ -34,6 +34,7 @@ public class PostResignGameRoute implements Route {
 
         Player resigningPlayer = playerLobby.getPlayerBySessionID(sessionID);
         Game gameToResignFrom = playerLobby.getGame(resigningPlayer);
+        resigningPlayer.removeCurrentGame(gameToResignFrom);
         playerLobby.resignPlayerFromGame(gameToResignFrom, resigningPlayer);
         LOG.fine(String.format("%s invoked PostResignRoute.", resigningPlayer.getName()));
 

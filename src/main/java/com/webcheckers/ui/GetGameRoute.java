@@ -82,14 +82,13 @@ public class GetGameRoute implements Route{
         if (game.getWinningPlayerName() != null) {
             LOG.fine("Inside get winning player");
             winner = game.getWinningPlayerName();
+            currentPlayer.removeCurrentGame(game);
             playerLobby.endGame(game);
         }
 
         if (game.getResigningPlayer() != null) {
             LOG.fine("Inside get resigning player winner: " + game.getWinningPlayerName() + ", ResigningPlayer: " + game.getResigningPlayer().getName());
-            winner = game.getWinningPlayerName();
             vm.put(MESSAGE_ATTR, new Message(PLAYER_RESIGNED_MSG, MessageType.info));
-            playerLobby.endGame(game);
         }
 
         if (game.getSignedoutPlayer() != null) {
