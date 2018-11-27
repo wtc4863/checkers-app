@@ -34,15 +34,19 @@ public class Board {
             for (int j = 0; j < COLUMNS; j++) {
                 if (i <= 2) {
                     if (boardArray[i][j].isBlack()) {
-                        boardArray[i][j].addPiece(new Piece(Piece.PColor.white, Piece.PType.single));
+                        // boardArray[i][j].addPiece(new Piece(Piece.PColor.white, Piece.PType.single));
                     }
                 } else if(i >= 5) {
                     if (boardArray[i][j].isBlack()) {
-                        boardArray[i][j].addPiece(new Piece(Piece.PColor.red, Piece.PType.single));
+                        // boardArray[i][j].addPiece(new Piece(Piece.PColor.red, Piece.PType.single));
                     }
                 }
             }
         }
+
+        boardArray[4][3].addPiece(new Piece(PColor.white, PType.single));
+        boardArray[2][5].addPiece(new Piece(PColor.white, PType.single));
+        boardArray[1][6].addPiece(new Piece(PColor.red, PType.king));
     }
 
     /** Constructor used for testing*/

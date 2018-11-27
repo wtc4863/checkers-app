@@ -219,6 +219,12 @@ public class JumpMove extends Move {
         // Check all the possible spaces to see if any one of them is valid
         for(JumpMove move : possibleMoves) {
             if(move.validateMove(game)) {
+                // Check if the move's end location has already been visited
+                for(Move madeMove : game.queuedTurnMoves) {
+                    if (madeMove.end.equals(move.end)) {
+                        return false;
+                    }
+                }
                 LOG.fine("jumpMove found to be true. Must make jump" + move.toString());
                 return true;
             }

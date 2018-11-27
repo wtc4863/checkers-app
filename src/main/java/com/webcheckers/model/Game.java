@@ -22,7 +22,7 @@ public class Game {
 
     Board board;
     Turn turn;
-    ArrayList<Move> queuedTurnMoves;
+    public ArrayList<Move> queuedTurnMoves;
     public State state;
     public boolean madeKing;
 
