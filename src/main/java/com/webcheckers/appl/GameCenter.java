@@ -70,7 +70,7 @@ public class GameCenter {
      * @param player player that is playing in the desired game
      * @return game object
      */
-    public Game getGame(Player player) {
+    public synchronized Game getGame(Player player) {
         for (Game game : activeGames) {
             // System.out.println(readGameID(player));
             if (readGameID(player) == game.getGameID()) {
