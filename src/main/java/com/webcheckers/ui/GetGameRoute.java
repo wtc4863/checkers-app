@@ -183,7 +183,7 @@ public class GetGameRoute implements Route{
                 if (game.getWinningPlayerName() != null) {
                     LOG.fine("Inside get winning player");
                     winner = game.getWinningPlayerName();
-                    currentPlayer.removeCurrentGame(game);
+                    player.removeCurrentGame(game);
                     playerLobby.endGame(game);
                 }
 
