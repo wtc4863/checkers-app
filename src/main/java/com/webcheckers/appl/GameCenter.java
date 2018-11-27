@@ -4,6 +4,7 @@ import com.webcheckers.model.*;
 import com.webcheckers.ui.BoardView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 /**
@@ -12,6 +13,18 @@ import java.util.HashMap;
  */
 
 public class GameCenter {
+    // Case-based signin names
+    private static final String KING_PIECE = "test king";
+    private static final String DOUBLE_JUMP = "test double";
+    private static final String DOUBLE_JUMP_KING = "test double king";
+    private static final String NO_MOVES_AVAILABLE = "test no moves";
+    private static final ArrayList<String> customNames = new ArrayList<>(Arrays.asList(
+        KING_PIECE,
+        DOUBLE_JUMP,
+        DOUBLE_JUMP_KING,
+        NO_MOVES_AVAILABLE
+    ));
+
     //
     // Attributes
     //
@@ -79,12 +92,29 @@ public class GameCenter {
      * @return
      */
     public synchronized Game startGame(Player redPlayer, Player whitePlayer) {
-        this.opponents.put(redPlayer.getName(), whitePlayer);
-        this.opponents.put(whitePlayer.getName(), redPlayer);
+        String redName = redPlayer.getName();
+        String whiteName = whitePlayer.getName();
+        this.opponents.put(redName, whitePlayer);
+        this.opponents.put(whiteName, redPlayer);
         Game game = new Game(redPlayer, whitePlayer);
+        if (customNames.contains(redName)) {
+            switch (redName) {
+                case KING_PIECE:
+                    game = Game.testKingPieces(redPlayer, whitePlayer);
+                    break;
+                case DOUBLE_JUMP:
+                    game = Game.testDoubleJump(redPlayer, whitePlayer);
+                    break;
+                case DOUBLE_JUMP_KING:
+                    game = Game.testDoubleJumpKing(redPlayer, whitePlayer);
+                    break;
+                case NO_MOVES_AVAILABLE:
+                    game = Game.testNoMoves(redPlayer, whitePlayer);
+                    break;
+            }
+        }
         activeGames.add(game);
         return game;
-        //TODO
     }
 
     /**
