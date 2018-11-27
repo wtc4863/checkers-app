@@ -24,6 +24,7 @@ public class Game {
     Turn turn;
     ArrayList<Move> queuedTurnMoves;
     public State state;
+    public boolean madeKing;
 
     public enum Turn {
         WHITE, RED;
@@ -58,6 +59,7 @@ public class Game {
         this.board = new Board();
         this.queuedTurnMoves = new ArrayList<>();
         this.state = State.ACTIVE;
+        this.madeKing = false;
     }
 
     // used for custom configuration
@@ -70,6 +72,7 @@ public class Game {
         this.board = board;
         this.queuedTurnMoves = new ArrayList<>();
         this.state = State.ACTIVE;
+        this.madeKing = false;
     }
 
     //
@@ -198,16 +201,19 @@ public class Game {
     }
 
     public Move getLastMoveMade() {
-        if(hasMovesInCurrentTurn()) {
-            int index = queuedTurnMoves.size() - 1;
-            return queuedTurnMoves.get(index);
-        }
-        return null;
+        return getMove(queuedTurnMoves.size() - 1);
     }
 
     public void addMoveToCurrentTurn(Move newest) {
         queuedTurnMoves.add(newest);
         LOG.fine(String.format("Move added to current turn: %d", queuedTurnMoves.size()));
+    }
+
+    public Move getMove(int index) {
+        if(hasMovesInCurrentTurn()) {
+            return queuedTurnMoves.get(index);
+        }
+        return null;
     }
 
 
@@ -266,11 +272,15 @@ public class Game {
     public boolean movesLeft() {
         //if there is a move left, the most recent move's end position is the next move's start position
         if(queuedTurnMoves.size() > 0) {
+            Move firstMove = queuedTurnMoves.get(0);
             Move lastMove = queuedTurnMoves.get(queuedTurnMoves.size() - 1);
             // if a simple move is made it can be on only move
             if(lastMove instanceof SimpleMove) return false;
             Position newStart = lastMove.getEnd();
-            return JumpMove.positionHasJumpMoveAvailable(newStart, this);
+
+            // This is where the actual piece object is located
+            Position originalStart = firstMove.getStart();
+            return JumpMove.positionHasJumpMoveAvailable(newStart, originalStart, this);
         }
         return false;
     }
@@ -289,7 +299,7 @@ public class Game {
         }
         if (turnColor == color) {
             for (Position current : remainingPieces) {
-                if (JumpMove.positionHasJumpMoveAvailable(current, this) || SimpleMove.positionHasSimpleMoveAvailable(current, this)) {
+                if (JumpMove.positionHasJumpMoveAvailable(current, current, this) || SimpleMove.positionHasSimpleMoveAvailable(current, this)) {
                     return false;
                 }
             }
