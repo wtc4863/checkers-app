@@ -53,8 +53,11 @@ public class GetSignOutRoute implements Route {
     //if this player is currently signed in, sign them out
     if(playerName != null) {
 
-      //playerLobby.getGame(playerLobby.getPlayer(playerName)).setSignedoutPlayer(playerLobby.getPlayer(playerName));
-      playerLobby.resignPlayerFromGame(playerLobby.getGame(playerSO),playerSO);
+      // playerLobby.getGame(playerLobby.getPlayer(playerName)).setSignedoutPlayer(playerLobby.getPlayer(playerName));
+      // If the player is in a game, resign them from it
+      if (playerLobby.getGame(playerSO) != null) {
+        playerLobby.resignPlayerFromGame(playerLobby.getGame(playerSO), playerSO);
+      }
       playerLobby.signOut(playerName);
 
     }
