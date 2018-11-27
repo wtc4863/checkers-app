@@ -26,7 +26,7 @@ public class Game {
     Board board;
     Turn turn;
     Player asyncRequester;
-    public ArrayList<Move> queuedTurnMoves;
+    ArrayList<Move> queuedTurnMoves;
     public State state;
     public boolean madeKing;
 

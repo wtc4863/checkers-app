@@ -177,6 +177,9 @@ public class JumpMoveTest {
         // Set up the middle space
         addEmptySpace(board, middle);
 
+        // There are no queued moves
+        when(game.hasMovesInCurrentTurn()).thenReturn(false);
+
         JumpMove CuT = new JumpMove(start, middle, validEnd);
 
         assertFalse(CuT.validateMove(game), "A jump move that jumps over an empty space was returned as valid");

@@ -128,7 +128,7 @@ public class JumpMove extends Move {
 
         // Make sure the middle position has an opponent piece
         Position realStart;
-        if(game.queuedTurnMoves.size() > 0) {
+        if(game.hasMovesInCurrentTurn()) {
             realStart = game.getMove(0).start;
         } else {
             realStart = this.start;
