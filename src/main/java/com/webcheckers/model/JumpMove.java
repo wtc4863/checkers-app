@@ -127,7 +127,13 @@ public class JumpMove extends Move {
         }
 
         // Make sure the middle position has an opponent piece
-        PColor currentColor = game.getPieceColor(this.start);
+        Position realStart;
+        if(game.queuedTurnMoves.size() > 0) {
+            realStart = game.getMove(0).start;
+        } else {
+            realStart = this.start;
+        }
+        PColor currentColor = game.getPieceColor(realStart);
         if(board.getSpace(middle).doesHasPiece()) {
             LOG.fine("Middle: " + middle.toString());
             LOG.fine("Board has piece.");
@@ -201,7 +207,7 @@ public class JumpMove extends Move {
          */
 
         // This is a big-time law of Demeter violation right here
-        PColor currentColor = game.getPieceColor(pos);
+        PColor currentColor = game.getPieceColor(pieceLocation);
         boolean isKing = game.getBoard().getSpace(pieceLocation).pieceInfo().isKing();
         if(currentColor == PColor.red || isKing) {
             // Lower-left
