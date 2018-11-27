@@ -52,32 +52,32 @@ public class SimpleMove extends Move {
         if (board.spaceIsValid(end)) {
             // red is at the top of the board in the model and moving "forward" is going down
             Piece.PColor currentColor = game.getPieceColor(this.start);
-            boolean errorCheck;
-            if (currentColor == Piece.PColor.white) {
-                // get the possible starting points given this ending space
-                int left = end.getCell() - 1;
-                int right = end.getCell() + 1;
-                int top = end.getRow() - 1;
-                // create new positions for easy comparison
-                Position upperLeft = new Position(top, left);
-                Position upperRight = new Position(top, right);
-                errorCheck = upperLeft.equals(start) || upperRight.equals(start);
-            } else {
-                // get the possible starting points given this ending space
-                int left = end.getCell() - 1;
-                int right = end.getCell() + 1;
-                int bot = end.getRow() + 1;
-                // create new positions for easy comparison
-                Position bottomLeft = new Position(bot, left);
-                Position bottomRight = new Position(bot, right);
-                errorCheck = bottomLeft.equals(start) || bottomRight.equals(start);
+            boolean whiteErrorCheck = false;
+            boolean redErrorCheck = false;
+            boolean isKing = game.getBoard().getSpace(this.start).pieceInfo().isKing();
+            // get the possible starting points given this ending space
+            int left = end.getCell() - 1;
+            int right = end.getCell() + 1;
+            int top = end.getRow() - 1;
+            int bot = end.getRow() + 1;
+            // create new positions for easy comparison
+            Position upperLeft = new Position(top, left);
+            Position upperRight = new Position(top, right);
+            Position bottomLeft = new Position(bot, left);
+            Position bottomRight = new Position(bot, right);
+
+            if (currentColor == Piece.PColor.white || isKing) {
+                whiteErrorCheck = upperLeft.equals(start) || upperRight.equals(start);
             }
-            if (errorCheck)
+            if (currentColor == Piece.PColor.red || isKing) {
+                redErrorCheck = bottomLeft.equals(start) || bottomRight.equals(start);
+            }
+            if (whiteErrorCheck || redErrorCheck)
                 this.currentMsg = MOVE_VALID;
             else
                 this.currentMsg = MOVE_PIECE_FORWARD;
 
-            return errorCheck;
+            return whiteErrorCheck || redErrorCheck;
         } else {
             this.currentMsg = INVALID_LANDING_SPACE;
             return false;
@@ -135,7 +135,9 @@ public class SimpleMove extends Move {
         if (piece.pieceColor == Piece.PColor.white || piece.isKing()) {
             possibleMoves.add(new SimpleMove(pos, new Position(top, left)));
             possibleMoves.add(new SimpleMove(pos, new Position(top, right)));
-        } else if (piece.pieceColor == Piece.PColor.red || piece.isKing()) {
+        }
+
+        if (piece.pieceColor == Piece.PColor.red || piece.isKing()) {
             possibleMoves.add(new SimpleMove(pos, new Position(bot, left)));
             possibleMoves.add(new SimpleMove(pos, new Position(bot, right)));
         }
@@ -154,5 +156,4 @@ public class SimpleMove extends Move {
         return String.format("SimpleMove{(%d, %d) -> (%d, %d)}",
                 start.getRow(), start.getCell(), end.getRow(), end.getCell());
     }
-
 }

@@ -59,6 +59,11 @@ public class PostSubmitTurnRoute implements Route{
 
         Game game = playerLobby.getGame(thisPlayer);
         TurnController turnController = new TurnController(playerLobby);
+        if (game.madeKing) {
+            game.madeKing = false;
+            game.applyTurnMoves();
+            return turnController.MessageFromModeltoUI(new Message(SUCCESS_MESSAGE, MessageType.info));
+        }
         if(game.movesLeft()) {
             return turnController.MessageFromModeltoUI(new Message(ERROR_MESSAGE, MessageType.error));
         } else {

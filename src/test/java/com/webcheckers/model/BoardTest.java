@@ -40,7 +40,6 @@ public class BoardTest {
         board.move(oldPos, newPos);
         assertTrue(board.boardArray[5][2].doesHasPiece());
     }
-    */
 
     @Test
     public void testGoodMove() {
@@ -50,4 +49,5 @@ public class BoardTest {
         assertTrue(board.boardArray[4][5].doesHasPiece());
         assertFalse(board.boardArray[5][4].doesHasPiece());
     }
+    */
 }

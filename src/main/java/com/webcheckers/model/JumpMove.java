@@ -93,6 +93,9 @@ public class JumpMove extends Move {
             // We'll need this information later
             movedPiece = board.getSpace(start).pieceInfo();
         } else if (game.hasMovesInCurrentTurn()) {
+            // Get the moved piece
+            Move firstMove = game.queuedTurnMoves.get(0);
+            movedPiece = board.getSpace(firstMove.start).pieceInfo();
             // Check if last turn made
             Move lastMove = game.getLastMoveMade();
             Position end = lastMove.getEnd();
@@ -141,21 +144,22 @@ public class JumpMove extends Move {
             return false;
         }
 
-        // TODO: skip this block if the piece is a king
         // Make sure the piece is going in the right direction
-        boolean check;
-        if(currentColor == PColor.red) {
-            // Red pieces should travel in the "negative" direction
-            check = start.getRow() > end.getRow();
+        if (!movedPiece.isKing()) {
+            boolean check;
+            if (currentColor == PColor.red) {
+                // Red pieces should travel in the "negative" direction
+                check = start.getRow() > end.getRow();
+            } else {
+                // White pieces should travel in the "positive" direction
+                check = start.getRow() < end.getRow();
+            }
+            if (check) this.currentMsg = MOVE_VALID;
+            else this.currentMsg = MOVE_PIECE_FORWARD;
+            return check;
         } else {
-            // White pieces should travel in the "positive" direction
-            check = start.getRow() < end.getRow();
+            return true;
         }
-        if (check)
-            this.currentMsg = MOVE_VALID;
-        else
-            this.currentMsg = MOVE_PIECE_FORWARD;
-        return check;
     }
 
     /**
@@ -189,7 +193,7 @@ public class JumpMove extends Move {
      * @param game the game that is currently running
      * @return true if the position has jump moves available, false otherwise
      */
-    static boolean positionHasJumpMoveAvailable(Position pos, Game game) {
+    static boolean positionHasJumpMoveAvailable(Position pos, Position pieceLocation, Game game) {
         ArrayList<JumpMove> possibleMoves = new ArrayList<>();
         /* REFERENCE FOR THIS CODE BLOCK:
         "lower" refers to lower-numbered rows
@@ -198,22 +202,37 @@ public class JumpMove extends Move {
 
         // This is a big-time law of Demeter violation right here
         PColor currentColor = game.getPieceColor(pos);
-        if(currentColor == PColor.red) {
+        boolean isKing = game.getBoard().getSpace(pieceLocation).pieceInfo().isKing();
+        if(currentColor == PColor.red || isKing) {
             // Lower-left
             possibleMoves.add(new JumpMove(pos, new Position(pos.getRow() - 2, pos.getCell() - 2)));
             // Lower-right
             possibleMoves.add(new JumpMove(pos, new Position(pos.getRow() - 2, pos.getCell() + 2)));
-        } else {
+        }
+        if(currentColor == PColor.white || isKing) {
             // Upper-left
             possibleMoves.add(new JumpMove(pos, new Position(pos.getRow() + 2, pos.getCell() - 2)));
             // Upper-right
             possibleMoves.add(new JumpMove(pos, new Position(pos.getRow() + 2, pos.getCell() + 2)));
-        }   // TODO: when the piece is a king, check all four of those
+        }
 
         // Check all the possible spaces to see if any one of them is valid
         for(JumpMove move : possibleMoves) {
             if(move.validateMove(game)) {
+                if(isMoveOk(move, game)) {
+                    continue;
+                }
                 LOG.fine("jumpMove found to be true. Must make jump" + move.toString());
+                return true;
+            }
+        }
+        return false;
+    }
+
+    static boolean isMoveOk(Move move, Game game) {
+        // Check if the move's end location has already been visited
+        for(Move madeMove : game.queuedTurnMoves) {
+            if (madeMove.end.equals(move.end)) {
                 return true;
             }
         }
@@ -236,7 +255,7 @@ public class JumpMove extends Move {
 
         // Loop through all piece positions for that player
         for(Position pos : game.getBoard().getPieceLocations(currentColor)) {
-            if(positionHasJumpMoveAvailable(pos, game)) {
+            if(positionHasJumpMoveAvailable(pos, pos, game)) {
                 return true;
             }
         }

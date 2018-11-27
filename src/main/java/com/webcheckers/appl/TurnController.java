@@ -66,6 +66,10 @@ public class TurnController {
         Move currentMove = MovefromUItoModel(moveToBeValidated);
         boolean movesMade = currentGame.hasMovesInCurrentTurn();
         boolean result = currentMove.validateMove(currentGame);
+        // If we have made a king, the move is over
+        if (currentGame.madeKing) {
+            return new Message("You have created a king piece, so your turn is over. Please submit!", MessageType.error);
+        }
         // test if move is valid
         if(result) {
             if (movesMade) {
@@ -75,6 +79,9 @@ public class TurnController {
                 }
             }
             currentGame.addMoveToCurrentTurn(currentMove);
+            if(makeKingPiece(currentGame)) {
+                currentGame.madeKing = true;
+            }
             return new Message(VALID_MOVE);
         } else {
             // differentiate between different errors move types
@@ -90,5 +97,28 @@ public class TurnController {
      */
     public Move backupMove(Game game) {
         return game.removeMove();
+    }
+
+    private boolean makeKingPiece(Game game) {
+        // Get the original start and final ending space
+        Position end = game.getLastMoveMade().getEnd();
+        Position start = game.getMove(0).getStart();
+
+        Piece movedPiece = game.getBoard().getSpace(start).pieceInfo();
+
+        // Don't do anything if it's already a king piece
+        if (movedPiece.isKing()) {
+            return false;
+        } else {
+            // Red pieces turn into kings when they end on the 0 row
+            if (movedPiece.isRed() && end.getRow() == 0) {
+                movedPiece.makeKing();
+                return true;
+            } else if (!movedPiece.isRed() && end.getRow() == 7) {
+                movedPiece.makeKing();
+                return true;
+            }
+        }
+        return false;
     }
 }
