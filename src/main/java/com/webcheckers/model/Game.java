@@ -370,6 +370,13 @@ public class Game {
         return null;
     }
 
+    public Move getFirstMove() {
+        if (hasMovesInCurrentTurn()) {
+            return queuedTurnMoves.get(0);
+        }
+        return null;
+    }
+
     //
     // Demonstration Methods
     //
@@ -443,8 +450,8 @@ public class Game {
 
     public static Game testInvalidMoves(Player redPlayer, Player whitePlayer) {
         ArrayList<Position> redPieces = new ArrayList<>(Arrays.asList(
-            new Position(6,3),
-            new Position(5, 2),
+            new Position(7,2),
+            new Position(6, 1),
             new Position(4, 1)
         ));
         ArrayList<Position> whitePieces = new ArrayList<>(Arrays.asList(
