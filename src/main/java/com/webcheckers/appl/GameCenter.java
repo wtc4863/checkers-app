@@ -117,25 +117,25 @@ public class GameCenter {
         if (customNames.contains(redName)) {
             switch (redName) {
                 case KING_PIECE:
-                    game = Game.testKingPieces(redPlayer, whitePlayer);
+                    game = Game.testKingPieces(redPlayer, whitePlayer, gameID);
                     break;
                 case DOUBLE_JUMP:
-                    game = Game.testDoubleJump(redPlayer, whitePlayer);
+                    game = Game.testDoubleJump(redPlayer, whitePlayer, gameID);
                     break;
                 case DOUBLE_JUMP_KING:
-                    game = Game.testDoubleJumpKing(redPlayer, whitePlayer);
+                    game = Game.testDoubleJumpKing(redPlayer, whitePlayer, gameID);
                     break;
                 case NO_MOVES_AVAILABLE:
-                    game = Game.testNoMoves(redPlayer, whitePlayer);
+                    game = Game.testNoMoves(redPlayer, whitePlayer, gameID);
                     break;
                 case KING_MID_TURN:
-                    game = Game.testKingMidTurn(redPlayer, whitePlayer);
+                    game = Game.testKingMidTurn(redPlayer, whitePlayer, gameID);
                     break;
                 case EASY_WIN:
-                    game = Game.testCaptureToEnd(redPlayer, whitePlayer);
+                    game = Game.testCaptureToEnd(redPlayer, whitePlayer, gameID);
                     break;
                 case ABS_TEST:
-                    game = Game.testInvalidMoves(redPlayer, whitePlayer);
+                    game = Game.testInvalidMoves(redPlayer, whitePlayer, gameID);
                     break;
             }
         }

@@ -188,7 +188,7 @@ public class PlayerLobby {
      * @param player player whose game is being found
      * @return game object of player, null if player is not in game
      */
-    public Game getGame(Player player) {
+    public synchronized Game getGame(Player player) {
         if (player == null) {
             return null;
         } else {

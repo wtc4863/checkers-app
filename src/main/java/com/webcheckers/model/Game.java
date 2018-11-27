@@ -69,8 +69,9 @@ public class Game {
     }
 
     // used for custom configuration
-    public Game(Player redPlayer, Player whitePlayer, Turn turn, Board board) {
+    public Game(Player redPlayer, Player whitePlayer, Turn turn, Board board, int gameID) {
         LOG.fine(String.format("Custom Game created: (%s : %s", redPlayer, whitePlayer));
+        this.gameID = gameID;
         this.redPlayer = redPlayer;
         this.whitePlayer = whitePlayer;
         this.resignedPlayer = null;
@@ -389,14 +390,14 @@ public class Game {
     // Demonstration Methods
     //
 
-    public static Game testKingPieces(Player redPlayer, Player whitePlayer) {
+    public static Game testKingPieces(Player redPlayer, Player whitePlayer, int gameID) {
         ArrayList<Position> redPieces = new ArrayList<>(
             Arrays.asList(new Position(2, 1), new Position(6, 1)));
         ArrayList<Position> whitePieces = new ArrayList<>(Arrays.asList(new Position(1, 2), new Position(5, 0)));
-        return new Game(redPlayer, whitePlayer, Turn.RED, new Board(redPieces, whitePieces));
+        return new Game(redPlayer, whitePlayer, Turn.RED, new Board(redPieces, whitePieces), gameID);
     }
 
-    public static Game testDoubleJump(Player redPlayer, Player whitePlayer) {
+    public static Game testDoubleJump(Player redPlayer, Player whitePlayer, int gameID) {
         ArrayList<Position> redPieces = new ArrayList<>(Arrays.asList(
             new Position(7, 0),
             new Position(1, 6),
@@ -407,10 +408,10 @@ public class Game {
             new Position(6, 1),
             new Position(4, 1)
         ));
-        return new Game(redPlayer, whitePlayer, Turn.RED, new Board(redPieces, whitePieces));
+        return new Game(redPlayer, whitePlayer, Turn.RED, new Board(redPieces, whitePieces), gameID);
     }
 
-    public static Game testDoubleJumpKing(Player redPlayer, Player whitePlayer) {
+    public static Game testDoubleJumpKing(Player redPlayer, Player whitePlayer, int gameID) {
         ArrayList<Position> redPieces = new ArrayList<>(Arrays.asList(
             new Position(1, 0)
         ));
@@ -419,10 +420,10 @@ public class Game {
             new Position(1, 4),
             new Position(0,7)
         ));
-        return new Game(redPlayer, whitePlayer, Turn.RED, new Board(redPieces, whitePieces));
+        return new Game(redPlayer, whitePlayer, Turn.RED, new Board(redPieces, whitePieces), gameID);
     }
 
-    public static Game testNoMoves(Player redPlayer, Player whitePlayer) {
+    public static Game testNoMoves(Player redPlayer, Player whitePlayer, int gameID) {
         ArrayList<Position> redPieces = new ArrayList<>(Arrays.asList(
             new Position(2,1)
         ));
@@ -432,10 +433,10 @@ public class Game {
             new Position(0, 5),
         new Position(0, 7)
         ));
-        return new Game(redPlayer, whitePlayer, Turn.RED, new Board(redPieces, whitePieces));
+        return new Game(redPlayer, whitePlayer, Turn.RED, new Board(redPieces, whitePieces), gameID);
     }
 
-    public static Game testKingMidTurn(Player redPlayer, Player whitePlayer) {
+    public static Game testKingMidTurn(Player redPlayer, Player whitePlayer, int gameID) {
         ArrayList<Position> redPieces = new ArrayList<>(Arrays.asList(
             new Position(2,1)
         ));
@@ -443,20 +444,20 @@ public class Game {
             new Position(1, 4),
             new Position(1, 2)
         ));
-        return new Game(redPlayer, whitePlayer, Turn.RED, new Board(redPieces, whitePieces));
+        return new Game(redPlayer, whitePlayer, Turn.RED, new Board(redPieces, whitePieces), gameID);
     }
 
-    public static Game testCaptureToEnd(Player redPlayer, Player whitePlayer) {
+    public static Game testCaptureToEnd(Player redPlayer, Player whitePlayer, int gameID) {
         ArrayList<Position> redPieces = new ArrayList<>(Arrays.asList(
             new Position(2,1)
         ));
         ArrayList<Position> whitePieces = new ArrayList<>(Arrays.asList(
             new Position(1, 2)
         ));
-        return new Game(redPlayer, whitePlayer, Turn.RED, new Board(redPieces, whitePieces));
+        return new Game(redPlayer, whitePlayer, Turn.RED, new Board(redPieces, whitePieces), gameID);
     }
 
-    public static Game testInvalidMoves(Player redPlayer, Player whitePlayer) {
+    public static Game testInvalidMoves(Player redPlayer, Player whitePlayer, int gameID) {
         ArrayList<Position> redPieces = new ArrayList<>(Arrays.asList(
             new Position(7,2),
             new Position(6, 1),
@@ -468,7 +469,7 @@ public class Game {
             new Position(2, 3),
             new Position(3, 6)
         ));
-        return new Game(redPlayer, whitePlayer, Turn.RED, new Board(redPieces, whitePieces));
+        return new Game(redPlayer, whitePlayer, Turn.RED, new Board(redPieces, whitePieces), gameID);
     }
 
 
