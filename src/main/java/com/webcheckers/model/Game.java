@@ -3,6 +3,7 @@ package com.webcheckers.model;
 import com.webcheckers.ui.BoardView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.logging.Logger;
 
 /**
@@ -368,4 +369,78 @@ public class Game {
         }
         return null;
     }
+
+    //
+    // Demonstration Methods
+    //
+
+    public static Game testKingPieces(Player redPlayer, Player whitePlayer) {
+        ArrayList<Position> redPieces = new ArrayList<>(
+            Arrays.asList(new Position(2, 1), new Position(6, 1)));
+        ArrayList<Position> whitePieces = new ArrayList<>(Arrays.asList(new Position(1, 2), new Position(5, 0)));
+        return new Game(redPlayer, whitePlayer, Turn.RED, new Board(redPieces, whitePieces));
+    }
+
+    public static Game testDoubleJump(Player redPlayer, Player whitePlayer) {
+        ArrayList<Position> redPieces = new ArrayList<>(Arrays.asList(
+            new Position(7, 0),
+            new Position(1, 6),
+            new Position(3, 4)
+        ));
+        ArrayList<Position> whitePieces = new ArrayList<>(Arrays.asList(
+            new Position(0, 7),
+            new Position(6, 1),
+            new Position(4, 1)
+        ));
+        return new Game(redPlayer, whitePlayer, Turn.RED, new Board(redPieces, whitePieces));
+    }
+
+    public static Game testDoubleJumpKing(Player redPlayer, Player whitePlayer) {
+        ArrayList<Position> redPieces = new ArrayList<>(Arrays.asList(
+            new Position(3, 6),
+            new Position(1, 4),
+            new Position(3, 2)
+        ));
+        ArrayList<Position> whitePieces = new ArrayList<>(Arrays.asList(
+            new Position(0, 5),
+            new Position(6, 3),
+            new Position(4, 5)
+        ));
+        return new Game(redPlayer, whitePlayer, Turn.RED, new Board(redPieces, whitePieces));
+    }
+
+    public static Game testNoMoves(Player redPlayer, Player whitePlayer) {
+        ArrayList<Position> redPieces = new ArrayList<>(Arrays.asList(
+            new Position(2,1)
+        ));
+        ArrayList<Position> whitePieces = new ArrayList<>(Arrays.asList(
+            new Position(0, 1),
+            new Position(0, 3),
+            new Position(0, 5),
+        new Position(0, 7)
+        ));
+        return new Game(redPlayer, whitePlayer, Turn.RED, new Board(redPieces, whitePieces));
+    }
+
+    public static Game testKingMidTurn(Player redPlayer, Player whitePlayer) {
+        ArrayList<Position> redPieces = new ArrayList<>(Arrays.asList(
+            new Position(2,1)
+        ));
+        ArrayList<Position> whitePieces = new ArrayList<>(Arrays.asList(
+            new Position(1, 4),
+            new Position(1, 2)
+        ));
+        return new Game(redPlayer, whitePlayer, Turn.RED, new Board(redPieces, whitePieces));
+    }
+
+    public static Game testCaptureToEnd(Player redPlayer, Player whitePlayer) {
+        ArrayList<Position> redPieces = new ArrayList<>(Arrays.asList(
+            new Position(2,1)
+        ));
+        ArrayList<Position> whitePieces = new ArrayList<>(Arrays.asList(
+            new Position(1, 2)
+        ));
+        return new Game(redPlayer, whitePlayer, Turn.RED, new Board(redPieces, whitePieces));
+    }
+
 }
